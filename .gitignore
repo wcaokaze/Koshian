@@ -1,0 +1,6 @@
+.DS_Store
+koshian-core/.gradle
+koshian-core/.idea
+koshian-core/build
+koshian-core/koshian-core.iml
+koshian-core/local.properties
