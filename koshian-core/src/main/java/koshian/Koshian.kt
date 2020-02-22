@@ -4,7 +4,7 @@ import android.content.*
 import android.view.*
 import android.widget.*
 
-fun <R> koshian(context: Context, koshianBuilder: Koshian<Nothing>.() -> R): R {
+inline fun <R> koshian(context: Context, koshianBuilder: Koshian<Nothing>.() -> R): R {
    val oldContext = `$$KoshianInternal`.context
    `$$KoshianInternal`.context = context
 
@@ -16,14 +16,14 @@ fun <R> koshian(context: Context, koshianBuilder: Koshian<Nothing>.() -> R): R {
    }
 }
 
-inline class Koshian<out V>(val `$$koshianInternal$view`: Any)
+inline class Koshian<out V>(val `$$koshianInternal$view`: Any?)
 
-val <V : View> Koshian<V>.view: V get() {
+inline val <V : View> Koshian<V>.view: V get() {
    @Suppress("UNCHECKED_CAST")
    return `$$koshianInternal$view` as V
 }
 
-fun Koshian<*>.textView(koshianViewBuilder: Koshian<TextView>.() -> Unit): TextView {
+inline fun Koshian<*>.textView(koshianViewBuilder: Koshian<TextView>.() -> Unit): TextView {
    val view = TextView(`$$KoshianInternal`.context)
    val koshian = Koshian<TextView>(view)
    koshian.koshianViewBuilder()
