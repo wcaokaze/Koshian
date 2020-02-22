@@ -1,2 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.wcaokaze.koshian"/>
+          package="com.wcaokaze.koshian">
+
+    <application>
+        <activity android:name="koshian.EmptyTestActivity"/>
+    </application>
+</manifest>
