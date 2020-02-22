@@ -16,6 +16,7 @@ inline fun <R> koshian(context: Context, koshianBuilder: Koshian<Nothing>.() -> 
    }
 }
 
+@KoshianMarker
 inline class Koshian<out V>(val `$$koshianInternal$view`: Any?)
 
 inline val <V : View> Koshian<V>.view: V get() {
