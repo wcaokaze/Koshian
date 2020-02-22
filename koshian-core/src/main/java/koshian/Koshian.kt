@@ -23,9 +23,5 @@ inline val <V : View> Koshian<V>.view: V get() {
    return `$$koshianInternal$view` as V
 }
 
-inline fun Koshian<*>.textView(koshianViewBuilder: Koshian<TextView>.() -> Unit): TextView {
-   val view = TextView(`$$KoshianInternal`.context)
-   val koshian = Koshian<TextView>(view)
-   koshian.koshianViewBuilder()
-   return view
-}
+inline val Koshian<*>.textView: KoshianViewProvider<TextView>
+   get() = KoshianViewProvider(::TextView)
