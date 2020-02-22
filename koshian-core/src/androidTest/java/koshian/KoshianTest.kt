@@ -4,9 +4,8 @@ import androidx.test.ext.junit.rules.*
 import androidx.test.ext.junit.runners.*
 import org.junit.*
 import org.junit.runner.*
+import kotlin.test.*
 import kotlin.test.Test
-
-import android.view.*
 
 @RunWith(AndroidJUnit4::class)
 class KoshianTest {
@@ -16,11 +15,12 @@ class KoshianTest {
    @Test fun createView() {
       activityScenarioRule.scenario.onActivity { activity ->
          val view = koshian(activity) {
-            view {
+            textView {
+               view.text = "Koshian"
             }
          }
 
-         assert(view is View)
+         assertEquals("Koshian", view.text)
       }
    }
 }
