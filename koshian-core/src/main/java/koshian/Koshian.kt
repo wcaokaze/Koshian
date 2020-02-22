@@ -4,12 +4,12 @@ import android.content.*
 import android.view.*
 import android.widget.*
 
-fun <R> koshian(context: Context, koshianBuilder: Koshian<Unit>.() -> R): R {
+fun <R> koshian(context: Context, koshianBuilder: Koshian<Nothing>.() -> R): R {
    val oldContext = `$$KoshianInternal`.context
    `$$KoshianInternal`.context = context
 
    try {
-      val koshian = Koshian<Unit>(Unit)
+      val koshian = Koshian<Nothing>(Unit)
       return koshian.koshianBuilder()
    } finally {
       `$$KoshianInternal`.context = oldContext
