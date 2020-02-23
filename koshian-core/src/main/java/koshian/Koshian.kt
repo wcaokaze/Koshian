@@ -8,7 +8,7 @@ inline fun <R> koshian(context: Context, koshianBuilder: Koshian<Nothing>.() -> 
    `$$KoshianInternal`.context = context
 
    try {
-      val koshian = Koshian<Nothing>(KoshianRoot)
+      val koshian = Koshian<Nothing>(KoshianRoot.INSTANCE)
       return koshian.koshianBuilder()
    } finally {
       `$$KoshianInternal`.context = oldContext
@@ -77,4 +77,8 @@ inline class Koshian<out V>(val `$$koshianInternal$view`: Any?) {
 inline val <V : View> Koshian<V>.view: V get() {
    @Suppress("UNCHECKED_CAST")
    return `$$koshianInternal$view` as V
+}
+
+inline val Koshian<View>.layout: ViewGroup.LayoutParams get() {
+   return (`$$koshianInternal$view` as View).layoutParams
 }

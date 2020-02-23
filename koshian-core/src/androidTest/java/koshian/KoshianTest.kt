@@ -7,6 +7,7 @@ import org.junit.runner.*
 import kotlin.test.*
 import kotlin.test.Test
 
+import android.view.*
 import android.widget.*
 
 @RunWith(AndroidJUnit4::class)
@@ -49,6 +50,28 @@ class KoshianTest {
          val child2 = view.getChildAt(1)
          assertTrue(child2 is TextView)
          assertEquals("TextView2", child2.text)
+      }
+   }
+
+   @Test fun buildLayoutParams() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val view = koshian(activity) {
+            linearLayout {
+               layout.width  = MATCH_PARENT
+               layout.height = MATCH_PARENT
+
+               textView {
+                  layout.width  = MATCH_PARENT
+                  layout.height = MATCH_PARENT
+                  view.text = "TextView1"
+               }
+            }
+         }
+
+         val parentViewLayoutParams = view.layoutParams
+         assertTrue(parentViewLayoutParams is ViewGroup.LayoutParams)
+         assertEquals(MATCH_PARENT, parentViewLayoutParams.width)
+         assertEquals(MATCH_PARENT, parentViewLayoutParams.height)
       }
    }
 }
