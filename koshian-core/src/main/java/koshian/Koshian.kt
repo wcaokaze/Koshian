@@ -8,16 +8,16 @@ inline fun <R> koshian(
       koshianBuilder: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Create>.() -> R
 ): R {
    val oldContext = `$$KoshianInternal`.context
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
+   val oldLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
    `$$KoshianInternal`.context = context
-   `$$KoshianInternal`.parentViewConstructor = KoshianRoot.CONSTRUCTOR
+   `$$KoshianInternal`.layoutParamsProvider = { ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT) }
 
    try {
       val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Create>(KoshianRoot.INSTANCE)
       return koshian.koshianBuilder()
    } finally {
       `$$KoshianInternal`.context = oldContext
-      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
+      `$$KoshianInternal`.layoutParamsProvider = oldLayoutParamsProvider
    }
 }
 
@@ -35,16 +35,15 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
 {
    inline operator fun <C : View>
          invoke(
-               constructor: KoshianViewConstructor<C>,
+               constructor: (Context?) -> C,
                buildAction: ViewBuilder<C, CL, M>.() -> Unit
          ): C
    {
-      val view = constructor.instantiate(`$$KoshianInternal`.context)
+      val view = constructor(`$$KoshianInternal`.context)
 
       val parent = `$$koshianInternal$view` as ViewManager
-      val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
-
-      val layoutParams = parentViewConstructor.instantiateLayoutParams()
+      val parentLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
+      val layoutParams = parentLayoutParamsProvider() as ViewGroup.LayoutParams?
 
       parent.addView(view, layoutParams)
 
@@ -55,23 +54,23 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
 
    inline operator fun <C : View, CCL : ViewGroup.LayoutParams>
          invoke(
-               constructor: KoshianViewGroupConstructor<C, CCL>,
+               constructor: (Context?) -> C,
+               noinline layoutParamsProvider: () -> CCL,
                buildAction: ViewGroupBuilder<C, CL, CCL, M>.() -> Unit
          ): C
    {
-      val view = constructor.instantiate(`$$KoshianInternal`.context)
+      val view = constructor(`$$KoshianInternal`.context)
 
       val parent = `$$koshianInternal$view` as ViewManager
-      val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
-
-      val layoutParams = parentViewConstructor.instantiateLayoutParams()
+      val parentLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
+      val layoutParams = parentLayoutParamsProvider() as ViewGroup.LayoutParams?
 
       parent.addView(view, layoutParams)
 
-      `$$KoshianInternal`.parentViewConstructor = constructor
+      `$$KoshianInternal`.layoutParamsProvider = layoutParamsProvider
       val koshian = ViewGroupBuilder<C, CL, CCL, M>(view)
       koshian.buildAction()
-      `$$KoshianInternal`.parentViewConstructor = parentViewConstructor
+      `$$KoshianInternal`.layoutParamsProvider = parentLayoutParamsProvider
 
       return view
    }

@@ -7,5 +7,8 @@ inline fun <L, M : KoshianMode>
             buildAction: ViewBuilder<TextView, L, M>.() -> Unit
       ): TextView
 {
-   return this(KoshianViewConstructor(::TextView), buildAction)
+   return this(
+         ::TextView,
+         buildAction
+   )
 }
