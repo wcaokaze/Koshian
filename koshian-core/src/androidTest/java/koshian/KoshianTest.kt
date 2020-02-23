@@ -7,6 +7,8 @@ import org.junit.runner.*
 import kotlin.test.*
 import kotlin.test.Test
 
+import android.widget.*
+
 @RunWith(AndroidJUnit4::class)
 class KoshianTest {
    @get:Rule
@@ -21,6 +23,32 @@ class KoshianTest {
          }
 
          assertEquals("Koshian", view.text)
+      }
+   }
+
+   @Test fun buildViewGroup() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val view = koshian(activity) {
+            frameLayout {
+               textView {
+                  view.text = "TextView1"
+               }
+
+               textView {
+                  view.text = "TextView2"
+               }
+            }
+         }
+
+         assertEquals(2, view.childCount)
+
+         val child1 = view.getChildAt(0)
+         assertTrue(child1 is TextView)
+         assertEquals("TextView1", child1.text)
+
+         val child2 = view.getChildAt(1)
+         assertTrue(child2 is TextView)
+         assertEquals("TextView2", child2.text)
       }
    }
 }
