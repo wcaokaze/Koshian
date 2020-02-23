@@ -35,8 +35,10 @@ class KoshianTest {
                   view.text = "TextView1"
                }
 
-               textView {
-                  view.text = "TextView2"
+               frameLayout {
+                  textView {
+                     view.text = "TextView2"
+                  }
                }
             }
          }
@@ -48,8 +50,12 @@ class KoshianTest {
          assertEquals("TextView1", child1.text)
 
          val child2 = view.getChildAt(1)
-         assertTrue(child2 is TextView)
-         assertEquals("TextView2", child2.text)
+         assertTrue(child2 is FrameLayout)
+         assertEquals(1, child2.childCount)
+
+         val child3 = child2.getChildAt(0)
+         assertTrue(child3 is TextView)
+         assertEquals("TextView2", child3.text)
       }
    }
 
