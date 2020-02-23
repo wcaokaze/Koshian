@@ -1,7 +1,6 @@
 package koshian
 
 import android.content.*
-import android.view.*
 import android.widget.*
 
 object LinearLayoutConstructor : KoshianViewParentConstructor<LinearLayout, LinearLayout.LayoutParams> {
@@ -9,4 +8,4 @@ object LinearLayoutConstructor : KoshianViewParentConstructor<LinearLayout, Line
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
-inline val Koshian<ViewManager, *, *>.linearLayout get() = LinearLayoutConstructor
+inline val KoshianParent.linearLayout get() = LinearLayoutConstructor

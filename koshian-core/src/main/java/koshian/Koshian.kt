@@ -32,7 +32,7 @@ inline fun <R> koshian(
 @KoshianMarker
 inline class Koshian<out V, out L, out CL>(val `$$koshianInternal$view`: Any?) {
    inline operator fun <C : View>
-         KoshianViewConstructor<C>.invoke(koshianViewBuilder: Koshian<C, CL, Nothing>.() -> Unit): C
+         KoshianViewConstructor<C>.invoke(buildAction: ViewBuilder<C, CL>.() -> Unit): C
    {
       val view = instantiate(`$$KoshianInternal`.context)
 
@@ -43,13 +43,13 @@ inline class Koshian<out V, out L, out CL>(val `$$koshianInternal$view`: Any?) {
 
       parent.addView(view, layoutParams)
 
-      val koshian = Koshian<C, CL, Nothing>(view)
-      koshian.koshianViewBuilder()
+      val koshian = ViewBuilder<C, CL>(view)
+      koshian.buildAction()
       return view
    }
 
    inline operator fun <C : View, CCL : ViewGroup.LayoutParams>
-         KoshianViewParentConstructor<C, CCL>.invoke(koshianViewBuilder: Koshian<C, CL, CCL>.() -> Unit): C
+         KoshianViewParentConstructor<C, CCL>.invoke(buildAction: ViewGroupBuilder<C, CL, CCL>.() -> Unit): C
    {
       val view = instantiate(`$$KoshianInternal`.context)
 
@@ -61,8 +61,8 @@ inline class Koshian<out V, out L, out CL>(val `$$koshianInternal$view`: Any?) {
       parent.addView(view, layoutParams)
 
       `$$KoshianInternal`.parentViewConstructor = this
-      val koshian = Koshian<C, CL, CCL>(view)
-      koshian.koshianViewBuilder()
+      val koshian = ViewGroupBuilder<C, CL, CCL>(view)
+      koshian.buildAction()
       `$$KoshianInternal`.parentViewConstructor = parentViewConstructor
 
       return view
