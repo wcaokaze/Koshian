@@ -8,16 +8,16 @@ inline fun <R> koshian(
       koshianBuilder: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Create>.() -> R
 ): R {
    val oldContext = `$$KoshianInternal`.context
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
+   val oldLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
    `$$KoshianInternal`.context = context
-   `$$KoshianInternal`.parentViewConstructor = KoshianRoot.CONSTRUCTOR
+   `$$KoshianInternal`.layoutParamsProvider = { ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT) }
 
    try {
       val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Create>(KoshianRoot.INSTANCE)
       return koshian.koshianBuilder()
    } finally {
       `$$KoshianInternal`.context = oldContext
-      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
+      `$$KoshianInternal`.layoutParamsProvider = oldLayoutParamsProvider
    }
 }
 
@@ -32,47 +32,54 @@ inline fun <R> koshian(
 @KoshianMarker
 inline class Koshian<out V, out L, out CL, M : KoshianMode>
       (val `$$koshianInternal$view`: Any?)
+
+inline operator fun <V, L, C, CL, M>
+      Koshian<V, L, CL, M>.invoke(
+            constructor: (Context?) -> C,
+            buildAction: ViewBuilder<C, CL, M>.() -> Unit
+      ): C
+      where V : ViewManager,
+            C : View,
+            M : KoshianMode
 {
-   inline operator fun <C : View>
-         KoshianViewConstructor<C>.invoke(
-               buildAction: ViewBuilder<C, CL, M>.() -> Unit
-         ): C
-   {
-      val view = instantiate(`$$KoshianInternal`.context)
+   val view = constructor(`$$KoshianInternal`.context)
 
-      val parent = `$$koshianInternal$view` as ViewManager
-      val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
+   val parent = `$$koshianInternal$view` as ViewManager
+   val parentLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
+   val layoutParams = parentLayoutParamsProvider() as ViewGroup.LayoutParams?
 
-      val layoutParams = parentViewConstructor.instantiateLayoutParams()
+   parent.addView(view, layoutParams)
 
-      parent.addView(view, layoutParams)
+   val koshian = ViewBuilder<C, CL, M>(view)
+   koshian.buildAction()
+   return view
+}
 
-      val koshian = ViewBuilder<C, CL, M>(view)
-      koshian.buildAction()
-      return view
-   }
+inline operator fun <V, L, C, CL, CCL, M>
+      Koshian<V, L, CL, M>.invoke(
+            constructor: (Context?) -> C,
+            noinline layoutParamsProvider: () -> CCL,
+            buildAction: ViewGroupBuilder<C, CL, CCL, M>.() -> Unit
+      ): C
+      where V : ViewManager,
+            C : View,
+            CCL : ViewGroup.LayoutParams,
+            M : KoshianMode
+{
+   val view = constructor(`$$KoshianInternal`.context)
 
-   inline operator fun <C : View, CCL : ViewGroup.LayoutParams>
-         KoshianViewGroupConstructor<C, CCL>.invoke(
-               buildAction: ViewGroupBuilder<C, CL, CCL, M>.() -> Unit
-         ): C
-   {
-      val view = instantiate(`$$KoshianInternal`.context)
+   val parent = `$$koshianInternal$view` as ViewManager
+   val parentLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
+   val layoutParams = parentLayoutParamsProvider() as ViewGroup.LayoutParams?
 
-      val parent = `$$koshianInternal$view` as ViewManager
-      val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
+   parent.addView(view, layoutParams)
 
-      val layoutParams = parentViewConstructor.instantiateLayoutParams()
+   `$$KoshianInternal`.layoutParamsProvider = layoutParamsProvider
+   val koshian = ViewGroupBuilder<C, CL, CCL, M>(view)
+   koshian.buildAction()
+   `$$KoshianInternal`.layoutParamsProvider = parentLayoutParamsProvider
 
-      parent.addView(view, layoutParams)
-
-      `$$KoshianInternal`.parentViewConstructor = this
-      val koshian = ViewGroupBuilder<C, CL, CCL, M>(view)
-      koshian.buildAction()
-      `$$KoshianInternal`.parentViewConstructor = parentViewConstructor
-
-      return view
-   }
+   return view
 }
 
 inline val <V : View> Koshian<V, *, *, *>.view: V get() {
