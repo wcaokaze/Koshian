@@ -49,7 +49,7 @@ inline class Koshian<out V, out L, out CL>(val `$$koshianInternal$view`: Any?) {
    }
 
    inline operator fun <C : View, CCL : ViewGroup.LayoutParams>
-         KoshianViewParentConstructor<C, CCL>.invoke(buildAction: ViewGroupBuilder<C, CL, CCL>.() -> Unit): C
+         KoshianViewGroupConstructor<C, CCL>.invoke(buildAction: ViewGroupBuilder<C, CL, CCL>.() -> Unit): C
    {
       val view = instantiate(`$$KoshianInternal`.context)
 

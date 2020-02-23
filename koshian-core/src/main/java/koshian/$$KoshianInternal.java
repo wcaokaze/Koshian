@@ -8,5 +8,5 @@ public final class $$KoshianInternal {
    public static Context context = null;
 
    @SuppressWarnings("rawtypes")
-   public static KoshianViewParentConstructor parentViewConstructor = null;
+   public static KoshianViewGroupConstructor parentViewConstructor = null;
 }

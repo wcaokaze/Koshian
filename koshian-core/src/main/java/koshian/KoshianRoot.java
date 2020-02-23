@@ -6,11 +6,11 @@ import android.view.*;
 public final class KoshianRoot implements ViewManager {
    public static final KoshianRoot INSTANCE = new KoshianRoot();
 
-   public static final KoshianViewParentConstructor<KoshianRoot, ViewGroup.LayoutParams>
+   public static final KoshianViewGroupConstructor<KoshianRoot, ViewGroup.LayoutParams>
          CONSTRUCTOR = new KoshianRootConstructor();
 
    private static final class KoshianRootConstructor
-         implements KoshianViewParentConstructor<KoshianRoot, ViewGroup.LayoutParams>
+         implements KoshianViewGroupConstructor<KoshianRoot, ViewGroup.LayoutParams>
    {
       @Override
       public KoshianRoot instantiate(final Context context) {
