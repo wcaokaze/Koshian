@@ -63,6 +63,7 @@ class KoshianTest {
                textView {
                   layout.width  = MATCH_PARENT
                   layout.height = MATCH_PARENT
+                  layout.weight = 1.0f
                   view.text = "TextView1"
                }
             }
