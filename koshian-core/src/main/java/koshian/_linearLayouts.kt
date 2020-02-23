@@ -2,11 +2,9 @@ package koshian
 
 import android.widget.*
 
-inline fun <L, M : KoshianMode>
-      KoshianParent<L, M>.linearLayout(
-            buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, M>.() -> Unit
-      ): LinearLayout
-{
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.linearLayout(
+      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): LinearLayout {
    return this(
          ::LinearLayout,
          { LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT) },

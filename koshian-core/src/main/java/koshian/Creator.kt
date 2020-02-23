@@ -3,14 +3,13 @@ package koshian
 import android.content.*
 import android.view.*
 
-inline operator fun <V, L, C, CL, M>
-      Koshian<V, L, CL, M>.invoke(
+inline operator fun <V, L, C, CL>
+      Koshian<V, L, CL, KoshianMode.Creator>.invoke(
             constructor: (Context?) -> C,
-            buildAction: ViewBuilder<C, CL, M>.() -> Unit
+            buildAction: ViewBuilder<C, CL, KoshianMode.Creator>.() -> Unit
       ): C
       where V : ViewManager,
-            C : View,
-            M : KoshianMode
+            C : View
 {
    val view = constructor(`$$KoshianInternal`.context)
 
@@ -20,21 +19,20 @@ inline operator fun <V, L, C, CL, M>
 
    parent.addView(view, layoutParams)
 
-   val koshian = ViewBuilder<C, CL, M>(view)
+   val koshian = ViewBuilder<C, CL, KoshianMode.Creator>(view)
    koshian.buildAction()
    return view
 }
 
-inline operator fun <V, L, C, CL, CCL, M>
-      Koshian<V, L, CL, M>.invoke(
+inline operator fun <V, L, C, CL, CCL>
+      Koshian<V, L, CL, KoshianMode.Creator>.invoke(
             constructor: (Context?) -> C,
             noinline layoutParamsProvider: () -> CCL,
-            buildAction: ViewGroupBuilder<C, CL, CCL, M>.() -> Unit
+            buildAction: ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>.() -> Unit
       ): C
       where V : ViewManager,
             C : View,
-            CCL : ViewGroup.LayoutParams,
-            M : KoshianMode
+            CCL : ViewGroup.LayoutParams
 {
    val view = constructor(`$$KoshianInternal`.context)
 
@@ -45,7 +43,7 @@ inline operator fun <V, L, C, CL, CCL, M>
    parent.addView(view, layoutParams)
 
    `$$KoshianInternal`.layoutParamsProvider = layoutParamsProvider
-   val koshian = ViewGroupBuilder<C, CL, CCL, M>(view)
+   val koshian = ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>(view)
    koshian.buildAction()
    `$$KoshianInternal`.layoutParamsProvider = parentLayoutParamsProvider
 
