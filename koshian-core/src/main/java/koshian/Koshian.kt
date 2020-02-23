@@ -5,7 +5,7 @@ import android.view.*
 
 inline fun <R> koshian(
       context: Context,
-      koshianBuilder: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Create>.() -> R
+      koshianBuilder: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>.() -> R
 ): R {
    val oldContext = `$$KoshianInternal`.context
    val oldLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
@@ -13,7 +13,7 @@ inline fun <R> koshian(
    `$$KoshianInternal`.layoutParamsProvider = { ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT) }
 
    try {
-      val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Create>(KoshianRoot.INSTANCE)
+      val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(KoshianRoot.INSTANCE)
       return koshian.koshianBuilder()
    } finally {
       `$$KoshianInternal`.context = oldContext
