@@ -8,4 +8,10 @@ object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLa
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
-inline val KoshianParent.frameLayout get() = FrameLayoutConstructor
+inline fun <L, M : KoshianMode>
+      Koshian<*, *, L, M>.frameLayout(
+            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, M>.() -> Unit
+      ): FrameLayout
+{
+   return this.invoke(FrameLayoutConstructor, buildAction)
+}

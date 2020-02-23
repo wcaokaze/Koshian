@@ -8,4 +8,10 @@ object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, Linea
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
-inline val KoshianParent.linearLayout get() = LinearLayoutConstructor
+inline fun <L, M : KoshianMode>
+      Koshian<*, *, L, M>.linearLayout(
+            buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, M>.() -> Unit
+      ): LinearLayout
+{
+   return this(LinearLayoutConstructor, buildAction)
+}
