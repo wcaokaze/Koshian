@@ -1,9 +1,10 @@
 package koshian
 
+import android.view.*
 import android.widget.*
 
 inline fun <L, M : KoshianMode>
-      Koshian<*, *, L, M>.textView(
+      Koshian<ViewManager, *, L, M>.textView(
             buildAction: ViewBuilder<TextView, L, M>.() -> Unit
       ): TextView
 {

@@ -33,11 +33,14 @@ inline fun <R> koshian(
 inline class Koshian<out V, out L, out CL, M : KoshianMode>
       (val `$$koshianInternal$view`: Any?)
 
-inline operator fun <V, L, CL, M : KoshianMode, C : View>
+inline operator fun <V, L, CL, M, C>
       Koshian<V, L, CL, M>.invoke(
             constructor: (Context?) -> C,
             buildAction: ViewBuilder<C, CL, M>.() -> Unit
       ): C
+      where V : ViewManager,
+            M : KoshianMode,
+            C : View
 {
    val view = constructor(`$$KoshianInternal`.context)
 
@@ -52,12 +55,16 @@ inline operator fun <V, L, CL, M : KoshianMode, C : View>
    return view
 }
 
-inline operator fun <V, L, CL, M : KoshianMode, C : View, CCL : ViewGroup.LayoutParams>
+inline operator fun <V, L, CL, M, C, CCL>
       Koshian<V, L, CL, M>.invoke(
             constructor: (Context?) -> C,
             noinline layoutParamsProvider: () -> CCL,
             buildAction: ViewGroupBuilder<C, CL, CCL, M>.() -> Unit
       ): C
+      where V : ViewManager,
+            M : KoshianMode,
+            C : View,
+            CCL : ViewGroup.LayoutParams
 {
    val view = constructor(`$$KoshianInternal`.context)
 
