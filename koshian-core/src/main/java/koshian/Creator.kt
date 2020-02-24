@@ -21,8 +21,8 @@ inline fun <R> koshian(
    }
 }
 
-inline operator fun <V, L, C, CL>
-      Koshian<V, L, CL, KoshianMode.Creator>.invoke(
+inline fun <V, L, C, CL>
+      Koshian<V, L, CL, KoshianMode.Creator>.create(
             constructor: (Context?) -> C,
             buildAction: ViewBuilder<C, CL, KoshianMode.Creator>.() -> Unit
       ): C
@@ -42,8 +42,8 @@ inline operator fun <V, L, C, CL>
    return view
 }
 
-inline operator fun <V, L, C, CL, CCL>
-      Koshian<V, L, CL, KoshianMode.Creator>.invoke(
+inline fun <V, L, C, CL, CCL>
+      Koshian<V, L, CL, KoshianMode.Creator>.create(
             constructor: (Context?) -> C,
             noinline layoutParamsProvider: () -> CCL,
             buildAction: ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>.() -> Unit
