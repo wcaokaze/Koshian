@@ -1,25 +1,6 @@
 package koshian
 
-import android.content.*
 import android.view.*
-
-inline fun <R> koshian(
-      context: Context,
-      koshianBuilder: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>.() -> R
-): R {
-   val oldContext = `$$KoshianInternal`.context
-   val oldLayoutParamsProvider = `$$KoshianInternal`.layoutParamsProvider
-   `$$KoshianInternal`.context = context
-   `$$KoshianInternal`.layoutParamsProvider = { ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT) }
-
-   try {
-      val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(KoshianRoot.INSTANCE)
-      return koshian.koshianBuilder()
-   } finally {
-      `$$KoshianInternal`.context = oldContext
-      `$$KoshianInternal`.layoutParamsProvider = oldLayoutParamsProvider
-   }
-}
 
 /**
  * @param V The type of [view]
