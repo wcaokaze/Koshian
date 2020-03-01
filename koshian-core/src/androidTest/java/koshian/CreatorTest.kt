@@ -11,7 +11,7 @@ import android.view.*
 import android.widget.*
 
 @RunWith(AndroidJUnit4::class)
-class KoshianTest {
+class CreatorTest {
    @get:Rule
    val activityScenarioRule = activityScenarioRule<EmptyTestActivity>()
 

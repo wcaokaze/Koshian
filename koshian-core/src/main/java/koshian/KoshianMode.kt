@@ -1,6 +1,6 @@
 package koshian
 
 sealed class KoshianMode {
-   object Create : KoshianMode()
+   object Creator : KoshianMode()
    object Applier : KoshianMode()
 }
