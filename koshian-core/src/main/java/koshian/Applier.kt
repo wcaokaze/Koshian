@@ -51,13 +51,18 @@ inline fun <V : View, L : ViewGroup.LayoutParams> applyKoshian(
 
 inline fun <reified V, L>
       Koshian<ViewManager, *, L, KoshianMode.Applier>.apply(
+            constructor: KoshianViewConstructor<V>,
             buildAction: ViewBuilder<V, L, KoshianMode.Applier>.() -> Unit
       )
       where V : View
 {
    val parent = `$$koshianInternal$view` as ViewManager
-   val view = `$$KoshianInternal`.findView(parent, V::class.java)
-         ?: throw IllegalStateException()
+
+   var view = `$$KoshianInternal`.findView(parent, V::class.java)
+
+   if (view == null) {
+      view = `$$KoshianInternal`.addNewView(parent, constructor)
+   }
 
    val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
    koshian.buildAction()
@@ -75,8 +80,9 @@ inline fun <reified V, L, CL>
    `$$KoshianInternal`.parentViewConstructor = constructor
 
    val parent = `$$koshianInternal$view` as ViewManager
+
    val view = `$$KoshianInternal`.findView(parent, V::class.java)
-         ?: throw IllegalStateException()
+         ?: constructor.instantiate(`$$KoshianInternal`.context)
 
    val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
 

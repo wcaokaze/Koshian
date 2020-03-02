@@ -13,6 +13,23 @@ public final class $$KoshianInternal {
 
    public static int applyingIndex = -1;
 
+   public static <V extends View>
+         V addNewView(final ViewManager parentView,
+                      final KoshianViewConstructor<V> childConstructor)
+   {
+      final V child = childConstructor.instantiate(context);
+
+      if (parentView instanceof ViewGroup) {
+         final ViewGroup parentViewGroup = (ViewGroup) parentView;
+         parentViewGroup.addView(child, applyingIndex++,
+               parentViewConstructor.instantiateLayoutParams());
+      } else {
+         parentView.addView(child, parentViewConstructor.instantiateLayoutParams());
+      }
+
+      return child;
+   }
+
    public static <V> V findView(final ViewManager parent,
                                 final Class<V> viewClass)
    {

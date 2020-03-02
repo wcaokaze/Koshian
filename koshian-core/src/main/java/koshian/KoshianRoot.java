@@ -6,15 +6,15 @@ import android.view.*;
 public final class KoshianRoot implements ViewManager {
    public static final KoshianRoot INSTANCE = new KoshianRoot();
 
-   public static final KoshianViewGroupConstructor<KoshianRoot, ViewGroup.LayoutParams>
+   public static final KoshianViewGroupConstructor<ViewGroup, ViewGroup.LayoutParams>
          CONSTRUCTOR = new KoshianRootConstructor();
 
    private static final class KoshianRootConstructor
-         implements KoshianViewGroupConstructor<KoshianRoot, ViewGroup.LayoutParams>
+         implements KoshianViewGroupConstructor<ViewGroup, ViewGroup.LayoutParams>
    {
       @Override
-      public KoshianRoot instantiate(final Context context) {
-         return INSTANCE;
+      public ViewGroup instantiate(final Context context) {
+         throw new UnsupportedOperationException();
       }
 
       @Override

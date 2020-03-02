@@ -17,5 +17,5 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.linearLayout(
 inline fun <L> KoshianParent<L, KoshianMode.Applier>.linearLayout(
       buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   return apply(LinearLayoutConstructor, buildAction)
+   apply(LinearLayoutConstructor, buildAction)
 }
