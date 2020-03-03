@@ -21,9 +21,8 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.frameLayout(
    apply(FrameLayoutConstructor, buildAction)
 }
 
-inline fun applyKoshian(
-      view: FrameLayout,
+inline fun FrameLayout.applyKoshian(
       applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   applyKoshian(view, FrameLayoutConstructor, applyAction)
+   applyKoshian(FrameLayoutConstructor, applyAction)
 }

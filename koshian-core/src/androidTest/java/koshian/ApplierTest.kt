@@ -22,7 +22,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             view.text = "Koshian"
          }
 
@@ -37,7 +37,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             view.elevation = 4.0f
          }
 
@@ -57,7 +57,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             textView {
                view.text = "TextView1"
             }
@@ -94,7 +94,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             linearLayout {
                textView {
                   view.text = "TextView1_1"
@@ -136,7 +136,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             textView {
                view.text = "TextView"
             }
@@ -168,7 +168,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             view {
                view.elevation = 4.0f
             }
@@ -205,7 +205,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             view {
                view.elevation = 4.0f
             }
@@ -232,7 +232,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             textView {
                view.text = "TextView"
             }
@@ -251,7 +251,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             layout.width = 4
          }
 
@@ -266,7 +266,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             layout.width = 4
          }
 
@@ -283,7 +283,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             view {
                layout.weight = 4.0f
             }
@@ -304,7 +304,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             frameLayout {
                layout.weight = 4.0f
             }
@@ -323,7 +323,7 @@ class ApplierTest {
             }
          }
 
-         applyKoshian(v) {
+         v.applyKoshian {
             view {
                layout.weight = 4.0f
             }
