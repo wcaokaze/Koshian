@@ -23,7 +23,7 @@ class ApplierTest {
          }
 
          applyKoshian(v) {
-            v.text = "Koshian"
+            view.text = "Koshian"
          }
 
          assertEquals("Koshian", v.text)
@@ -241,6 +241,97 @@ class ApplierTest {
          val child = v.getChildAt(0)
          assertTrue(child is TextView)
          assertEquals("TextView", child.text)
+      }
+   }
+
+   @Test fun layoutParams_singleView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val v = koshian(activity) {
+            view {
+            }
+         }
+
+         applyKoshian(v) {
+            layout.width = 4
+         }
+
+         assertEquals(4, v.layoutParams.width)
+      }
+   }
+
+   @Test fun layoutParams_singleViewGroup() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val v = koshian(activity) {
+            frameLayout {
+            }
+         }
+
+         applyKoshian(v) {
+            layout.width = 4
+         }
+
+         assertEquals(4, v.layoutParams.width)
+      }
+   }
+
+   @Test fun layoutParams_viewInViewGroup() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val v = koshian(activity) {
+            linearLayout {
+               view {
+               }
+            }
+         }
+
+         applyKoshian(v) {
+            view {
+               layout.weight = 4.0f
+            }
+         }
+
+         val layoutParams = v.getChildAt(0).layoutParams
+         assertTrue(layoutParams is LinearLayout.LayoutParams)
+         assertEquals(4.0f, layoutParams.weight)
+      }
+   }
+
+   @Test fun layoutParams_viewGroupInViewGroup() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val v = koshian(activity) {
+            linearLayout {
+               frameLayout {
+               }
+            }
+         }
+
+         applyKoshian(v) {
+            frameLayout {
+               layout.weight = 4.0f
+            }
+         }
+
+         val layoutParams = v.getChildAt(0).layoutParams
+         assertTrue(layoutParams is LinearLayout.LayoutParams)
+         assertEquals(4.0f, layoutParams.weight)
+      }
+   }
+
+   @Test fun layoutParams_insertedView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val v = koshian(activity) {
+            linearLayout {
+            }
+         }
+
+         applyKoshian(v) {
+            view {
+               layout.weight = 4.0f
+            }
+         }
+
+         val layoutParams = v.getChildAt(0).layoutParams
+         assertTrue(layoutParams is LinearLayout.LayoutParams)
+         assertEquals(4.0f, layoutParams.weight)
       }
    }
 }

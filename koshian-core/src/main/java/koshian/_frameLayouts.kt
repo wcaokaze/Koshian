@@ -15,6 +15,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.frameLayout(
    return create(FrameLayoutConstructor, buildAction)
 }
 
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.frameLayout(
+      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(FrameLayoutConstructor, buildAction)
+}
+
 inline fun applyKoshian(
       view: FrameLayout,
       applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
