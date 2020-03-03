@@ -17,19 +17,19 @@ class CreatorTest {
 
    @Test fun createView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         val view = koshian(activity) {
+         val v = koshian(activity) {
             textView {
                view.text = "Koshian"
             }
          }
 
-         assertEquals("Koshian", view.text)
+         assertEquals("Koshian", v.text)
       }
    }
 
    @Test fun buildViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         val view = koshian(activity) {
+         val v = koshian(activity) {
             frameLayout {
                textView {
                   view.text = "TextView1"
@@ -43,13 +43,13 @@ class CreatorTest {
             }
          }
 
-         assertEquals(2, view.childCount)
+         assertEquals(2, v.childCount)
 
-         val child1 = view.getChildAt(0)
+         val child1 = v.getChildAt(0)
          assertTrue(child1 is TextView)
          assertEquals("TextView1", child1.text)
 
-         val child2 = view.getChildAt(1)
+         val child2 = v.getChildAt(1)
          assertTrue(child2 is FrameLayout)
          assertEquals(1, child2.childCount)
 
@@ -61,7 +61,7 @@ class CreatorTest {
 
    @Test fun buildLayoutParams() {
       activityScenarioRule.scenario.onActivity { activity ->
-         val view = koshian(activity) {
+         val v = koshian(activity) {
             linearLayout {
                layout.width  = MATCH_PARENT
                layout.height = MATCH_PARENT
@@ -75,10 +75,43 @@ class CreatorTest {
             }
          }
 
-         val parentViewLayoutParams = view.layoutParams
+         val parentViewLayoutParams = v.layoutParams
          assertTrue(parentViewLayoutParams is ViewGroup.LayoutParams)
          assertEquals(MATCH_PARENT, parentViewLayoutParams.width)
          assertEquals(MATCH_PARENT, parentViewLayoutParams.height)
+      }
+   }
+
+   @Test fun addView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val v = koshian(activity) {
+            linearLayout {
+               textView {
+                  view.text = "TextView1"
+               }
+            }
+         }
+
+         v.addView {
+            textView {
+               layout.weight = 4.0f
+               view.text = "TextView2"
+            }
+         }
+
+         assertEquals(2, v.childCount)
+
+         val child1 = v.getChildAt(0)
+         assertTrue(child1 is TextView)
+         assertEquals("TextView1", child1.text)
+
+         val child2 = v.getChildAt(1)
+         assertTrue(child2 is TextView)
+         assertEquals("TextView2", child2.text)
+
+         val child2LayoutParams = child2.layoutParams
+         assertTrue(child2LayoutParams is LinearLayout.LayoutParams)
+         assertEquals(4.0f, child2LayoutParams.weight)
       }
    }
 }

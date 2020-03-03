@@ -21,6 +21,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.linearLayout(
    apply(LinearLayoutConstructor, buildAction)
 }
 
+inline fun <R> LinearLayout.addView(
+      buildAction: ViewGroupBuilder<LinearLayout, Nothing, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> R
+): R {
+   return addView(LinearLayoutConstructor, buildAction)
+}
+
 inline fun LinearLayout.applyKoshian(
       applyAction: ViewGroupBuilder<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
