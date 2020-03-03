@@ -21,6 +21,28 @@ inline fun <R> koshian(
    }
 }
 
+inline fun <P, L, R>
+      P.addView(
+            parentConstructor: KoshianViewGroupConstructor<P, L>,
+            buildAction: Koshian<P, Nothing, L, KoshianMode.Creator>.() -> R
+      ): R
+      where P : ViewGroup,
+            L : ViewGroup.LayoutParams
+{
+   val oldContext = `$$KoshianInternal`.context
+   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
+   `$$KoshianInternal`.context = context
+   `$$KoshianInternal`.parentViewConstructor = parentConstructor
+
+   try {
+      val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this)
+      return koshian.buildAction()
+   } finally {
+      `$$KoshianInternal`.context = oldContext
+      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
+   }
+}
+
 inline fun <V, L, C, CL>
       Koshian<V, L, CL, KoshianMode.Creator>.create(
             constructor: KoshianViewConstructor<C>,
