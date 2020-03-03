@@ -16,5 +16,5 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.textView(
 inline fun <L> KoshianParent<L, KoshianMode.Applier>.textView(
       buildAction: ViewBuilder<TextView, L, KoshianMode.Applier>.() -> Unit
 ) {
-   return apply(buildAction)
+   apply(TextViewConstructor, buildAction)
 }

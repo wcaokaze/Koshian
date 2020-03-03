@@ -1,6 +1,7 @@
 package koshian
 
 import android.content.*
+import android.view.*
 import android.widget.*
 
 object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, LinearLayout.LayoutParams> {
@@ -17,5 +18,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.linearLayout(
 inline fun <L> KoshianParent<L, KoshianMode.Applier>.linearLayout(
       buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   return apply(LinearLayoutConstructor, buildAction)
+   apply(LinearLayoutConstructor, buildAction)
+}
+
+inline fun LinearLayout.applyKoshian(
+      applyAction: ViewGroupBuilder<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   applyKoshian(LinearLayoutConstructor, applyAction)
 }
