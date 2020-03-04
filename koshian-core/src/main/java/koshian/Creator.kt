@@ -2,11 +2,15 @@ package koshian
 
 import android.content.*
 import android.view.*
+import kotlin.contracts.*
 
+@ExperimentalContracts
 inline fun <R> koshian(
       context: Context,
       koshianBuilder: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>.() -> R
 ): R {
+   contract { callsInPlace(koshianBuilder, InvocationKind.EXACTLY_ONCE) }
+
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    `$$KoshianInternal`.context = context
@@ -21,6 +25,7 @@ inline fun <R> koshian(
    }
 }
 
+@ExperimentalContracts
 inline fun <P, L, R>
       P.addView(
             parentConstructor: KoshianViewGroupConstructor<P, L>,
@@ -29,6 +34,8 @@ inline fun <P, L, R>
       where P : ViewGroup,
             L : ViewGroup.LayoutParams
 {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    `$$KoshianInternal`.context = context
