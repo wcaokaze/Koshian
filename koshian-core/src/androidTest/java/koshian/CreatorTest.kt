@@ -9,6 +9,7 @@ import kotlin.test.Test
 
 import android.view.*
 import android.widget.*
+import kotlin.contracts.*
 
 @RunWith(AndroidJUnit4::class)
 class CreatorTest {
@@ -17,6 +18,7 @@ class CreatorTest {
 
    @Test fun createView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             textView {
                view.text = "Koshian"
@@ -29,6 +31,7 @@ class CreatorTest {
 
    @Test fun buildViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
                textView {
@@ -61,6 +64,7 @@ class CreatorTest {
 
    @Test fun buildLayoutParams() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             linearLayout {
                layout.width  = MATCH_PARENT
@@ -84,6 +88,7 @@ class CreatorTest {
 
    @Test fun addView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             linearLayout {
                textView {
@@ -92,6 +97,7 @@ class CreatorTest {
             }
          }
 
+         @UseExperimental(ExperimentalContracts::class)
          v.addView {
             textView {
                layout.weight = 4.0f
@@ -112,6 +118,49 @@ class CreatorTest {
          val child2LayoutParams = child2.layoutParams
          assertTrue(child2LayoutParams is LinearLayout.LayoutParams)
          assertEquals(4.0f, child2LayoutParams.weight)
+      }
+   }
+
+   @Test fun contracts() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val textView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            frameLayout {
+               textView = textView {
+                  view.text = "Koshian"
+               }
+            }
+         }
+
+         assertEquals("Koshian", textView.text)
+         assertSame(textView, v.getChildAt(0))
+      }
+   }
+
+   @Test fun contracts_addView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val textView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            frameLayout {
+            }
+         }
+
+         @UseExperimental(ExperimentalContracts::class)
+         val child = v.addView {
+            frameLayout {
+               textView = textView {
+                  view.text = "Koshian"
+               }
+            }
+         }
+
+         assertEquals("Koshian", textView.text)
+         assertSame(child, v.getChildAt(0))
+         assertSame(textView, child.getChildAt(0))
       }
    }
 }

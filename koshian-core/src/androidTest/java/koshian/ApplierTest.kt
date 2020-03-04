@@ -9,6 +9,7 @@ import kotlin.test.Test
 
 import android.view.*
 import android.widget.*
+import kotlin.contracts.*
 
 @RunWith(AndroidJUnit4::class)
 class ApplierTest {
@@ -17,6 +18,7 @@ class ApplierTest {
 
    @Test fun apply() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             textView {
             }
@@ -32,6 +34,7 @@ class ApplierTest {
 
    @Test fun applyViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
             }
@@ -47,6 +50,7 @@ class ApplierTest {
 
    @Test fun applyChildView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
                textView {
@@ -79,6 +83,7 @@ class ApplierTest {
 
    @Test fun nestedViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
                linearLayout {
@@ -129,6 +134,7 @@ class ApplierTest {
 
    @Test fun insert_first() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
                view {
@@ -158,6 +164,7 @@ class ApplierTest {
 
    @Test fun insert_middle() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
                view {
@@ -198,6 +205,7 @@ class ApplierTest {
 
    @Test fun insert_last() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
                view {
@@ -227,6 +235,7 @@ class ApplierTest {
 
    @Test fun insert_intoEmptyView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
             }
@@ -246,6 +255,7 @@ class ApplierTest {
 
    @Test fun layoutParams_singleView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             view {
             }
@@ -261,6 +271,7 @@ class ApplierTest {
 
    @Test fun layoutParams_singleViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
             }
@@ -276,6 +287,7 @@ class ApplierTest {
 
    @Test fun layoutParams_viewInViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             linearLayout {
                view {
@@ -297,6 +309,7 @@ class ApplierTest {
 
    @Test fun layoutParams_viewGroupInViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             linearLayout {
                frameLayout {
@@ -318,6 +331,7 @@ class ApplierTest {
 
    @Test fun layoutParams_insertedView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             linearLayout {
             }
