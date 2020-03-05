@@ -18,6 +18,10 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
    val Float .dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
    val Double.dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
 
+   val Int   .px: Int inline get() = this
+   val Float .px: Int inline get() = this.toInt()
+   val Double.px: Int inline get() = this.toInt()
+
    inline operator fun <V>
          V.invoke(
                applyAction: ViewBuilder<V, CL, KoshianMode.Applier>.() -> Unit

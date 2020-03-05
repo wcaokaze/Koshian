@@ -51,6 +51,42 @@ class DimensionTest {
       }
    }
 
+   @Test fun px_int() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
+         val size = koshian(activity) { 4.px }
+
+         assertClose(
+               activity.resources.getDimension(R.dimen.four_px),
+               size.toFloat(),
+               0.001f)
+      }
+   }
+
+   @Test fun px_float() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
+         val size = koshian(activity) { 4.0f.px }
+
+         assertClose(
+               activity.resources.getDimension(R.dimen.four_px),
+               size.toFloat(),
+               0.001f)
+      }
+   }
+
+   @Test fun px_double() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
+         val size = koshian(activity) { 4.0.px }
+
+         assertClose(
+               activity.resources.getDimension(R.dimen.four_px),
+               size.toFloat(),
+               0.001f)
+      }
+   }
+
    private fun assertClose(expected: Float, actual: Float, offset: Float) {
       assert(abs(expected - actual) < offset)
    }
