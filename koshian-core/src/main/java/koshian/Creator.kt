@@ -15,7 +15,8 @@ inline fun <R> koshian(
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = KoshianRoot.CONSTRUCTOR
-   `$$KoshianInternal`.displayDensity = context.resources.displayMetrics.density
+
+   `$$KoshianInternal`.init(context)
 
    try {
       val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(KoshianRoot.INSTANCE)

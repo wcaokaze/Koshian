@@ -2,10 +2,12 @@ package koshian;
 
 import android.annotation.*;
 import android.content.*;
+import android.util.DisplayMetrics;
 import android.view.*;
 
 public final class $$KoshianInternal {
-   public static float displayDensity = 0.0f;
+   private static float displayDensity = 0.0f;
+   private static float scaledDensity  = 0.0f;
 
    @SuppressLint("StaticFieldLeak")
    public static Context context = null;
@@ -14,6 +16,12 @@ public final class $$KoshianInternal {
    public static KoshianViewGroupConstructor parentViewConstructor = null;
 
    public static int applyingIndex = -1;
+
+   public static void init(final Context context) {
+      final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+      displayDensity = displayMetrics.density;
+      scaledDensity  = displayMetrics.scaledDensity;
+   }
 
    public static int dipToPx(final int dipValue) {
       final int pxValue = (int) (dipValue * displayDensity);
@@ -49,6 +57,18 @@ public final class $$KoshianInternal {
       } else {
          return -1;
       }
+   }
+
+   public static float spToPx(final int spValue) {
+      return spValue * scaledDensity;
+   }
+
+   public static float spToPx(final float spValue) {
+      return spValue * scaledDensity;
+   }
+
+   public static float spToPx(final double spValue) {
+      return (float) (spValue * scaledDensity);
    }
 
    public static <V extends View>

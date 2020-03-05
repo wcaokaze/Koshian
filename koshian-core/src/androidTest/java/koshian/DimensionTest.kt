@@ -4,6 +4,7 @@ import androidx.test.ext.junit.rules.*
 import androidx.test.ext.junit.runners.*
 import org.junit.*
 import org.junit.runner.*
+import kotlin.test.*
 import kotlin.test.Test
 
 import com.wcaokaze.koshian.test.R
@@ -87,7 +88,43 @@ class DimensionTest {
       }
    }
 
+   @Test fun sp_int() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
+         val size = koshian(activity) { 4.sp }
+
+         assertClose(
+               activity.resources.getDimension(R.dimen.four_sp),
+               size,
+               0.001f)
+      }
+   }
+
+   @Test fun sp_float() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
+         val size = koshian(activity) { 4.0f.sp }
+
+         assertClose(
+               activity.resources.getDimension(R.dimen.four_sp),
+               size,
+               0.001f)
+      }
+   }
+
+   @Test fun sp_double() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
+         val size = koshian(activity) { 4.0.sp }
+
+         assertClose(
+               activity.resources.getDimension(R.dimen.four_sp),
+               size,
+               0.001f)
+      }
+   }
+
    private fun assertClose(expected: Float, actual: Float, offset: Float) {
-      assert(abs(expected - actual) < offset)
+      assertTrue(abs(expected - actual) < offset)
    }
 }
