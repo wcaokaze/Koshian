@@ -5,6 +5,8 @@ import android.content.*;
 import android.view.*;
 
 public final class $$KoshianInternal {
+   public static float displayDensity = 0.0f;
+
    @SuppressLint("StaticFieldLeak")
    public static Context context = null;
 
@@ -12,6 +14,42 @@ public final class $$KoshianInternal {
    public static KoshianViewGroupConstructor parentViewConstructor = null;
 
    public static int applyingIndex = -1;
+
+   public static int dipToPx(final int dipValue) {
+      final int pxValue = (int) (dipValue * displayDensity);
+
+      if (pxValue != 0) {
+         return pxValue;
+      } else if (dipValue > 0) {
+         return 1;
+      } else {
+         return -1;
+      }
+   }
+
+   public static int dipToPx(final float dipValue) {
+      final int pxValue = (int) (dipValue * displayDensity);
+
+      if (pxValue != 0) {
+         return pxValue;
+      } else if (dipValue > 0) {
+         return 1;
+      } else {
+         return -1;
+      }
+   }
+
+   public static int dipToPx(final double dipValue) {
+      final int pxValue = (int) (dipValue * displayDensity);
+
+      if (pxValue != 0) {
+         return pxValue;
+      } else if (dipValue > 0) {
+         return 1;
+      } else {
+         return -1;
+      }
+   }
 
    public static <V extends View>
          V addNewView(final ViewManager parentView,

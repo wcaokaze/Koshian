@@ -14,6 +14,10 @@ import android.view.*
 inline class Koshian<out V, out L, out CL, M : KoshianMode>
       (val `$$koshianInternal$view`: Any?)
 {
+   val Int   .dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
+   val Float .dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
+   val Double.dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
+
    inline operator fun <V>
          V.invoke(
                applyAction: ViewBuilder<V, CL, KoshianMode.Applier>.() -> Unit
