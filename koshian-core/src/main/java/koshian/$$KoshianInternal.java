@@ -30,6 +30,34 @@ public final class $$KoshianInternal {
       return child;
    }
 
+   public static void assertNextView(final Object parent, final View view) {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException("A View(" + view + ") was specified " +
+               "but there is no ViewGroup in current Koshian.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+      final int applyingIndex = $$KoshianInternal.applyingIndex;
+
+      if (applyingIndex == -1) {
+         throw new IllegalStateException("A View (" + view + ") was specified " +
+               "but it seems that current Koshian is not in Applier context.");
+      }
+
+      if (applyingIndex >= viewGroup.getChildCount()) {
+         throw new AssertionError("A View (" + view + ") was specified " +
+               "but current Koshian has children no longer.");
+      }
+
+      final View nextView = viewGroup.getChildAt(applyingIndex);
+
+      if (view != nextView) {
+         throw new AssertionError("A View (" + view + ") was specified " +
+               "but it does not match with the next View. " +
+               "(Information: the next View was " + nextView + ")");
+      }
+   }
+
    public static <V> V findView(final ViewManager parent,
                                 final Class<V> viewClass)
    {

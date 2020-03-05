@@ -13,6 +13,19 @@ import android.view.*
 @KoshianMarker
 inline class Koshian<out V, out L, out CL, M : KoshianMode>
       (val `$$koshianInternal$view`: Any?)
+{
+   inline operator fun <V>
+         V.invoke(
+               applyAction: ViewBuilder<V, CL, KoshianMode.Applier>.() -> Unit
+         )
+         where V : View
+   {
+      `$$KoshianInternal`.assertNextView(`$$koshianInternal$view`, this)
+
+      val koshian = ViewBuilder<V, CL, KoshianMode.Applier>(this)
+      koshian.applyAction()
+   }
+}
 
 inline val <V : View> Koshian<V, *, *, *>.view: V get() {
    @Suppress("UNCHECKED_CAST")

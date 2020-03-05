@@ -348,5 +348,102 @@ class ApplierTest {
          assertEquals(4.0f, layoutParams.weight)
       }
    }
+
+   @Test fun specifyView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            linearLayout {
+               view {
+               }
+
+               koshianTextView = textView {
+                  view.text = "Koshian"
+               }
+
+               view {
+               }
+            }
+         }
+
+         v.applyKoshian {
+            view {
+            }
+
+            koshianTextView {
+               layout.width  = WRAP_CONTENT
+               layout.height = MATCH_PARENT
+               view.textSize = 4.0f
+            }
+
+            view {
+            }
+         }
+      }
+   }
+
+   @Test fun specifyView_inNotViewGroupBuilder() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            linearLayout {
+               view {
+               }
+
+               koshianTextView = textView {
+               }
+            }
+         }
+
+         val exception = assertFailsWith<IllegalStateException> {
+            v.applyKoshian {
+               view {
+                  koshianTextView {
+                  }
+               }
+            }
+         }
+
+         val message = exception.message
+         assertNotNull(message)
+         assertTrue(koshianTextView.toString() in message)
+         assertTrue("no ViewGroup" in message)
+      }
+   }
+
+   @Test fun specifyView_notMatch() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val unmatchedView: View
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            linearLayout {
+               unmatchedView = view {
+               }
+
+               koshianTextView = textView {
+               }
+            }
+         }
+
+         val exception = assertFailsWith<AssertionError> {
+            v.applyKoshian {
+               koshianTextView {
+               }
+            }
+         }
+
+         val message = exception.message
+         assertNotNull(message)
+         assertTrue(koshianTextView.toString() in message)
+         assertTrue("not match" in message)
+         assertTrue(unmatchedView.toString() in message)
+      }
+   }
 }
 
