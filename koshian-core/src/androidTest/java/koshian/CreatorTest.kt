@@ -123,25 +123,25 @@ class CreatorTest {
 
    @Test fun contracts() {
       activityScenarioRule.scenario.onActivity { activity ->
-         val textView: TextView
+         val koshianTextView: TextView
 
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
             frameLayout {
-               textView = textView {
+               koshianTextView = textView {
                   view.text = "Koshian"
                }
             }
          }
 
-         assertEquals("Koshian", textView.text)
-         assertSame(textView, v.getChildAt(0))
+         assertEquals("Koshian", koshianTextView.text)
+         assertSame(koshianTextView, v.getChildAt(0))
       }
    }
 
    @Test fun contracts_addView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         val textView: TextView
+         val koshianTextView: TextView
 
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -152,15 +152,15 @@ class CreatorTest {
          @UseExperimental(ExperimentalContracts::class)
          val child = v.addView {
             frameLayout {
-               textView = textView {
+               koshianTextView = textView {
                   view.text = "Koshian"
                }
             }
          }
 
-         assertEquals("Koshian", textView.text)
+         assertEquals("Koshian", koshianTextView.text)
          assertSame(child, v.getChildAt(0))
-         assertSame(textView, child.getChildAt(0))
+         assertSame(koshianTextView, child.getChildAt(0))
       }
    }
 }
