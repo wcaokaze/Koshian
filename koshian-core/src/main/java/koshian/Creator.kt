@@ -16,6 +16,8 @@ inline fun <R> koshian(
    `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = KoshianRoot.CONSTRUCTOR
 
+   `$$KoshianInternal`.init(context)
+
    try {
       val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(KoshianRoot.INSTANCE)
       return koshian.koshianBuilder()
