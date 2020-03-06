@@ -10,6 +10,9 @@ object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLa
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
+/**
+ * adds Views into this FrameLayout.
+ */
 @ExperimentalContracts
 inline fun <R> FrameLayout.addView(
       buildAction: ViewGroupBuilder<FrameLayout, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
@@ -18,6 +21,9 @@ inline fun <R> FrameLayout.addView(
    return addView(FrameLayoutConstructor, buildAction)
 }
 
+/**
+ * creates a new FrameLayout and adds it into this ViewGroup.
+ */
 @ExperimentalContracts
 inline fun <L> KoshianParent<L, KoshianMode.Creator>.frameLayout(
       buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
@@ -26,6 +32,10 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.frameLayout(
    return create(FrameLayoutConstructor, buildAction)
 }
 
+/**
+ * finds Views that are already added in this FrameLayout,
+ * and applies Koshian DSL to them.
+ */
 inline fun FrameLayout.applyKoshian(
       applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
