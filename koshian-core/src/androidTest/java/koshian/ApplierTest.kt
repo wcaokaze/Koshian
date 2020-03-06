@@ -20,7 +20,7 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            textView {
+            TextView {
             }
          }
 
@@ -36,7 +36,7 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
+            FrameLayout {
             }
          }
 
@@ -52,21 +52,21 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               textView {
+            FrameLayout {
+               TextView {
                }
 
-               textView {
+               TextView {
                }
             }
          }
 
          v.applyKoshian {
-            textView {
+            TextView {
                view.text = "TextView1"
             }
 
-            textView {
+            TextView {
                view.text = "TextView2"
             }
          }
@@ -85,32 +85,32 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               linearLayout {
-                  textView {
+            FrameLayout {
+               LinearLayout {
+                  TextView {
                   }
 
-                  textView {
+                  TextView {
                   }
                }
 
-               textView {
+               TextView {
                }
             }
          }
 
          v.applyKoshian {
-            linearLayout {
-               textView {
+            LinearLayout {
+               TextView {
                   view.text = "TextView1_1"
                }
 
-               textView {
+               TextView {
                   view.text = "TextView1_2"
                }
             }
 
-            textView {
+            TextView {
                view.text = "TextView2"
             }
          }
@@ -136,18 +136,18 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               view {
+            FrameLayout {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            textView {
+            TextView {
                view.text = "TextView"
             }
 
-            view {
+            View {
                view.elevation = 4.0f
             }
          }
@@ -166,25 +166,25 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               view {
+            FrameLayout {
+               View {
                }
 
-               view {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                view.elevation = 4.0f
             }
 
-            textView {
+            TextView {
                view.text = "TextView"
             }
 
-            view {
+            View {
                view.elevation = 8.0f
             }
          }
@@ -207,18 +207,18 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               view {
+            FrameLayout {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                view.elevation = 4.0f
             }
 
-            textView {
+            TextView {
                view.text = "TextView"
             }
          }
@@ -237,12 +237,12 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
+            FrameLayout {
             }
          }
 
          v.applyKoshian {
-            textView {
+            TextView {
                view.text = "TextView"
             }
          }
@@ -257,7 +257,7 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            view {
+            View {
             }
          }
 
@@ -273,7 +273,7 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
+            FrameLayout {
             }
          }
 
@@ -289,14 +289,14 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               view {
+            LinearLayout {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                layout.weight = 4.0f
             }
          }
@@ -311,14 +311,14 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               frameLayout {
+            LinearLayout {
+               FrameLayout {
                }
             }
          }
 
          v.applyKoshian {
-            frameLayout {
+            FrameLayout {
                layout.weight = 4.0f
             }
          }
@@ -333,12 +333,12 @@ class ApplierTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
+            LinearLayout {
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                layout.weight = 4.0f
             }
          }
@@ -355,21 +355,21 @@ class ApplierTest {
 
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               view {
+            LinearLayout {
+               View {
                }
 
-               koshianTextView = textView {
+               koshianTextView = TextView {
                   view.text = "Koshian"
                }
 
-               view {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
             }
 
             koshianTextView {
@@ -378,7 +378,7 @@ class ApplierTest {
                view.textSize = 4.0f
             }
 
-            view {
+            View {
             }
          }
       }
@@ -390,18 +390,18 @@ class ApplierTest {
 
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               view {
+            LinearLayout {
+               View {
                }
 
-               koshianTextView = textView {
+               koshianTextView = TextView {
                }
             }
          }
 
          val exception = assertFailsWith<IllegalStateException> {
             v.applyKoshian {
-               view {
+               View {
                   koshianTextView {
                   }
                }
@@ -422,11 +422,11 @@ class ApplierTest {
 
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               unmatchedView = view {
+            LinearLayout {
+               unmatchedView = View {
                }
 
-               koshianTextView = textView {
+               koshianTextView = TextView {
                }
             }
          }

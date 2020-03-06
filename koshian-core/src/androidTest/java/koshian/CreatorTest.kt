@@ -20,7 +20,7 @@ class CreatorTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            textView {
+            TextView {
                view.text = "Koshian"
             }
          }
@@ -33,13 +33,13 @@ class CreatorTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               textView {
+            FrameLayout {
+               TextView {
                   view.text = "TextView1"
                }
 
-               frameLayout {
-                  textView {
+               FrameLayout {
+                  TextView {
                      view.text = "TextView2"
                   }
                }
@@ -66,11 +66,11 @@ class CreatorTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
+            LinearLayout {
                layout.width  = MATCH_PARENT
                layout.height = MATCH_PARENT
 
-               textView {
+               TextView {
                   layout.width  = MATCH_PARENT
                   layout.height = MATCH_PARENT
                   layout.weight = 1.0f
@@ -90,8 +90,8 @@ class CreatorTest {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               textView {
+            LinearLayout {
+               TextView {
                   view.text = "TextView1"
                }
             }
@@ -99,7 +99,7 @@ class CreatorTest {
 
          @UseExperimental(ExperimentalContracts::class)
          v.addView {
-            textView {
+            TextView {
                layout.weight = 4.0f
                view.text = "TextView2"
             }
@@ -127,8 +127,8 @@ class CreatorTest {
 
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               koshianTextView = textView {
+            FrameLayout {
+               koshianTextView = TextView {
                   view.text = "Koshian"
                }
             }
@@ -145,14 +145,14 @@ class CreatorTest {
 
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
+            FrameLayout {
             }
          }
 
          @UseExperimental(ExperimentalContracts::class)
          val child = v.addView {
-            frameLayout {
-               koshianTextView = textView {
+            FrameLayout {
+               koshianTextView = TextView {
                   view.text = "Koshian"
                }
             }

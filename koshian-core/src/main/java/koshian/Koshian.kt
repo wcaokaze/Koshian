@@ -44,6 +44,15 @@ inline val <V : View> Koshian<V, *, *, *>.view: V get() {
    return `$$koshianInternal$view` as V
 }
 
+@Deprecated(
+      "It always fails to apply koshian to the current koshian-view. Did you mean `View {}`?",
+      ReplaceWith("View", "koshian.*"))
+inline fun <V : View, L> Koshian<V, *, L, *>.view(
+      applyAction: ViewBuilder<V, L, KoshianMode.Applier>.() -> Unit
+) {
+   view.invoke(applyAction)
+}
+
 inline val <L> Koshian<View, L, *, *>.layout: L get() {
    @Suppress("UNCHECKED_CAST")
    return (`$$koshianInternal$view` as View).layoutParams as L
