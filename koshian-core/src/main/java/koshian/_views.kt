@@ -9,14 +9,16 @@ object ViewConstructor : KoshianViewConstructor<View> {
 }
 
 @ExperimentalContracts
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.view(
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
       buildAction: ViewBuilder<View, L, KoshianMode.Creator>.() -> Unit
 ): View {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
    return create(ViewConstructor, buildAction)
 }
 
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.view(
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.View(
       buildAction: ViewBuilder<View, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(ViewConstructor, buildAction)

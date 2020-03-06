@@ -11,14 +11,16 @@ object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, Linea
 }
 
 @ExperimentalContracts
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.linearLayout(
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
       buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
 ): LinearLayout {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
    return create(LinearLayoutConstructor, buildAction)
 }
 
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.linearLayout(
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
       buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(LinearLayoutConstructor, buildAction)

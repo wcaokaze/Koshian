@@ -25,7 +25,8 @@ inline fun <R> FrameLayout.addView(
  * creates a new FrameLayout and adds it into this ViewGroup.
  */
 @ExperimentalContracts
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.frameLayout(
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
       buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
 ): FrameLayout {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
@@ -42,7 +43,8 @@ inline fun FrameLayout.applyKoshian(
    applyKoshian(FrameLayoutConstructor, applyAction)
 }
 
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.frameLayout(
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
       buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(FrameLayoutConstructor, buildAction)
