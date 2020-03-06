@@ -9,6 +9,7 @@ import kotlin.test.Test
 
 import android.view.*
 import android.widget.*
+import kotlin.contracts.*
 
 @RunWith(AndroidJUnit4::class)
 class ApplierTest {
@@ -17,8 +18,9 @@ class ApplierTest {
 
    @Test fun apply() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            textView {
+            TextView {
             }
          }
 
@@ -32,8 +34,9 @@ class ApplierTest {
 
    @Test fun applyViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
+            FrameLayout {
             }
          }
 
@@ -47,22 +50,23 @@ class ApplierTest {
 
    @Test fun applyChildView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               textView {
+            FrameLayout {
+               TextView {
                }
 
-               textView {
+               TextView {
                }
             }
          }
 
          v.applyKoshian {
-            textView {
+            TextView {
                view.text = "TextView1"
             }
 
-            textView {
+            TextView {
                view.text = "TextView2"
             }
          }
@@ -79,33 +83,34 @@ class ApplierTest {
 
    @Test fun nestedViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               linearLayout {
-                  textView {
+            FrameLayout {
+               LinearLayout {
+                  TextView {
                   }
 
-                  textView {
+                  TextView {
                   }
                }
 
-               textView {
+               TextView {
                }
             }
          }
 
          v.applyKoshian {
-            linearLayout {
-               textView {
+            LinearLayout {
+               TextView {
                   view.text = "TextView1_1"
                }
 
-               textView {
+               TextView {
                   view.text = "TextView1_2"
                }
             }
 
-            textView {
+            TextView {
                view.text = "TextView2"
             }
          }
@@ -129,19 +134,20 @@ class ApplierTest {
 
    @Test fun insert_first() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               view {
+            FrameLayout {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            textView {
+            TextView {
                view.text = "TextView"
             }
 
-            view {
+            View {
                view.elevation = 4.0f
             }
          }
@@ -158,26 +164,27 @@ class ApplierTest {
 
    @Test fun insert_middle() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               view {
+            FrameLayout {
+               View {
                }
 
-               view {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                view.elevation = 4.0f
             }
 
-            textView {
+            TextView {
                view.text = "TextView"
             }
 
-            view {
+            View {
                view.elevation = 8.0f
             }
          }
@@ -198,19 +205,20 @@ class ApplierTest {
 
    @Test fun insert_last() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               view {
+            FrameLayout {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                view.elevation = 4.0f
             }
 
-            textView {
+            TextView {
                view.text = "TextView"
             }
          }
@@ -227,13 +235,14 @@ class ApplierTest {
 
    @Test fun insert_intoEmptyView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
+            FrameLayout {
             }
          }
 
          v.applyKoshian {
-            textView {
+            TextView {
                view.text = "TextView"
             }
          }
@@ -246,8 +255,9 @@ class ApplierTest {
 
    @Test fun layoutParams_singleView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            view {
+            View {
             }
          }
 
@@ -261,8 +271,9 @@ class ApplierTest {
 
    @Test fun layoutParams_singleViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
+            FrameLayout {
             }
          }
 
@@ -276,15 +287,16 @@ class ApplierTest {
 
    @Test fun layoutParams_viewInViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               view {
+            LinearLayout {
+               View {
                }
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                layout.weight = 4.0f
             }
          }
@@ -297,15 +309,16 @@ class ApplierTest {
 
    @Test fun layoutParams_viewGroupInViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               frameLayout {
+            LinearLayout {
+               FrameLayout {
                }
             }
          }
 
          v.applyKoshian {
-            frameLayout {
+            FrameLayout {
                layout.weight = 4.0f
             }
          }
@@ -318,13 +331,14 @@ class ApplierTest {
 
    @Test fun layoutParams_insertedView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
+            LinearLayout {
             }
          }
 
          v.applyKoshian {
-            view {
+            View {
                layout.weight = 4.0f
             }
          }
@@ -332,6 +346,103 @@ class ApplierTest {
          val layoutParams = v.getChildAt(0).layoutParams
          assertTrue(layoutParams is LinearLayout.LayoutParams)
          assertEquals(4.0f, layoutParams.weight)
+      }
+   }
+
+   @Test fun specifyView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               View {
+               }
+
+               koshianTextView = TextView {
+                  view.text = "Koshian"
+               }
+
+               View {
+               }
+            }
+         }
+
+         v.applyKoshian {
+            View {
+            }
+
+            koshianTextView {
+               layout.width  = WRAP_CONTENT
+               layout.height = MATCH_PARENT
+               view.textSize = 4.0f
+            }
+
+            View {
+            }
+         }
+      }
+   }
+
+   @Test fun specifyView_inNotViewGroupBuilder() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               View {
+               }
+
+               koshianTextView = TextView {
+               }
+            }
+         }
+
+         val exception = assertFailsWith<IllegalStateException> {
+            v.applyKoshian {
+               View {
+                  koshianTextView {
+                  }
+               }
+            }
+         }
+
+         val message = exception.message
+         assertNotNull(message)
+         assertTrue(koshianTextView.toString() in message)
+         assertTrue("no ViewGroup" in message)
+      }
+   }
+
+   @Test fun specifyView_notMatch() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val unmatchedView: View
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               unmatchedView = View {
+               }
+
+               koshianTextView = TextView {
+               }
+            }
+         }
+
+         val exception = assertFailsWith<AssertionError> {
+            v.applyKoshian {
+               koshianTextView {
+               }
+            }
+         }
+
+         val message = exception.message
+         assertNotNull(message)
+         assertTrue(koshianTextView.toString() in message)
+         assertTrue("not match" in message)
+         assertTrue(unmatchedView.toString() in message)
       }
    }
 }

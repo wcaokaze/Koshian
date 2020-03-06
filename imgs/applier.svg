@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="634" height="160" viewBox="0 0 634 160">
+
+    <defs>
+        <marker id="arrow" orient="auto" overflow="visible">
+            <path stroke-linejoin="round" fill="#6897bb"
+                  d="M -13,4 L 0,0 -13,-4 C -10,-2 -10,2 -13,4 z"/>
+        </marker>
+    </defs>
+
+    <g font-family="monospace" font-size="13px">
+        <rect width="312" height="160" fill="#2b2b2b" />
+
+        <text x="5" y="20">
+            <tspan fill="#cc7832">val</tspan> <tspan fill="#a9b7c6">contentView = koshian(context) {</tspan>
+        </text>
+        <text x="30" y="40">
+            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
+        </text>
+        <text x="55" y="60">
+            <tspan fill="#ffc66d">TextView</tspan> <tspan fill="#a9b7c6">{}</tspan>
+        </text>
+        <text x="55" y="80">
+            <tspan fill="#ffc66d">TextView</tspan> <tspan fill="#a9b7c6">{}</tspan>
+        </text>
+        <text x="55" y="100">
+            <tspan fill="#ffc66d">ImageView</tspan> <tspan fill="#a9b7c6">{}</tspan>
+        </text>
+        <text x="30" y="120">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="5" y="140">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+    </g>
+
+    <rect x="312" width="10" height="160" fill="#313131" />
+
+    <g font-family="monospace" font-size="13px" transform="translate(322 0)">
+        <rect width="312" height="160" fill="#2b2b2b" />
+
+        <text x="5" y="20">
+            <tspan fill="#a9b7c6">contentView.applyKoshian {</tspan>
+        </text>
+        <text x="30" y="40">
+            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
+        </text>
+        <text x="55" y="60">
+            <tspan fill="#ffc66d">TextView</tspan> <tspan fill="#a9b7c6">{}</tspan>
+        </text>
+        <text x="55" y="80">
+            <tspan fill="#ffc66d">TextView</tspan> <tspan fill="#a9b7c6">{}</tspan>
+        </text>
+        <text x="55" y="100">
+            <tspan fill="#ffc66d">ImageView</tspan> <tspan fill="#a9b7c6">{}</tspan>
+        </text>
+        <text x="30" y="120">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="5" y="140">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+    </g>
+
+    <path marker-end="url(#arrow)" stroke="#6897bb" stroke-width="1px"
+          d="M 360,55 170,55"/>
+
+    <path marker-end="url(#arrow)" stroke="#6897bb" stroke-width="1px"
+          d="M 360,75 170,75"/>
+
+    <path marker-end="url(#arrow)" stroke="#6897bb" stroke-width="1px"
+          d="M 360,95 170,95"/>
+
+</svg>

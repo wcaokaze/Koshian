@@ -2,9 +2,13 @@ package koshian;
 
 import android.annotation.*;
 import android.content.*;
+import android.util.DisplayMetrics;
 import android.view.*;
 
 public final class $$KoshianInternal {
+   private static float displayDensity = 0.0f;
+   private static float scaledDensity  = 0.0f;
+
    @SuppressLint("StaticFieldLeak")
    public static Context context = null;
 
@@ -12,6 +16,60 @@ public final class $$KoshianInternal {
    public static KoshianViewGroupConstructor parentViewConstructor = null;
 
    public static int applyingIndex = -1;
+
+   public static void init(final Context context) {
+      final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+      displayDensity = displayMetrics.density;
+      scaledDensity  = displayMetrics.scaledDensity;
+   }
+
+   public static int dipToPx(final int dipValue) {
+      final int pxValue = (int) (dipValue * displayDensity);
+
+      if (pxValue != 0) {
+         return pxValue;
+      } else if (dipValue > 0) {
+         return 1;
+      } else {
+         return -1;
+      }
+   }
+
+   public static int dipToPx(final float dipValue) {
+      final int pxValue = (int) (dipValue * displayDensity);
+
+      if (pxValue != 0) {
+         return pxValue;
+      } else if (dipValue > 0) {
+         return 1;
+      } else {
+         return -1;
+      }
+   }
+
+   public static int dipToPx(final double dipValue) {
+      final int pxValue = (int) (dipValue * displayDensity);
+
+      if (pxValue != 0) {
+         return pxValue;
+      } else if (dipValue > 0) {
+         return 1;
+      } else {
+         return -1;
+      }
+   }
+
+   public static float spToPx(final int spValue) {
+      return spValue * scaledDensity;
+   }
+
+   public static float spToPx(final float spValue) {
+      return spValue * scaledDensity;
+   }
+
+   public static float spToPx(final double spValue) {
+      return (float) (spValue * scaledDensity);
+   }
 
    public static <V extends View>
          V addNewView(final ViewManager parentView,
@@ -28,6 +86,34 @@ public final class $$KoshianInternal {
       }
 
       return child;
+   }
+
+   public static void assertNextView(final Object parent, final View view) {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException("A View(" + view + ") was specified " +
+               "but there is no ViewGroup in current Koshian.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+      final int applyingIndex = $$KoshianInternal.applyingIndex;
+
+      if (applyingIndex == -1) {
+         throw new IllegalStateException("A View (" + view + ") was specified " +
+               "but it seems that current Koshian is not in Applier context.");
+      }
+
+      if (applyingIndex >= viewGroup.getChildCount()) {
+         throw new AssertionError("A View (" + view + ") was specified " +
+               "but current Koshian has children no longer.");
+      }
+
+      final View nextView = viewGroup.getChildAt(applyingIndex);
+
+      if (view != nextView) {
+         throw new AssertionError("A View (" + view + ") was specified " +
+               "but it does not match with the next View. " +
+               "(Information: the next View was " + nextView + ")");
+      }
    }
 
    public static <V> V findView(final ViewManager parent,

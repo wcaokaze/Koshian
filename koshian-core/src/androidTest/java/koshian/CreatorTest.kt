@@ -9,6 +9,7 @@ import kotlin.test.Test
 
 import android.view.*
 import android.widget.*
+import kotlin.contracts.*
 
 @RunWith(AndroidJUnit4::class)
 class CreatorTest {
@@ -17,8 +18,9 @@ class CreatorTest {
 
    @Test fun createView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            textView {
+            TextView {
                view.text = "Koshian"
             }
          }
@@ -29,14 +31,15 @@ class CreatorTest {
 
    @Test fun buildViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            frameLayout {
-               textView {
+            FrameLayout {
+               TextView {
                   view.text = "TextView1"
                }
 
-               frameLayout {
-                  textView {
+               FrameLayout {
+                  TextView {
                      view.text = "TextView2"
                   }
                }
@@ -61,12 +64,13 @@ class CreatorTest {
 
    @Test fun buildLayoutParams() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
+            LinearLayout {
                layout.width  = MATCH_PARENT
                layout.height = MATCH_PARENT
 
-               textView {
+               TextView {
                   layout.width  = MATCH_PARENT
                   layout.height = MATCH_PARENT
                   layout.weight = 1.0f
@@ -84,16 +88,18 @@ class CreatorTest {
 
    @Test fun addView() {
       activityScenarioRule.scenario.onActivity { activity ->
+         @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
-            linearLayout {
-               textView {
+            LinearLayout {
+               TextView {
                   view.text = "TextView1"
                }
             }
          }
 
+         @UseExperimental(ExperimentalContracts::class)
          v.addView {
-            textView {
+            TextView {
                layout.weight = 4.0f
                view.text = "TextView2"
             }
@@ -112,6 +118,49 @@ class CreatorTest {
          val child2LayoutParams = child2.layoutParams
          assertTrue(child2LayoutParams is LinearLayout.LayoutParams)
          assertEquals(4.0f, child2LayoutParams.weight)
+      }
+   }
+
+   @Test fun contracts() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               koshianTextView = TextView {
+                  view.text = "Koshian"
+               }
+            }
+         }
+
+         assertEquals("Koshian", koshianTextView.text)
+         assertSame(koshianTextView, v.getChildAt(0))
+      }
+   }
+
+   @Test fun contracts_addView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val koshianTextView: TextView
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+            }
+         }
+
+         @UseExperimental(ExperimentalContracts::class)
+         val child = v.addView {
+            FrameLayout {
+               koshianTextView = TextView {
+                  view.text = "Koshian"
+               }
+            }
+         }
+
+         assertEquals("Koshian", koshianTextView.text)
+         assertSame(child, v.getChildAt(0))
+         assertSame(koshianTextView, child.getChildAt(0))
       }
    }
 }

@@ -13,10 +13,44 @@ import android.view.*
 @KoshianMarker
 inline class Koshian<out V, out L, out CL, M : KoshianMode>
       (val `$$koshianInternal$view`: Any?)
+{
+   val Int   .dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
+   val Float .dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
+   val Double.dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
+
+   val Int   .sp: Float inline get() = `$$KoshianInternal`.spToPx(this)
+   val Float .sp: Float inline get() = `$$KoshianInternal`.spToPx(this)
+   val Double.sp: Float inline get() = `$$KoshianInternal`.spToPx(this)
+
+   val Int   .px: Int inline get() = this
+   val Float .px: Int inline get() = this.toInt()
+   val Double.px: Int inline get() = this.toInt()
+
+   inline operator fun <V>
+         V.invoke(
+               applyAction: ViewBuilder<V, CL, KoshianMode.Applier>.() -> Unit
+         )
+         where V : View
+   {
+      `$$KoshianInternal`.assertNextView(`$$koshianInternal$view`, this)
+
+      val koshian = ViewBuilder<V, CL, KoshianMode.Applier>(this)
+      koshian.applyAction()
+   }
+}
 
 inline val <V : View> Koshian<V, *, *, *>.view: V get() {
    @Suppress("UNCHECKED_CAST")
    return `$$koshianInternal$view` as V
+}
+
+@Deprecated(
+      "It always fails to apply koshian to the current koshian-view. Did you mean `View {}`?",
+      ReplaceWith("View", "koshian.*"))
+inline fun <V : View, L> Koshian<V, *, L, *>.view(
+      applyAction: ViewBuilder<V, L, KoshianMode.Applier>.() -> Unit
+) {
+   view.invoke(applyAction)
 }
 
 inline val <L> Koshian<View, L, *, *>.layout: L get() {
