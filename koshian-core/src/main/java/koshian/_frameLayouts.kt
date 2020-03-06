@@ -36,6 +36,39 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
 /**
  * finds Views that are already added in this FrameLayout,
  * and applies Koshian DSL to them.
+ *
+ * ![](https://github.com/wcaokaze/Koshian/blob/master/imgs/applier.svg)
+ *
+ * The following 2 snippets are equivalent.
+ * ```kotlin
+ * val contentView = koshian(context) {
+ *    LinearLayout {
+ *       TextView {
+ *          view.text = "hello"
+ *          view.textColor = 0xffffff opacity 0.8
+ *       }
+ *    }
+ * }
+ * ```
+ * ```kotlin
+ * val contentView = koshian(context) {
+ *    LinearLayout {
+ *       TextView {
+ *          view.text = "hello"
+ *       }
+ *    }
+ * }
+ *
+ * contentView.applyKoshian {
+ *    TextView {
+ *       view.textColor = 0xffffff opacity 0.8
+ *    }
+ * }
+ * ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://github.com/wcaokaze/Koshian/blob/master/imgs/applier_insertion.svg)
  */
 inline fun FrameLayout.applyKoshian(
       applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
