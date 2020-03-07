@@ -76,6 +76,13 @@ inline fun FrameLayout.applyKoshian(
    applyKoshian(FrameLayoutConstructor, applyAction)
 }
 
+/**
+ * If the next View is a FrameLayout, applies Koshian to it.
+ *
+ * Otherwise, creates a new FrameLayout and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
 @Suppress("FunctionName")
 inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
       buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
