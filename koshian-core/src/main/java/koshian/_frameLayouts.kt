@@ -40,31 +40,35 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
  *
  * The following 2 snippets are equivalent.
- * ```kotlin
- * val contentView = koshian(context) {
- *    LinearLayout {
- *       TextView {
- *          view.text = "hello"
- *          view.textColor = 0xffffff opacity 0.8
- *       }
- *    }
- * }
- * ```
- * ```kotlin
- * val contentView = koshian(context) {
- *    LinearLayout {
- *       TextView {
- *          view.text = "hello"
- *       }
- *    }
- * }
  *
- * contentView.applyKoshian {
- *    TextView {
- *       view.textColor = 0xffffff opacity 0.8
- *    }
- * }
- * ```
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
  *
  * When mismatched View is specified, Koshian creates a new View and inserts it.
  *
