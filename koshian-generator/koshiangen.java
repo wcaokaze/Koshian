@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,14 +18,20 @@ public final class koshiangen {
                .filter(s -> !s.startsWith("-"))
                .collect(Collectors.toList());
 
+         int functionType = options & (OPTION_VIEW | OPTION_VIEW_GROUP);
+
+         if (functionType != OPTION_VIEW && functionType != OPTION_VIEW_GROUP) {
+            functionType = promptViewOrViewGroup();
+         }
+
          final String koshianFunctions;
 
-         if ((options & OPTION_VIEW) != 0) {
+         if (functionType == OPTION_VIEW) {
             koshianFunctions = generateKoshianViewBuilderFunctions(views);
-         } else if ((options & OPTION_VIEW_GROUP) != 0) {
+         } else if (functionType == OPTION_VIEW_GROUP) {
             koshianFunctions = generateKoshianViewGroupBuilderFunctions(views);
          } else {
-            throw new IllegalArgumentException("Specify -vg or -v");
+            return;
          }
 
          System.out.println(koshianFunctions);
@@ -46,6 +55,31 @@ public final class koshiangen {
                }
             })
             .reduce(0, (a, b) -> a | b);
+   }
+
+   private static int promptViewOrViewGroup() {
+      System.out.println("Select View or ViewGroup to generate Koshian functions (v/vg):");
+
+      try (final var in = new BufferedReader(new InputStreamReader(System.in))) {
+         while (true) {
+            final var line = in.readLine();
+
+            if (line == null) { return 0; }
+
+            switch (line) {
+               case "v":
+                  System.out.println();
+                  return OPTION_VIEW;
+               case "vg":
+                  System.out.println();
+                  return OPTION_VIEW_GROUP;
+               default:
+                  System.out.println("Input \"v\" (View) or \"vg\" (ViewGroup):");
+            }
+         }
+      } catch (final IOException e) {
+         return 0;
+      }
    }
 
    private static String generateKoshianViewBuilderFunctions(final List<String> views) {
