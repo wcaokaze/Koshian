@@ -3,38 +3,39 @@ package koshian
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ViewSwitcher
 import kotlin.contracts.*
 
-object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLayout.LayoutParams> {
-   override fun instantiate(context: Context) = FrameLayout(context)
+object ViewSwitcherConstructor : KoshianViewGroupConstructor<ViewSwitcher, FrameLayout.LayoutParams> {
+   override fun instantiate(context: Context?) = ViewSwitcher(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
 /**
- * adds Views into this FrameLayout.
+ * adds Views into this ViewSwitcher.
  */
 @ExperimentalContracts
-inline fun <R> FrameLayout.addView(
-      buildAction: ViewGroupBuilder<FrameLayout, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
+inline fun <R> ViewSwitcher.addView(
+      buildAction: ViewGroupBuilder<ViewSwitcher, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
 ): R {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(FrameLayoutConstructor, buildAction)
+   return addView(ViewSwitcherConstructor, buildAction)
 }
 
 /**
- * creates a new FrameLayout and adds it into this ViewGroup.
+ * creates a new ViewSwitcher and adds it into this ViewGroup.
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
-): FrameLayout {
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
+      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): ViewSwitcher {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(FrameLayoutConstructor, buildAction)
+   return create(ViewSwitcherConstructor, buildAction)
 }
 
 /**
- * finds Views that are already added in this FrameLayout,
+ * finds Views that are already added in this ViewSwitcher,
  * and applies Koshian DSL to them.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
@@ -74,22 +75,22 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
  */
-inline fun FrameLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+inline fun ViewSwitcher.applyKoshian(
+      applyAction: ViewGroupBuilder<ViewSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   applyKoshian(FrameLayoutConstructor, applyAction)
+   applyKoshian(ViewSwitcherConstructor, applyAction)
 }
 
 /**
- * If the next View is a FrameLayout, applies Koshian to it.
+ * If the next View is a ViewSwitcher, applies Koshian to it.
  *
- * Otherwise, creates a new FrameLayout and inserts it to the current position.
+ * Otherwise, creates a new ViewSwitcher and inserts it to the current position.
  *
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewSwitcher(
+      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   apply(FrameLayoutConstructor, buildAction)
+   apply(ViewSwitcherConstructor, buildAction)
 }

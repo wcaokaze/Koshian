@@ -3,38 +3,39 @@ package koshian
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TabWidget
 import kotlin.contracts.*
 
-object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, LinearLayout.LayoutParams> {
-   override fun instantiate(context: Context?) = LinearLayout(context)
+object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayout.LayoutParams> {
+   override fun instantiate(context: Context?) = TabWidget(context)
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
 /**
- * adds Views into this LinearLayout.
+ * adds Views into this TabWidget.
  */
 @ExperimentalContracts
-inline fun <R> LinearLayout.addView(
-      buildAction: ViewGroupBuilder<LinearLayout, Nothing, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> R
+inline fun <R> TabWidget.addView(
+      buildAction: ViewGroupBuilder<TabWidget, Nothing, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> R
 ): R {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(LinearLayoutConstructor, buildAction)
+   return addView(TabWidgetConstructor, buildAction)
 }
 
 /**
- * creates a new LinearLayout and adds it into this ViewGroup.
+ * creates a new TabWidget and adds it into this ViewGroup.
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
-      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
-): LinearLayout {
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabWidget(
+      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): TabWidget {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(LinearLayoutConstructor, buildAction)
+   return create(TabWidgetConstructor, buildAction)
 }
 
 /**
- * finds Views that are already added in this LinearLayout,
+ * finds Views that are already added in this TabWidget,
  * and applies Koshian DSL to them.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
@@ -74,22 +75,22 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
  */
-inline fun LinearLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+inline fun TabWidget.applyKoshian(
+      applyAction: ViewGroupBuilder<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   applyKoshian(LinearLayoutConstructor, applyAction)
+   applyKoshian(TabWidgetConstructor, applyAction)
 }
 
 /**
- * If the next View is a LinearLayout, applies Koshian to it.
+ * If the next View is a TabWidget, applies Koshian to it.
  *
- * Otherwise, creates a new LinearLayout and inserts it to the current position.
+ * Otherwise, creates a new TabWidget and inserts it to the current position.
  *
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
-      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabWidget(
+      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   apply(LinearLayoutConstructor, buildAction)
+   apply(TabWidgetConstructor, buildAction)
 }
