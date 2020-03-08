@@ -1,19 +1,65 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class koshiangen {
+   private static final int OPTION_VIEW       = 0b01;
+   private static final int OPTION_VIEW_GROUP = 0b10;
+
    public static void main(final String... args) {
-      final var koshianFunctions = generate(args);
-      System.out.println(koshianFunctions);
+      try {
+         final var options = parseOptions(args);
+
+         final var views = Arrays.stream(args)
+               .filter(s -> !s.startsWith("-"))
+               .collect(Collectors.toList());
+
+         final String koshianFunctions;
+
+         if ((options & OPTION_VIEW) != 0) {
+            koshianFunctions = generateKoshianViewBuilderFunctions(views);
+         } else if ((options & OPTION_VIEW_GROUP) != 0) {
+            koshianFunctions = generateKoshianViewGroupBuilderFunctions(views);
+         } else {
+            throw new IllegalArgumentException("Specify -vg or -v");
+         }
+
+         System.out.println(koshianFunctions);
+      } catch (final Exception e) {
+         System.out.println(e.getMessage());
+      }
    }
 
-   private static String generate(final String[] views) {
+   private static int parseOptions(final String... args) {
+      return Arrays.stream(args)
+            .filter(s -> s.startsWith("-"))
+            .map(s -> s.substring(1))
+            .flatMap(s -> {
+               switch (s) {
+                  case "v":
+                     return Stream.of(OPTION_VIEW);
+                  case "vg":
+                     return Stream.of(OPTION_VIEW_GROUP);
+                  default:
+                     throw new IllegalArgumentException("Unknown option: " + s);
+               }
+            })
+            .reduce(0, (a, b) -> a | b);
+   }
+
+   private static String generateKoshianViewBuilderFunctions(final List<String> views) {
       final var builder = new StringBuilder();
-      builder.append(generateImports());
-      builder.append('\n');
 
-      for (int i = 0; i < views.length; i++) {
-         builder.append(generateKoshianViewGroupBuilderFunctions(views[i]));
+      builder.append(
+            "import android.content.Context\n" +
+            "import kotlin.contracts.*\n" +
+            "\n");
 
-         if (i == views.length - 2) {
+      for (int i = 0; i < views.size(); i++) {
+         builder.append(generateKoshianViewBuilderFunction(views.get(i)));
+
+         if (i == views.size() - 2) {
             builder.append("\n// =====================================================================================================================\n\n");
          }
       }
@@ -21,14 +67,62 @@ public final class koshiangen {
       return builder.toString();
    }
 
-   private static String generateImports() {
-      return
-         "import android.content.Context\n" +
-         "import android.view.ViewGroup\n" +
-         "import kotlin.contracts.*\n";
+   private static String generateKoshianViewGroupBuilderFunctions(final List<String> views) {
+      final var builder = new StringBuilder();
+
+      builder.append(
+            "import android.content.Context\n" +
+            "import android.view.ViewGroup\n" +
+            "import kotlin.contracts.*\n" +
+            "\n");
+
+      for (int i = 0; i < views.size(); i++) {
+         builder.append(generateKoshianViewGroupBuilderFunction(views.get(i)));
+
+         if (i == views.size() - 2) {
+            builder.append("\n// =====================================================================================================================\n\n");
+         }
+      }
+
+      return builder.toString();
    }
 
-   private static String generateKoshianViewGroupBuilderFunctions(final String view) {
+   private static String generateKoshianViewBuilderFunction(final String view) {
+      final var viewConstructor = view + "Constructor";
+
+      return
+            "object "+viewConstructor+" : KoshianViewConstructor<"+view+"> {\n" +
+            "   override fun instantiate(context: Context?) = "+view+"(context)\n" +
+            "}\n" +
+            "\n" +
+            "/**\n" +
+            " * creates a new "+view+" and adds it into this ViewGroup.\n" +
+            " */\n" +
+            "@ExperimentalContracts\n" +
+            "@Suppress(\"FunctionName\")\n" +
+            "inline fun <L> KoshianParent<L, KoshianMode.Creator>."+view+"(\n" +
+            "      buildAction: ViewBuilder<"+view+", L, KoshianMode.Creator>.() -> Unit\n" +
+            "): "+view+" {\n" +
+            "   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }\n" +
+            "   return create("+viewConstructor+", buildAction)\n" +
+            "}\n" +
+            "\n" +
+            "/**\n" +
+            " * If the next View is a "+view+", applies Koshian to it.\n" +
+            " *\n" +
+            " * Otherwise, creates a new "+view+" and inserts it to the current position.\n" +
+            " *\n" +
+            " * @see applyKoshian\n" +
+            " */\n" +
+            "@Suppress(\"FunctionName\")\n" +
+            "inline fun <L> KoshianParent<L, KoshianMode.Applier>."+view+"(\n" +
+            "      buildAction: ViewBuilder<"+view+", L, KoshianMode.Applier>.() -> Unit\n" +
+            ") {\n" +
+            "   apply("+viewConstructor+", buildAction)\n" +
+            "}\n";
+   }
+
+   private static String generateKoshianViewGroupBuilderFunction(final String view) {
       final var viewConstructor = view + "Constructor";
       final var layoutParams = view + ".LayoutParams";
 
