@@ -2,6 +2,8 @@ package koshian
 
 import android.view.*
 
+typealias KoshianExt<V> = Koshian<V, *, *, *>
+
 typealias KoshianParent<L, M> = Koshian<ViewManager, *, L, M>
 
 typealias ViewBuilder     <V, L,     M> = Koshian<V, L, Nothing, M>
