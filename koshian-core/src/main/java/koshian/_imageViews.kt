@@ -2,6 +2,8 @@
 package koshian
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import kotlin.contracts.*
 
@@ -34,3 +36,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageView(
 ) {
    apply(ImageViewConstructor, buildAction)
 }
+
+val KoshianExt<ImageView>.SCALE_TYPE_CENTER inline get() = ImageView.ScaleType.CENTER
+val KoshianExt<ImageView>.CENTER_CROP       inline get() = ImageView.ScaleType.CENTER_CROP
+val KoshianExt<ImageView>.CENTER_INSIDE     inline get() = ImageView.ScaleType.CENTER_INSIDE
+val KoshianExt<ImageView>.FIT_CENTER        inline get() = ImageView.ScaleType.FIT_CENTER
+val KoshianExt<ImageView>.FIT_END           inline get() = ImageView.ScaleType.FIT_END
+val KoshianExt<ImageView>.FIT_START         inline get() = ImageView.ScaleType.FIT_START
+val KoshianExt<ImageView>.FIT_XY            inline get() = ImageView.ScaleType.FIT_XY
+val KoshianExt<ImageView>.MATRIX            inline get() = ImageView.ScaleType.MATRIX
+
+var ImageView.image: Drawable?
+   inline get() = drawable
+   inline set(value) = setImageDrawable(value)
+
+var ImageView.bitmap: Bitmap?
+   @Deprecated("This getter always throws an Exception", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   inline set(value) = setImageBitmap(value)
