@@ -3,38 +3,39 @@ package koshian
 import android.content.Context
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TabHost
 import kotlin.contracts.*
 
-object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLayout.LayoutParams> {
-   override fun instantiate(context: Context) = FrameLayout(context)
+object TabHostConstructor : KoshianViewGroupConstructor<TabHost, FrameLayout.LayoutParams> {
+   override fun instantiate(context: Context?) = TabHost(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
 /**
- * adds Views into this FrameLayout.
+ * adds Views into this TabHost.
  */
 @ExperimentalContracts
-inline fun <R> FrameLayout.addView(
-      buildAction: ViewGroupBuilder<FrameLayout, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
+inline fun <R> TabHost.addView(
+      buildAction: ViewGroupBuilder<TabHost, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
 ): R {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(FrameLayoutConstructor, buildAction)
+   return addView(TabHostConstructor, buildAction)
 }
 
 /**
- * creates a new FrameLayout and adds it into this ViewGroup.
+ * creates a new TabHost and adds it into this ViewGroup.
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
-): FrameLayout {
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabHost(
+      buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): TabHost {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(FrameLayoutConstructor, buildAction)
+   return create(TabHostConstructor, buildAction)
 }
 
 /**
- * finds Views that are already added in this FrameLayout,
+ * finds Views that are already added in this TabHost,
  * and applies Koshian DSL to them.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
@@ -74,22 +75,22 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
  */
-inline fun FrameLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+inline fun TabHost.applyKoshian(
+      applyAction: ViewGroupBuilder<TabHost, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   applyKoshian(FrameLayoutConstructor, applyAction)
+   applyKoshian(TabHostConstructor, applyAction)
 }
 
 /**
- * If the next View is a FrameLayout, applies Koshian to it.
+ * If the next View is a TabHost, applies Koshian to it.
  *
- * Otherwise, creates a new FrameLayout and inserts it to the current position.
+ * Otherwise, creates a new TabHost and inserts it to the current position.
  *
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabHost(
+      buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
-   apply(FrameLayoutConstructor, buildAction)
+   apply(TabHostConstructor, buildAction)
 }

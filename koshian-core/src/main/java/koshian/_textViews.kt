@@ -1,13 +1,16 @@
 package koshian
 
-import android.content.*
-import android.widget.*
+import android.content.Context
+import android.widget.TextView
 import kotlin.contracts.*
 
 object TextViewConstructor : KoshianViewConstructor<TextView> {
    override fun instantiate(context: Context?) = TextView(context)
 }
 
+/**
+ * creates a new TextView and adds it into this ViewGroup.
+ */
 @ExperimentalContracts
 @Suppress("FunctionName")
 inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
@@ -17,6 +20,13 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
    return create(TextViewConstructor, buildAction)
 }
 
+/**
+ * If the next View is a TextView, applies Koshian to it.
+ *
+ * Otherwise, creates a new TextView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
 @Suppress("FunctionName")
 inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
       buildAction: ViewBuilder<TextView, L, KoshianMode.Applier>.() -> Unit
