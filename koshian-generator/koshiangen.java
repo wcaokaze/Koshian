@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class koshiangen {
-   private static final int OPTION_VIEW       = 0b01;
-   private static final int OPTION_VIEW_GROUP = 0b10;
+   private static final int OPTION_VIEW       = 0b001;
+   private static final int OPTION_VIEW_GROUP = 0b010;
+   private static final int OPTION_HELP       = 0b100;
 
    public static void main(final String... args) {
       try {
@@ -17,6 +18,11 @@ public final class koshiangen {
          final var views = Arrays.stream(args)
                .filter(s -> !s.startsWith("-"))
                .collect(Collectors.toList());
+
+         if ((options & OPTION_HELP) != 0) {
+            printUsage();
+            return;
+         }
 
          int functionType = options & (OPTION_VIEW | OPTION_VIEW_GROUP);
 
@@ -40,6 +46,15 @@ public final class koshiangen {
       }
    }
 
+   private static void printUsage() {
+      System.out.println(
+            "Usage: java koshiangen [options] viewname\n" +
+            "Options:\n" +
+            "    -v  generate Koshian functions for a View\n" +
+            "    -vg generate Koshian functions for a ViewGroup\n" +
+            "    -h  show this message");
+   }
+
    private static int parseOptions(final String... args) {
       return Arrays.stream(args)
             .filter(s -> s.startsWith("-"))
@@ -50,6 +65,10 @@ public final class koshiangen {
                      return Stream.of(OPTION_VIEW);
                   case "vg":
                      return Stream.of(OPTION_VIEW_GROUP);
+                  case "h":
+                  case "help":
+                  case "-help":
+                     return Stream.of(OPTION_HELP);
                   default:
                      throw new IllegalArgumentException("Unknown option: " + s);
                }
