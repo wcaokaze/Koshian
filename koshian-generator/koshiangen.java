@@ -105,6 +105,8 @@ public final class koshiangen {
       final var builder = new StringBuilder();
 
       builder.append(
+            "@file:Suppress(\"UNUSED\")\n" +
+            "\n" +
             "import android.content.Context\n" +
             "import kotlin.contracts.*\n" +
             "\n");
@@ -124,6 +126,8 @@ public final class koshiangen {
       final var builder = new StringBuilder();
 
       builder.append(
+            "@file:Suppress(\"UNUSED\")\n" +
+            "\n" +
             "import android.content.Context\n" +
             "import android.view.ViewGroup\n" +
             "import kotlin.contracts.*\n" +
