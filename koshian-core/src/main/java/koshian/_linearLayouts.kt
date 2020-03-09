@@ -94,3 +94,6 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
 ) {
    apply(LinearLayoutConstructor, buildAction)
 }
+
+val KoshianExt<LinearLayout, *>.VERTICAL   inline get() = LinearLayout.VERTICAL
+val KoshianExt<LinearLayout, *>.HORIZONTAL inline get() = LinearLayout.HORIZONTAL
