@@ -1,7 +1,9 @@
+@file:Suppress("UNUSED")
 package koshian
 
 import android.content.Context
 import android.view.View
+import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
 object ViewConstructor : KoshianViewConstructor<View> {
@@ -33,3 +35,15 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.View(
 ) {
    apply(ViewConstructor, buildAction)
 }
+
+var View.backgroundColor: Int
+   @Deprecated(message = "The getter always throws an Exception", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   inline set(value) = setBackgroundColor(value)
+
+val KoshianExt<View, *>.LAYOUT_DIRECTION_LTR: Int @RequiresApi(17) inline get() = View.LAYOUT_DIRECTION_LTR
+val KoshianExt<View, *>.LAYOUT_DIRECTION_RTL: Int @RequiresApi(17) inline get() = View.LAYOUT_DIRECTION_RTL
+
+val KoshianExt<View, *>.VISIBLE:   Int inline get() = View.VISIBLE
+val KoshianExt<View, *>.INVISIBLE: Int inline get() = View.INVISIBLE
+val KoshianExt<View, *>.GONE:      Int inline get() = View.GONE

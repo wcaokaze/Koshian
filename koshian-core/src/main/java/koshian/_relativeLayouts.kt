@@ -1,8 +1,11 @@
+@file:Suppress("UNUSED")
 package koshian
 
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
 object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, RelativeLayout.LayoutParams> {
@@ -92,4 +95,108 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.RelativeLayout(
       buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(RelativeLayoutConstructor, buildAction)
+}
+
+var RelativeLayout.LayoutParams.alignParentStart: Boolean
+   @Deprecated("this getter always throws", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(17)
+   set(value) {
+      if (value) {
+         addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE)
+      } else {
+         removeRule(RelativeLayout.ALIGN_PARENT_START)
+      }
+   }
+
+var RelativeLayout.LayoutParams.alignParentTop: Boolean
+   @Deprecated("this getter always throws", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(17)
+   set(value) {
+      if (value) {
+         addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+      } else {
+         removeRule(RelativeLayout.ALIGN_PARENT_TOP)
+      }
+   }
+
+var RelativeLayout.LayoutParams.alignParentEnd: Boolean
+   @Deprecated("this getter always throws", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(17)
+   set(value) {
+      if (value) {
+         addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
+      } else {
+         removeRule(RelativeLayout.ALIGN_PARENT_END)
+      }
+   }
+
+var RelativeLayout.LayoutParams.alignParentBottom: Boolean
+   @Deprecated("this getter always throws", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(17)
+   set(value) {
+      if (value) {
+         addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE)
+      } else {
+         removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
+      }
+   }
+
+var RelativeLayout.LayoutParams.centerHorizontal: Boolean
+   @Deprecated("this getter always throws", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(17)
+   set(value) {
+      if (value) {
+         addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE)
+      } else {
+         removeRule(RelativeLayout.CENTER_HORIZONTAL)
+      }
+   }
+
+var RelativeLayout.LayoutParams.centerVertical: Boolean
+   @Deprecated("this getter always throws", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(17)
+   set(value) {
+      if (value) {
+         addRule(RelativeLayout.CENTER_VERTICAL, RelativeLayout.TRUE)
+      } else {
+         removeRule(RelativeLayout.CENTER_VERTICAL)
+      }
+   }
+
+var RelativeLayout.LayoutParams.centerInParent: Boolean
+   @Deprecated("this getter always throws", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(17)
+   set(value) {
+      if (value) {
+         addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+      } else {
+         removeRule(RelativeLayout.CENTER_IN_PARENT)
+      }
+   }
+
+@RequiresApi(17)
+fun RelativeLayout.LayoutParams.above(view: View) {
+   addRule(RelativeLayout.ABOVE, view.id)
+}
+
+@RequiresApi(17)
+fun RelativeLayout.LayoutParams.below(view: View) {
+   addRule(RelativeLayout.BELOW, view.id)
+}
+
+@RequiresApi(17)
+fun RelativeLayout.LayoutParams.startOf(view: View) {
+   addRule(RelativeLayout.START_OF, view.id)
+}
+
+@RequiresApi(17)
+fun RelativeLayout.LayoutParams.endOf(view: View) {
+   addRule(RelativeLayout.END_OF, view.id)
 }

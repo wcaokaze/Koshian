@@ -1,3 +1,4 @@
+@file:Suppress("UNUSED")
 package koshian
 
 import android.content.Context
@@ -93,3 +94,6 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
 ) {
    apply(LinearLayoutConstructor, buildAction)
 }
+
+val KoshianExt<LinearLayout, *>.VERTICAL   inline get() = LinearLayout.VERTICAL
+val KoshianExt<LinearLayout, *>.HORIZONTAL inline get() = LinearLayout.HORIZONTAL

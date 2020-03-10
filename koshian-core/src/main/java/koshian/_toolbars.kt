@@ -1,3 +1,4 @@
+@file:Suppress("UNUSED")
 package koshian
 
 import android.content.Context
@@ -37,3 +38,9 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Toolbar(
 ) {
    apply(ToolbarConstructor, buildAction)
 }
+
+var Toolbar.titleTextColor: Int
+   @Deprecated(message = "The getter always throws an Exception", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   @RequiresApi(21)
+   inline set(value) = setTitleTextColor(value)
