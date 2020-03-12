@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="634" height="320" viewBox="0 0 634 320">
+
+    <defs>
+        <marker id="arrow" orient="auto" overflow="visible">
+            <path stroke-linejoin="round" fill="#6897bb"
+                  d="M -13,4 L 0,0 -13,-4 C -10,-2 -10,2 -13,4 z"/>
+        </marker>
+    </defs>
+
+    <g font-family="monospace" font-size="13px">
+        <rect width="312" height="320" fill="#2b2b2b" />
+
+        <text x="5" y="20">
+            <tspan fill="#cc7832">val</tspan> <tspan fill="#a9b7c6">container = koshian(context) {</tspan>
+        </text>
+        <text x="30" y="40">
+            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
+        </text>
+        <text x="55" y="60">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'> {</tspan>
+        </text>
+        <text x="55" y="80">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="100">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'>(<tspan fill="#6a8759">"Second"</tspan>) {</tspan>
+        </text>
+        <text x="55" y="120">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="140">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'> {</tspan>
+        </text>
+        <text x="55" y="160">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="180">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'>(<tspan fill="#6a8759">"Fourth"</tspan>) {</tspan>
+        </text>
+        <text x="55" y="200">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="220">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'> {</tspan>
+        </text>
+        <text x="55" y="240">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="260">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="5" y="280">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+    </g>
+
+    <rect x="312" width="10" height="320" fill="#313131" />
+
+    <g font-family="monospace" font-size="13px" transform="translate(322 0)">
+        <rect width="312" height="320" fill="#2b2b2b" />
+
+        <text x="5" y="40">
+            <tspan fill="#a9b7c6">container.<tspan fill="#ffc66d">applyKoshian</tspan> {</tspan>
+        </text>
+        <text x="30" y="60">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'> {</tspan>
+        </text>
+        <text x="30" y="80">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="100">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'>(<tspan fill="#6a8759">"Second"</tspan>) {</tspan>
+        </text>
+        <text x="30" y="120">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="140">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'> {</tspan>
+        </text>
+        <text x="30" y="160">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="180">
+            <tspan fill="#ffc66d">TextView</tspan><tspan fill='#a9b7c6'> {</tspan>
+        </text>
+        <text x="30" y="200">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="220">
+            <tspan fill="#ffc66d">View</tspan><tspan fill='#a9b7c6'>(<tspan fill="#6a8759">"Fourth"</tspan>) {</tspan>
+        </text>
+        <text x="30" y="240">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="5" y="260">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+    </g>
+
+    <g stroke="#6897bb" stroke-width="1px" fill="none">
+        <path marker-end="url(#arrow)" d="M 340,55 140,55"/>
+        <path marker-end="url(#arrow)" d="M 340,95 200,95"/>
+        <path marker-end="url(#arrow)" d="M 340,135 140,135"/>
+        <path marker-end="url(#arrow)" d="m 325,175 c -60,0 -65,-10 -125,-10"/>
+        <path marker-end="url(#arrow)" d="M 340,215 200,180"/>
+    </g>
+
+    <g stroke="#6897bb" stroke-width="1px">
+        <line x1="334" x2="344" y1="175" y2="175" />
+        <line x1="339" x2="339" y1="170" y2="180" />
+    </g>
+
+</svg>

@@ -66,6 +66,21 @@ inline fun <reified V, L>
    koshian.buildAction()
 }
 
+inline fun <reified V, L>
+      Koshian<ViewManager, *, L, KoshianMode.Applier>.apply(
+            name: String,
+            buildAction: ViewBuilder<V, L, KoshianMode.Applier>.() -> Unit
+      )
+      where V : View
+{
+   val parent = `$$koshianInternal$view` as ViewManager
+
+   for (view in `$$KoshianInternal`.findViewByName(parent, name, V::class.java)) {
+      val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
+      koshian.buildAction()
+   }
+}
+
 inline fun <reified V, L, CL>
       Koshian<ViewManager, *, L, KoshianMode.Applier>.apply(
             constructor: KoshianViewGroupConstructor<V, CL>,

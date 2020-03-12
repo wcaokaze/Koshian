@@ -39,36 +39,30 @@
     <g font-family="monospace" font-size="13px" transform="translate(322 0)">
         <rect width="312" height="160" fill="#2b2b2b" />
 
-        <text x="5" y="20">
-            <tspan fill="#a9b7c6">contentView.applyKoshian {</tspan>
+        <text x="5" y="40">
+            <tspan fill="#a9b7c6">contentView.<tspan fill='#ffc66d'>applyKoshian</tspan> {</tspan>
         </text>
-        <text x="30" y="40">
-            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
-        </text>
-        <text x="55" y="60">
+        <text x="30" y="60">
             <tspan fill="#ffc66d">TextView</tspan> <tspan fill="#a9b7c6">{}</tspan>
         </text>
-        <text x="55" y="80">
+        <text x="30" y="80">
             <tspan fill="#ffc66d">TextView</tspan> <tspan fill="#a9b7c6">{}</tspan>
         </text>
-        <text x="55" y="100">
+        <text x="30" y="100">
             <tspan fill="#ffc66d">ImageView</tspan> <tspan fill="#a9b7c6">{}</tspan>
         </text>
-        <text x="30" y="120">
-            <tspan fill="#a9b7c6">}</tspan>
-        </text>
-        <text x="5" y="140">
+        <text x="5" y="120">
             <tspan fill="#a9b7c6">}</tspan>
         </text>
     </g>
 
     <path marker-end="url(#arrow)" stroke="#6897bb" stroke-width="1px"
-          d="M 360,55 170,55"/>
+          d="M 340,55 170,55"/>
 
     <path marker-end="url(#arrow)" stroke="#6897bb" stroke-width="1px"
-          d="M 360,75 170,75"/>
+          d="M 340,75 170,75"/>
 
     <path marker-end="url(#arrow)" stroke="#6897bb" stroke-width="1px"
-          d="M 360,95 170,95"/>
+          d="M 340,95 170,95"/>
 
 </svg>

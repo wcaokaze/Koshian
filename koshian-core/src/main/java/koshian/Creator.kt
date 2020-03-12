@@ -2,6 +2,7 @@ package koshian
 
 import android.content.*
 import android.view.*
+import com.wcaokaze.koshian.*
 import kotlin.contracts.*
 
 @ExperimentalContracts
@@ -61,6 +62,29 @@ inline fun <V, L, C, CL>
             C : View
 {
    val view = constructor.instantiate(`$$KoshianInternal`.context)
+
+   val parent = `$$koshianInternal$view` as ViewManager
+   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
+   val layoutParams = parentViewConstructor.instantiateLayoutParams()
+
+   parent.addView(view, layoutParams)
+
+   val koshian = ViewBuilder<C, CL, KoshianMode.Creator>(view)
+   koshian.buildAction()
+   return view
+}
+
+inline fun <V, L, C, CL>
+      Koshian<V, L, CL, KoshianMode.Creator>.create(
+            name: String,
+            constructor: KoshianViewConstructor<C>,
+            buildAction: ViewBuilder<C, CL, KoshianMode.Creator>.() -> Unit
+      ): C
+      where V : ViewManager,
+            C : View
+{
+   val view = constructor.instantiate(`$$KoshianInternal`.context)
+   view.setTag(R.id.view_tag_name, name)
 
    val parent = `$$koshianInternal$view` as ViewManager
    val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
