@@ -35,6 +35,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
 }
 
 /**
+ * creates a new LinearLayout with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
+      name: String,
+      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): LinearLayout {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, LinearLayoutConstructor, buildAction)
+}
+
+/**
  * finds Views that are already added in this LinearLayout,
  * and applies Koshian DSL to them.
  *
@@ -93,6 +108,20 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
       buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(LinearLayoutConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all LinearLayouts that are named the specified in this ViewGroup.
+ * If there are no LinearLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
+      name: String,
+      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, LinearLayoutConstructor, buildAction)
 }
 
 val KoshianExt<LinearLayout, *>.VERTICAL   inline get() = LinearLayout.VERTICAL

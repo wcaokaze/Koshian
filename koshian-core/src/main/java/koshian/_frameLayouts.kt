@@ -35,6 +35,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
 }
 
 /**
+ * creates a new FrameLayout with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
+      name: String,
+      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): FrameLayout {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, FrameLayoutConstructor, buildAction)
+}
+
+/**
  * finds Views that are already added in this FrameLayout,
  * and applies Koshian DSL to them.
  *
@@ -108,4 +123,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
       buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(FrameLayoutConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all FrameLayouts that are named the specified in this ViewGroup.
+ * If there are no FrameLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
+      name: String,
+      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, FrameLayoutConstructor, buildAction)
 }

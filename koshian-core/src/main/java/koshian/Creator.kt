@@ -122,3 +122,31 @@ inline fun <V, L, C, CL, CCL>
 
    return view
 }
+
+inline fun <V, L, C, CL, CCL>
+      Koshian<V, L, CL, KoshianMode.Creator>.create(
+            name: String,
+            constructor: KoshianViewGroupConstructor<C, CCL>,
+            buildAction: ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>.() -> Unit
+      ): C
+      where V : ViewManager,
+            C : View,
+            CCL : ViewGroup.LayoutParams
+{
+   val view = constructor.instantiate(`$$KoshianInternal`.context)
+   view.setTag(R.id.view_tag_name, name)
+
+   val parent = `$$koshianInternal$view` as ViewManager
+   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
+
+   val layoutParams = parentViewConstructor.instantiateLayoutParams()
+
+   parent.addView(view, layoutParams)
+
+   `$$KoshianInternal`.parentViewConstructor = constructor
+   val koshian = ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>(view)
+   koshian.buildAction()
+   `$$KoshianInternal`.parentViewConstructor = parentViewConstructor
+
+   return view
+}
