@@ -22,6 +22,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.VideoView(
 }
 
 /**
+ * creates a new VideoView with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.VideoView(
+      name: String,
+      buildAction: ViewBuilder<VideoView, L, KoshianMode.Creator>.() -> Unit
+): VideoView {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, VideoViewConstructor, buildAction)
+}
+
+/**
  * If the next View is a VideoView, applies Koshian to it.
  *
  * Otherwise, creates a new VideoView and inserts it to the current position.
@@ -33,4 +48,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
       buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(VideoViewConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all VideoViews that are named the specified in this ViewGroup.
+ * If there are no VideoViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
+      name: String,
+      buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }

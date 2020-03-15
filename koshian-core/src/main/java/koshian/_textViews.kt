@@ -25,6 +25,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
 }
 
 /**
+ * creates a new TextView with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
+      name: String,
+      buildAction: ViewBuilder<TextView, L, KoshianMode.Creator>.() -> Unit
+): TextView {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TextViewConstructor, buildAction)
+}
+
+/**
  * If the next View is a TextView, applies Koshian to it.
  *
  * Otherwise, creates a new TextView and inserts it to the current position.
@@ -36,6 +51,20 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
       buildAction: ViewBuilder<TextView, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(TextViewConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all TextViews that are named the specified in this ViewGroup.
+ * If there are no TextViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
+      name: String,
+      buildAction: ViewBuilder<TextView, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }
 
 var TextView.textColor: Int

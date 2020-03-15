@@ -22,6 +22,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckedTextView(
 }
 
 /**
+ * creates a new CheckedTextView with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckedTextView(
+      name: String,
+      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Creator>.() -> Unit
+): CheckedTextView {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, CheckedTextViewConstructor, buildAction)
+}
+
+/**
  * If the next View is a CheckedTextView, applies Koshian to it.
  *
  * Otherwise, creates a new CheckedTextView and inserts it to the current position.
@@ -33,4 +48,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
       buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(CheckedTextViewConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all CheckedTextViews that are named the specified in this ViewGroup.
+ * If there are no CheckedTextViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
+      name: String,
+      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }

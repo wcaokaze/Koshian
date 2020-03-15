@@ -36,6 +36,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabHost(
 }
 
 /**
+ * creates a new TabHost with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabHost(
+      name: String,
+      buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): TabHost {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TabHostConstructor, buildAction)
+}
+
+/**
  * finds Views that are already added in this TabHost,
  * and applies Koshian DSL to them.
  *
@@ -75,6 +90,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabHost(
  * When mismatched View is specified, Koshian creates a new View and inserts it.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TabHost.applyKoshian(
       applyAction: ViewGroupBuilder<TabHost, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
@@ -94,4 +124,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabHost(
       buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(TabHostConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all TabHosts that are named the specified in this ViewGroup.
+ * If there are no TabHosts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabHost(
+      name: String,
+      buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, TabHostConstructor, buildAction)
 }

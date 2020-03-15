@@ -23,6 +23,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
 }
 
 /**
+ * creates a new View with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
+      name: String,
+      buildAction: ViewBuilder<View, L, KoshianMode.Creator>.() -> Unit
+): View {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ViewConstructor, buildAction)
+}
+
+/**
  * If the next View is a View, applies Koshian to it.
  *
  * Otherwise, creates a new View and inserts it to the current position.
@@ -34,6 +49,20 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.View(
       buildAction: ViewBuilder<View, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(ViewConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all Views that are named the specified in this ViewGroup.
+ * If there are no Views named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.View(
+      name: String,
+      buildAction: ViewBuilder<View, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }
 
 var View.backgroundColor: Int

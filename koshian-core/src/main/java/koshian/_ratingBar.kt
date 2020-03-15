@@ -22,6 +22,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RatingBar(
 }
 
 /**
+ * creates a new RatingBar with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.RatingBar(
+      name: String,
+      buildAction: ViewBuilder<RatingBar, L, KoshianMode.Creator>.() -> Unit
+): RatingBar {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, RatingBarConstructor, buildAction)
+}
+
+/**
  * If the next View is a RatingBar, applies Koshian to it.
  *
  * Otherwise, creates a new RatingBar and inserts it to the current position.
@@ -33,4 +48,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.RatingBar(
       buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(RatingBarConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all RatingBars that are named the specified in this ViewGroup.
+ * If there are no RatingBars named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.RatingBar(
+      name: String,
+      buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }

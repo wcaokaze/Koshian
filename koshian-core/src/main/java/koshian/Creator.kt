@@ -2,6 +2,7 @@ package koshian
 
 import android.content.*
 import android.view.*
+import com.wcaokaze.koshian.*
 import kotlin.contracts.*
 
 @ExperimentalContracts
@@ -73,6 +74,29 @@ inline fun <V, L, C, CL>
    return view
 }
 
+inline fun <V, L, C, CL>
+      Koshian<V, L, CL, KoshianMode.Creator>.create(
+            name: String,
+            constructor: KoshianViewConstructor<C>,
+            buildAction: ViewBuilder<C, CL, KoshianMode.Creator>.() -> Unit
+      ): C
+      where V : ViewManager,
+            C : View
+{
+   val view = constructor.instantiate(`$$KoshianInternal`.context)
+   view.setTag(R.id.view_tag_name, name)
+
+   val parent = `$$koshianInternal$view` as ViewManager
+   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
+   val layoutParams = parentViewConstructor.instantiateLayoutParams()
+
+   parent.addView(view, layoutParams)
+
+   val koshian = ViewBuilder<C, CL, KoshianMode.Creator>(view)
+   koshian.buildAction()
+   return view
+}
+
 inline fun <V, L, C, CL, CCL>
       Koshian<V, L, CL, KoshianMode.Creator>.create(
             constructor: KoshianViewGroupConstructor<C, CCL>,
@@ -83,6 +107,34 @@ inline fun <V, L, C, CL, CCL>
             CCL : ViewGroup.LayoutParams
 {
    val view = constructor.instantiate(`$$KoshianInternal`.context)
+
+   val parent = `$$koshianInternal$view` as ViewManager
+   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
+
+   val layoutParams = parentViewConstructor.instantiateLayoutParams()
+
+   parent.addView(view, layoutParams)
+
+   `$$KoshianInternal`.parentViewConstructor = constructor
+   val koshian = ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>(view)
+   koshian.buildAction()
+   `$$KoshianInternal`.parentViewConstructor = parentViewConstructor
+
+   return view
+}
+
+inline fun <V, L, C, CL, CCL>
+      Koshian<V, L, CL, KoshianMode.Creator>.create(
+            name: String,
+            constructor: KoshianViewGroupConstructor<C, CCL>,
+            buildAction: ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>.() -> Unit
+      ): C
+      where V : ViewManager,
+            C : View,
+            CCL : ViewGroup.LayoutParams
+{
+   val view = constructor.instantiate(`$$KoshianInternal`.context)
+   view.setTag(R.id.view_tag_name, name)
 
    val parent = `$$koshianInternal$view` as ViewManager
    val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
