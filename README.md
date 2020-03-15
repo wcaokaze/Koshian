@@ -12,18 +12,18 @@ private val followButton: Button
 
 init {
    val layout = koshian(context) {
-      linearLayout {
-         linearLayout {
-            userIconView = imageView {
+      LinearLayout {
+         LinearLayout {
+            userIconView = ImageView {
                view.image = drawable(R.drawable.ic_empty_user)
             }
 
-            usernameView = textView {
+            usernameView = TextView {
                view.text = "@"
             }
          }
 
-         followButton = button {
+         followButton = Button {
             view.text = "follow"
          }
       }
@@ -32,7 +32,7 @@ init {
    layout.applyKoshian {
       view.orientation = VERTICAL
 
-      linearLayout {
+      LinearLayout {
          layout.width  = MATCH_PARENT
          layout.height = WRAP_CONTENT
          view.orientation = HORIZONTAL
@@ -53,7 +53,7 @@ init {
          }
       }
 
-      space {
+      Space {
          layout.width  = 0
          layout.height = 16.dip
       }
