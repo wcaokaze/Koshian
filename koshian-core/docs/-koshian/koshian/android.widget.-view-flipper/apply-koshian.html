@@ -1,0 +1,54 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>applyKoshian - Koshian</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">Koshian</a>&nbsp;/&nbsp;<a href="../index.html">koshian</a>&nbsp;/&nbsp;<a href="index.html">android.widget.ViewFlipper</a>&nbsp;/&nbsp;<a href="./apply-koshian.html">applyKoshian</a><br/>
+<br/>
+<h1>applyKoshian</h1>
+<a name="koshian$applyKoshian(android.widget.ViewFlipper, kotlin.Function1((koshian.Koshian((android.widget.ViewFlipper, android.view.ViewGroup.LayoutParams, android.widget.FrameLayout.LayoutParams, koshian.KoshianMode.Applier)), kotlin.Unit)))"></a>
+<code><span class="keyword">inline</span> <span class="keyword">fun </span><a href="https://developer.android.com/reference/android/widget/ViewFlipper.html"><span class="identifier">ViewFlipper</span></a><span class="symbol">.</span><span class="identifier">applyKoshian</span><span class="symbol">(</span><span class="identifier" id="koshian$applyKoshian(android.widget.ViewFlipper, kotlin.Function1((koshian.Koshian((android.widget.ViewFlipper, android.view.ViewGroup.LayoutParams, android.widget.FrameLayout.LayoutParams, koshian.KoshianMode.Applier)), kotlin.Unit)))/applyAction">applyAction</span><span class="symbol">:</span>&nbsp;<a href="../-view-group-builder.html"><span class="identifier">ViewGroupBuilder</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/ViewFlipper.html"><span class="identifier">ViewFlipper</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/view/ViewGroup/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/FrameLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">Applier</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code> <a href="https://github.com/wcaokaze/Koshian/blob/master/koshian-core/src/main/java/koshian/_viewFlippers.kt#L109">(source)</a>
+<p>finds Views that are already added in this ViewFlipper,
+and applies Koshian DSL to them.</p>
+<p>!<a href="https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true"></a></p>
+<p>The following 2 snippets are equivalent.</p>
+<ol><li>   <pre><code class="lang-kotlin"> val contentView = koshian(context) {
+       LinearLayout {
+          TextView {
+             view.text = "hello"
+             view.textColor = 0xffffff opacity 0.8
+          }
+       }
+    }
+</code></pre></li>
+
+<li>   <pre><code class="lang-kotlin"> val contentView = koshian(context) {
+       LinearLayout {
+          TextView {
+             view.text = "hello"
+          }
+       }
+    }
+
+    contentView.applyKoshian {
+       TextView {
+          view.textColor = 0xffffff opacity 0.8
+       }
+    }
+</code></pre></li>
+</ol>
+<p>When mismatched View is specified, Koshian creates a new View and inserts it.</p>
+<p>!<a href="https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true"></a></p>
+<p>Also, naming View is a good way.</p>
+<p>!<a href="https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true"></a></p>
+<p>Koshian specifying a name doesn't affect the cursor.
+Koshian not specifying a name ignores named Views.
+Named Views and non-named Views are simply in other worlds.</p>
+<p>!<a href="https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true"></a></p>
+<p>For readability, it is recommended to put named Views
+as synchronized with the cursor.</p>
+<p>!<a href="https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true"></a></p>
+</BODY>
+</HTML>
