@@ -79,7 +79,7 @@ dokka {
 
         sourceLink {
             path = "src/main/java"
-            url = 'https://github.com/wcaokaze/Koshian/blob/master/src/main/java'
+            url = 'https://github.com/wcaokaze/Koshian/blob/master/koshian-core/src/main/java'
             lineSuffix = '#L'
         }
 
