@@ -10,11 +10,13 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.10.1'
     }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     compileSdkVersion 28
@@ -60,4 +62,29 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = 'docs'
+
+    configuration {
+        moduleName = 'Koshian'
+
+        includes = []
+        jdkVersion = 6
+
+        skipEmptyPackages = true
+        reportUndocumented = false
+
+        sourceLink {
+            path = "src/main/java"
+            url = 'https://github.com/wcaokaze/Koshian/blob/master/koshian-core/src/main/java'
+            lineSuffix = '#L'
+        }
+
+        externalDocumentationLink {
+            url = new URL("https://developer.android.com/reference/")
+        }
+    }
 }
