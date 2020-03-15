@@ -36,6 +36,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
 }
 
 /**
+ * creates a new ViewFlipper with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
+      name: String,
+      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): ViewFlipper {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ViewFlipperConstructor, buildAction)
+}
+
+/**
  * finds Views that are already added in this ViewFlipper,
  * and applies Koshian DSL to them.
  *
@@ -75,6 +90,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
  * When mismatched View is specified, Koshian creates a new View and inserts it.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun ViewFlipper.applyKoshian(
       applyAction: ViewGroupBuilder<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
@@ -94,4 +124,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
       buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(ViewFlipperConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all ViewFlippers that are named the specified in this ViewGroup.
+ * If there are no ViewFlippers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
+      name: String,
+      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, ViewFlipperConstructor, buildAction)
 }

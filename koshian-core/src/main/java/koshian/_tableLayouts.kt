@@ -35,6 +35,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
 }
 
 /**
+ * creates a new TableLayout with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
+      name: String,
+      buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): TableLayout {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TableLayoutConstructor, buildAction)
+}
+
+/**
  * finds Views that are already added in this TableLayout,
  * and applies Koshian DSL to them.
  *
@@ -74,6 +89,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
  * When mismatched View is specified, Koshian creates a new View and inserts it.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TableLayout.applyKoshian(
       applyAction: ViewGroupBuilder<TableLayout, ViewGroup.LayoutParams, TableLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
@@ -93,4 +123,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableLayout(
       buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(TableLayoutConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all TableLayouts that are named the specified in this ViewGroup.
+ * If there are no TableLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableLayout(
+      name: String,
+      buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, TableLayoutConstructor, buildAction)
 }

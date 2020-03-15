@@ -22,6 +22,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageSwitcher(
 }
 
 /**
+ * creates a new ImageSwitcher with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageSwitcher(
+      name: String,
+      buildAction: ViewBuilder<ImageSwitcher, L, KoshianMode.Creator>.() -> Unit
+): ImageSwitcher {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ImageSwitcherConstructor, buildAction)
+}
+
+/**
  * If the next View is a ImageSwitcher, applies Koshian to it.
  *
  * Otherwise, creates a new ImageSwitcher and inserts it to the current position.
@@ -33,4 +48,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageSwitcher(
       buildAction: ViewBuilder<ImageSwitcher, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(ImageSwitcherConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all ImageSwitchers that are named the specified in this ViewGroup.
+ * If there are no ImageSwitchers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageSwitcher(
+      name: String,
+      buildAction: ViewBuilder<ImageSwitcher, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }

@@ -22,6 +22,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableRow(
 }
 
 /**
+ * creates a new TableRow with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableRow(
+      name: String,
+      buildAction: ViewBuilder<TableRow, L, KoshianMode.Creator>.() -> Unit
+): TableRow {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TableRowConstructor, buildAction)
+}
+
+/**
  * If the next View is a TableRow, applies Koshian to it.
  *
  * Otherwise, creates a new TableRow and inserts it to the current position.
@@ -33,4 +48,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableRow(
       buildAction: ViewBuilder<TableRow, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(TableRowConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all TableRows that are named the specified in this ViewGroup.
+ * If there are no TableRows named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableRow(
+      name: String,
+      buildAction: ViewBuilder<TableRow, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }

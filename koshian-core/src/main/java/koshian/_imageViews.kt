@@ -24,6 +24,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageView(
 }
 
 /**
+ * creates a new ImageView with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageView(
+      name: String,
+      buildAction: ViewBuilder<ImageView, L, KoshianMode.Creator>.() -> Unit
+): ImageView {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ImageViewConstructor, buildAction)
+}
+
+/**
  * If the next View is a ImageView, applies Koshian to it.
  *
  * Otherwise, creates a new ImageView and inserts it to the current position.
@@ -35,6 +50,20 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageView(
       buildAction: ViewBuilder<ImageView, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(ImageViewConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all ImageViews that are named the specified in this ViewGroup.
+ * If there are no ImageViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageView(
+      name: String,
+      buildAction: ViewBuilder<ImageView, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }
 
 val KoshianExt<ImageView, *>.SCALE_TYPE_CENTER inline get() = ImageView.ScaleType.CENTER

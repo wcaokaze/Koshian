@@ -36,6 +36,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextSwitcher(
 }
 
 /**
+ * creates a new TextSwitcher with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextSwitcher(
+      name: String,
+      buildAction: ViewGroupBuilder<TextSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): TextSwitcher {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TextSwitcherConstructor, buildAction)
+}
+
+/**
  * finds Views that are already added in this TextSwitcher,
  * and applies Koshian DSL to them.
  *
@@ -75,6 +90,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextSwitcher(
  * When mismatched View is specified, Koshian creates a new View and inserts it.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TextSwitcher.applyKoshian(
       applyAction: ViewGroupBuilder<TextSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
@@ -94,4 +124,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextSwitcher(
       buildAction: ViewGroupBuilder<TextSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(TextSwitcherConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all TextSwitchers that are named the specified in this ViewGroup.
+ * If there are no TextSwitchers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextSwitcher(
+      name: String,
+      buildAction: ViewGroupBuilder<TextSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, TextSwitcherConstructor, buildAction)
 }

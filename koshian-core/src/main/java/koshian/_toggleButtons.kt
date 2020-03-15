@@ -22,6 +22,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ToggleButton(
 }
 
 /**
+ * creates a new ToggleButton with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.ToggleButton(
+      name: String,
+      buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Creator>.() -> Unit
+): ToggleButton {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ToggleButtonConstructor, buildAction)
+}
+
+/**
  * If the next View is a ToggleButton, applies Koshian to it.
  *
  * Otherwise, creates a new ToggleButton and inserts it to the current position.
@@ -33,4 +48,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ToggleButton(
       buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(ToggleButtonConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all ToggleButtons that are named the specified in this ViewGroup.
+ * If there are no ToggleButtons named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.ToggleButton(
+      name: String,
+      buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, buildAction)
 }
