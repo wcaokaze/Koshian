@@ -130,3 +130,32 @@ For readability, it is recommended to put named Views
 as synchronized with the cursor.
 
 ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+
+
+Install
+--------------------------------------------------------------------------------
+Gradle
+```groovy
+repositories {
+   // jcenter()  // Not yet available
+
+   maven { url 'https://dl.bintray.com/wcaokaze/Koshian' }
+}
+
+dependencies {
+   implementation 'com.wcaokaze.koshian:koshian-core:0.1.0'
+}
+```
+
+Gradle (Kotlin)
+```kotlin
+repositories {
+   // jcenter()
+   maven(url = "https://dl.bintray.com/wcaokaze/Koshian")
+}
+
+dependencies {
+   implementation("com.wcaokaze.koshian:koshian-core:0.1.0")
+}
+```
+
