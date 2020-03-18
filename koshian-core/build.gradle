@@ -101,6 +101,13 @@ task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
 }
 
+task javadocJar(type: Jar) {
+    archiveClassifier.set('javadoc')
+    from dokka.outputDirectory
+}
+
+javadocJar.dependsOn(dokka)
+
 final pomConfig = {
     licenses {
         license {
@@ -133,6 +140,7 @@ publishing {
             version VERSION
 
             artifact sourcesJar
+            artifact javadocJar
             artifact "$buildDir/outputs/aar/koshian-core-release.aar"
 
             pom.withXml {
@@ -158,6 +166,8 @@ publishing {
     }
 }
 
+publish.dependsOn(sourcesJar, javadocJar)
+
 bintray {
     final props = new Properties()
     props.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -180,3 +190,5 @@ bintray {
         }
     }
 }
+
+bintrayUpload.dependsOn(publish)
