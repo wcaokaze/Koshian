@@ -1,0 +1,114 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>KoshianViewGroupConstructor - Koshian</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">Koshian</a>&nbsp;/&nbsp;<a href="../index.html">koshian</a>&nbsp;/&nbsp;<a href="./index.html">KoshianViewGroupConstructor</a><br/>
+<br/>
+<h1>KoshianViewGroupConstructor</h1>
+<code><span class="keyword">interface </span><span class="identifier">KoshianViewGroupConstructor</span><span class="symbol">&lt;</span><span class="identifier">V</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/View.html"><span class="identifier">View</span></a><span class="symbol">!</span><span class="symbol">, </span><span class="identifier">L</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://developer.android.com/reference/android/view/ViewGroup/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">!</span><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-koshian-view-constructor/index.html"><span class="identifier">KoshianViewConstructor</span></a><span class="symbol">&lt;</span><span class="identifier">V</span><span class="symbol">&gt;</span></code> <a href="https://github.com/wcaokaze/Koshian/blob/master/koshian-core/src/main/java/koshian/KoshianViewGroupConstructor.java#L5">(source)</a>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="instantiate-layout-params.html">instantiateLayoutParams</a></h4>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">instantiateLayoutParams</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">L</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="../-frame-layout-constructor/index.html">FrameLayoutConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">FrameLayoutConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/FrameLayout.html"><span class="identifier">FrameLayout</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/FrameLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-horizontal-scroll-view-constructor/index.html">HorizontalScrollViewConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">HorizontalScrollViewConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/HorizontalScrollView.html"><span class="identifier">HorizontalScrollView</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/FrameLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-linear-layout-constructor/index.html">LinearLayoutConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">LinearLayoutConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/LinearLayout.html"><span class="identifier">LinearLayout</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/LinearLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-nothing-constructor/index.html">NothingConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">NothingConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html"><span class="identifier">Nothing</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing/index.html"><span class="identifier">Nothing</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-radio-group-constructor/index.html">RadioGroupConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">RadioGroupConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/RadioGroup.html"><span class="identifier">RadioGroup</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/RadioGroup/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-relative-layout-constructor/index.html">RelativeLayoutConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">RelativeLayoutConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/RelativeLayout.html"><span class="identifier">RelativeLayout</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/RelativeLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-tab-host-constructor/index.html">TabHostConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">TabHostConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/TabHost.html"><span class="identifier">TabHost</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/FrameLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-table-layout-constructor/index.html">TableLayoutConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">TableLayoutConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/TableLayout.html"><span class="identifier">TableLayout</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/TableLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-tab-widget-constructor/index.html">TabWidgetConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">TabWidgetConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/TabWidget.html"><span class="identifier">TabWidget</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/LinearLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-text-switcher-constructor/index.html">TextSwitcherConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">TextSwitcherConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/TextSwitcher.html"><span class="identifier">TextSwitcher</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/FrameLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-view-flipper-constructor/index.html">ViewFlipperConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">ViewFlipperConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/ViewFlipper.html"><span class="identifier">ViewFlipper</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/FrameLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="../-view-switcher-constructor/index.html">ViewSwitcherConstructor</a></h4>
+</td>
+<td>
+<code><span class="keyword">object </span><span class="identifier">ViewSwitcherConstructor</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KoshianViewGroupConstructor</span></a><span class="symbol">&lt;</span><a href="https://developer.android.com/reference/android/widget/ViewSwitcher.html"><span class="identifier">ViewSwitcher</span></a><span class="symbol">,</span>&nbsp;<a href="https://developer.android.com/reference/android/widget/FrameLayout/LayoutParams.html"><span class="identifier">LayoutParams</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

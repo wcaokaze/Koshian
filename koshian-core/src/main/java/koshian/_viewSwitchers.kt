@@ -1,3 +1,20 @@
+/*
+ * Copyright 2020 wcaokaze
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@file:Suppress("UNUSED")
 package koshian
 
 import android.content.Context
@@ -32,6 +49,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
 ): ViewSwitcher {
    contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
    return create(ViewSwitcherConstructor, buildAction)
+}
+
+/**
+ * creates a new ViewSwitcher with name, and adds it into this ViewGroup.
+ *
+ * The name can be referenced in [applyKoshian]
+ */
+@ExperimentalContracts
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
+      name: String,
+      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+): ViewSwitcher {
+   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ViewSwitcherConstructor, buildAction)
 }
 
 /**
@@ -74,6 +106,21 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
  * When mismatched View is specified, Koshian creates a new View and inserts it.
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun ViewSwitcher.applyKoshian(
       applyAction: ViewGroupBuilder<ViewSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
@@ -93,4 +140,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewSwitcher(
       buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
 ) {
    apply(ViewSwitcherConstructor, buildAction)
+}
+
+/**
+ * Applies Koshian to all ViewSwitchers that are named the specified in this ViewGroup.
+ * If there are no ViewSwitchers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewSwitcher(
+      name: String,
+      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   apply(name, ViewSwitcherConstructor, buildAction)
 }

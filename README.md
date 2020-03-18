@@ -12,18 +12,18 @@ private val followButton: Button
 
 init {
    val layout = koshian(context) {
-      linearLayout {
-         linearLayout {
-            userIconView = imageView {
+      LinearLayout {
+         LinearLayout {
+            userIconView = ImageView {
                view.image = drawable(R.drawable.ic_empty_user)
             }
 
-            usernameView = textView {
+            usernameView = TextView {
                view.text = "@"
             }
          }
 
-         followButton = button {
+         followButton = Button {
             view.text = "follow"
          }
       }
@@ -32,7 +32,7 @@ init {
    layout.applyKoshian {
       view.orientation = VERTICAL
 
-      linearLayout {
+      LinearLayout {
          layout.width  = MATCH_PARENT
          layout.height = WRAP_CONTENT
          view.orientation = HORIZONTAL
@@ -53,7 +53,7 @@ init {
          }
       }
 
-      space {
+      Space {
          layout.width  = 0
          layout.height = 16.dip
       }
@@ -66,6 +66,96 @@ init {
          view.paddings = 8.dip
       }
    }
+}
+```
+
+
+applyKoshian
+--------------------------------------------------------------------------------
+
+finds Views that are already added in a ViewGroup, and applies Koshian DSL to them.
+
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+
+The following 2 snippets are equivalent.
+
+1.
+    ```kotlin
+    val contentView = koshian(context) {
+       LinearLayout {
+          TextView {
+             view.text = "hello"
+             view.textColor = 0xffffff opacity 0.8
+          }
+       }
+    }
+    ```
+
+2.
+    ```kotlin
+    val contentView = koshian(context) {
+       LinearLayout {
+          TextView {
+             view.text = "hello"
+          }
+       }
+    }
+
+    contentView.applyKoshian {
+       TextView {
+          view.textColor = 0xffffff opacity 0.8
+       }
+    }
+    ```
+
+When mismatched View is specified, Koshian creates a new View and inserts it.
+
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+
+
+Naming
+--------------------------------------------------------------------------------
+
+Also, naming View is a good way.
+
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+
+Koshian specifying a name doesn't affect the cursor.
+Koshian not specifying a name ignores named Views.
+Named Views and non-named Views are simply in other worlds.
+
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+
+For readability, it is recommended to put named Views
+as synchronized with the cursor.
+
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+
+
+Install
+--------------------------------------------------------------------------------
+Gradle
+```groovy
+repositories {
+   // jcenter()  // Not yet available
+
+   maven { url 'https://dl.bintray.com/wcaokaze/Koshian' }
+}
+
+dependencies {
+   implementation 'com.wcaokaze.koshian:koshian-core:0.1.0'
+}
+```
+
+Gradle (Kotlin)
+```kotlin
+repositories {
+   // jcenter()
+   maven(url = "https://dl.bintray.com/wcaokaze/Koshian")
+}
+
+dependencies {
+   implementation("com.wcaokaze.koshian:koshian-core:0.1.0")
 }
 ```
 
