@@ -67,7 +67,7 @@ class SpecifyingViewTest {
       }
    }
 
-   @Test fun specifyView_inNotViewGroupBuilder() {
+   @Test fun inNotViewGroupBuilder() {
       activityScenarioRule.scenario.onActivity { activity ->
          val koshianTextView: TextView
 
@@ -98,7 +98,7 @@ class SpecifyingViewTest {
       }
    }
 
-   @Test fun specifyView_notMatch() {
+   @Test fun notMatch() {
       activityScenarioRule.scenario.onActivity { activity ->
          val unmatchedView: View
          val koshianTextView: TextView
