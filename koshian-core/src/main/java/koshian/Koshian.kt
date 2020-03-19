@@ -42,13 +42,39 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
    val Float .px: Int inline get() = this.toInt()
    val Double.px: Int inline get() = this.toInt()
 
+   /**
+    * - If this view is already added into any ViewGroup
+    *
+    *     check the next view is this view.
+    *
+    * - If this view is not added into any ViewGroup yet
+    *
+    *     add this view to the current Koshian-view. (throws if the current
+    *     Koshian-View is not a ViewGroup)
+    *
+    *
+    * ## Pseudocode
+    * ```
+    * if (parent == null) {
+    *    if (currentKoshian.view !is ViewGroup) { throw IllegalStateException() }
+    *
+    *    currentKoshian.view.addView(this)
+    *    applyAction()
+    * } else {
+    *    if (currentKoshian.view !is ViewGroup) { throw IllegalStateException() }
+    *    if (currentKoshian.view[++cursor] !== this) { throw IllegalStateException() }
+    *
+    *    applyAction()
+    * }
+    * ```
+    */
    inline operator fun <V>
          V.invoke(
                applyAction: ViewBuilder<V, CL, KoshianMode.Applier>.() -> Unit
          )
          where V : View
    {
-      `$$KoshianInternal`.assertNextView(`$$koshianInternal$view`, this)
+      `$$KoshianInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
 
       val koshian = ViewBuilder<V, CL, KoshianMode.Applier>(this)
       koshian.applyAction()

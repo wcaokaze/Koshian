@@ -108,10 +108,30 @@ public final class $$KoshianInternal {
       return child;
    }
 
-   public static void assertNextView(final Object parent, final View view) {
+   public static void invokeViewInKoshian(final Object parent, final View view) {
+      if (view.getParent() == null) {
+         addView(parent, view);
+      } else {
+         assertNextView(parent, view);
+      }
+   }
+
+   private static void addView(final Object parent, final View view) {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
-               "but there is no ViewGroup in current Koshian.");
+               "but the current Koshian-View is not a ViewGroup.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+
+      viewGroup.addView(view, applyingIndex++,
+            parentViewConstructor.instantiateLayoutParams());
+   }
+
+   private static void assertNextView(final Object parent, final View view) {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException("A View(" + view + ") was specified " +
+               "but the current Koshian-View is not a ViewGroup.");
       }
 
       final ViewGroup viewGroup = (ViewGroup) parent;
@@ -123,14 +143,17 @@ public final class $$KoshianInternal {
       }
 
       if (applyingIndex >= viewGroup.getChildCount()) {
-         throw new AssertionError("A View (" + view + ") was specified " +
-               "but current Koshian has children no longer.");
+         throw new AssertionError("A View (" + view + ") " +
+               "which is already added to some ViewGroup was specified, " +
+               "but it does not match with the next View. " +
+               "(Information: There is no next View)");
       }
 
       final View nextView = viewGroup.getChildAt(applyingIndex);
 
       if (view != nextView) {
-         throw new AssertionError("A View (" + view + ") was specified " +
+         throw new AssertionError("A View (" + view + ") " +
+               "which is already added to some ViewGroup was specified, " +
                "but it does not match with the next View. " +
                "(Information: the next View was " + nextView + ")");
       }

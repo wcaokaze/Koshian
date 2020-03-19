@@ -94,7 +94,7 @@ class SpecifyingViewTest {
          val message = exception.message
          assertNotNull(message)
          assertTrue(koshianTextView.toString() in message)
-         assertTrue("no ViewGroup" in message)
+         assertTrue("current Koshian-View is not a ViewGroup." in message)
       }
    }
 
@@ -126,6 +126,88 @@ class SpecifyingViewTest {
          assertTrue(koshianTextView.toString() in message)
          assertTrue("not match" in message)
          assertTrue(unmatchedView.toString() in message)
+      }
+   }
+
+   @Test fun insertion_first() {
+      activityScenarioRule.scenario.onActivity { activity ->
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               View {
+               }
+            }
+         }
+
+         val insertedView = View(activity)
+
+         v.applyKoshian {
+            insertedView {
+            }
+         }
+
+         assertEquals(2, v.childCount)
+         assertSame(insertedView, v.getChildAt(0))
+         assertEquals(View::class, v.getChildAt(1)::class)
+      }
+   }
+
+   @Test fun insertion_middle() {
+      activityScenarioRule.scenario.onActivity { activity ->
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               View {
+               }
+
+               View {
+               }
+            }
+         }
+
+         val insertedView = View(activity)
+
+         v.applyKoshian {
+            View {
+            }
+            insertedView {
+            }
+            View {
+            }
+         }
+
+         assertEquals(3, v.childCount)
+         assertEquals(View::class, v.getChildAt(0)::class)
+         assertSame(insertedView, v.getChildAt(1))
+         assertEquals(View::class, v.getChildAt(2)::class)
+      }
+   }
+
+   @Test fun insertion_last() {
+      activityScenarioRule.scenario.onActivity { activity ->
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               View {
+               }
+            }
+         }
+
+         val insertedView = View(activity)
+
+         v.applyKoshian {
+            View {
+            }
+            insertedView {
+            }
+         }
+
+         assertEquals(2, v.childCount)
+         assertEquals(View::class, v.getChildAt(0)::class)
+         assertSame(insertedView, v.getChildAt(1))
       }
    }
 }
