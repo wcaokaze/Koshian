@@ -34,7 +34,7 @@ class DimensionTest {
 
    @Test fun dip_int() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.dip }
 
          assertClose(
@@ -46,7 +46,7 @@ class DimensionTest {
 
    @Test fun dip_float() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0f.dip }
 
          assertClose(
@@ -58,7 +58,7 @@ class DimensionTest {
 
    @Test fun dip_double() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0.dip }
 
          assertClose(
@@ -70,7 +70,7 @@ class DimensionTest {
 
    @Test fun px_int() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.px }
 
          assertClose(
@@ -82,7 +82,7 @@ class DimensionTest {
 
    @Test fun px_float() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0f.px }
 
          assertClose(
@@ -94,7 +94,7 @@ class DimensionTest {
 
    @Test fun px_double() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0.px }
 
          assertClose(
@@ -106,7 +106,7 @@ class DimensionTest {
 
    @Test fun sp_int() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.sp }
 
          assertClose(
@@ -118,7 +118,7 @@ class DimensionTest {
 
    @Test fun sp_float() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0f.sp }
 
          assertClose(
@@ -130,7 +130,7 @@ class DimensionTest {
 
    @Test fun sp_double() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0.sp }
 
          assertClose(

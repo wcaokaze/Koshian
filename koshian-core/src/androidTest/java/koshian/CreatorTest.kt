@@ -34,7 +34,7 @@ class CreatorTest {
 
    @Test fun createView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             TextView {
                view.text = "Koshian"
@@ -47,7 +47,7 @@ class CreatorTest {
 
    @Test fun buildViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
                TextView {
@@ -80,7 +80,7 @@ class CreatorTest {
 
    @Test fun buildLayoutParams() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                layout.width  = MATCH_PARENT
@@ -104,7 +104,7 @@ class CreatorTest {
 
    @Test fun addView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                TextView {
@@ -113,7 +113,7 @@ class CreatorTest {
             }
          }
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          v.addView {
             TextView {
                layout.weight = 4.0f
@@ -141,7 +141,7 @@ class CreatorTest {
       activityScenarioRule.scenario.onActivity { activity ->
          val koshianTextView: TextView
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
                koshianTextView = TextView {
@@ -159,13 +159,13 @@ class CreatorTest {
       activityScenarioRule.scenario.onActivity { activity ->
          val koshianTextView: TextView
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
             }
          }
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val child = v.addView {
             FrameLayout {
                koshianTextView = TextView {

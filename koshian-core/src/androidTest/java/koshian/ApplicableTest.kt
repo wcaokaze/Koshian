@@ -45,7 +45,7 @@ class ApplicableTest {
       activityScenarioRule.scenario.onActivity { activity ->
          val applicable = ApplicableImpl(activity)
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View {
@@ -69,7 +69,7 @@ class ApplicableTest {
          val applicable = ApplicableImpl(activity)
 
          val exception = assertFailsWith<IllegalStateException> {
-            @UseExperimental(ExperimentalContracts::class)
+            @OptIn(ExperimentalContracts::class)
             koshian(activity) {
                View {
                   applicable {
@@ -89,7 +89,7 @@ class ApplicableTest {
       activityScenarioRule.scenario.onActivity { activity ->
          val applicable = ApplicableImpl(activity)
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          koshian(activity) {
             LinearLayout {
                applicable {
@@ -98,7 +98,7 @@ class ApplicableTest {
          }
 
          val exception = assertFailsWith<IllegalStateException> {
-            @UseExperimental(ExperimentalContracts::class)
+            @OptIn(ExperimentalContracts::class)
             koshian(activity) {
                LinearLayout {
                   applicable {
@@ -118,7 +118,7 @@ class ApplicableTest {
       activityScenarioRule.scenario.onActivity { activity ->
          val applicable = ApplicableImpl(activity)
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View {
@@ -148,7 +148,7 @@ class ApplicableTest {
       activityScenarioRule.scenario.onActivity { activity ->
          val applicable = ApplicableImpl(activity)
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View {
@@ -179,7 +179,7 @@ class ApplicableTest {
          val applicable = ApplicableImpl(activity)
          val unmatchedView: View
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                unmatchedView = View {
@@ -207,7 +207,7 @@ class ApplicableTest {
 
    @Test fun insertion_first() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View {
@@ -230,7 +230,7 @@ class ApplicableTest {
 
    @Test fun insertion_middle() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View {
@@ -261,7 +261,7 @@ class ApplicableTest {
 
    @Test fun insertion_last() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View {

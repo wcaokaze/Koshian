@@ -34,7 +34,7 @@ class NamingApplierTest {
 
    @Test fun naming() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                TextView("View1") {
@@ -56,7 +56,7 @@ class NamingApplierTest {
 
    @Test fun naming_viewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                FrameLayout("View1") {
@@ -86,7 +86,7 @@ class NamingApplierTest {
 
    @Test fun multipleViews() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                TextView("View1") {
@@ -115,7 +115,7 @@ class NamingApplierTest {
 
    @Test fun viewGroup_multipleViews() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                FrameLayout("View1") {
@@ -158,7 +158,7 @@ class NamingApplierTest {
 
    @Test fun ignoreMismatchedClass() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View("View1") {
@@ -176,7 +176,7 @@ class NamingApplierTest {
 
    @Test fun viewGroup_ignoreMismatchedClass() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                FrameLayout("View1") {
@@ -194,7 +194,7 @@ class NamingApplierTest {
 
    @Test fun multipleNames() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                TextView("View1") {
@@ -234,7 +234,7 @@ class NamingApplierTest {
 
    @Test fun viewGroup_multipleNames() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                FrameLayout("View1") {
@@ -302,7 +302,7 @@ class NamingApplierTest {
          val fourth: View
          val fifth:  View
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val container = koshian(activity) {
             LinearLayout {
                first = View {
@@ -353,7 +353,7 @@ class NamingApplierTest {
          val fourth: FrameLayout
          val fifth:  FrameLayout
 
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val container = koshian(activity) {
             LinearLayout {
                first = FrameLayout {
@@ -398,7 +398,7 @@ class NamingApplierTest {
 
    @Test fun nestedViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                FrameLayout("Parent") {

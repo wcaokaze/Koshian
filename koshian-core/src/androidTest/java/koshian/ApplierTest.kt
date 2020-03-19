@@ -34,7 +34,7 @@ class ApplierTest {
 
    @Test fun apply() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             TextView {
             }
@@ -50,7 +50,7 @@ class ApplierTest {
 
    @Test fun applyViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
             }
@@ -66,7 +66,7 @@ class ApplierTest {
 
    @Test fun applyChildView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
                TextView {
@@ -99,7 +99,7 @@ class ApplierTest {
 
    @Test fun nestedViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
                LinearLayout {
@@ -150,7 +150,7 @@ class ApplierTest {
 
    @Test fun insert_first() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
                View {
@@ -180,7 +180,7 @@ class ApplierTest {
 
    @Test fun insert_middle() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
                View {
@@ -221,7 +221,7 @@ class ApplierTest {
 
    @Test fun insert_last() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
                View {
@@ -251,7 +251,7 @@ class ApplierTest {
 
    @Test fun insert_intoEmptyView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
             }
@@ -271,7 +271,7 @@ class ApplierTest {
 
    @Test fun layoutParams_singleView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             View {
             }
@@ -287,7 +287,7 @@ class ApplierTest {
 
    @Test fun layoutParams_singleViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             FrameLayout {
             }
@@ -303,7 +303,7 @@ class ApplierTest {
 
    @Test fun layoutParams_viewInViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                View {
@@ -325,7 +325,7 @@ class ApplierTest {
 
    @Test fun layoutParams_viewGroupInViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
                FrameLayout {
@@ -347,7 +347,7 @@ class ApplierTest {
 
    @Test fun layoutParams_insertedView() {
       activityScenarioRule.scenario.onActivity { activity ->
-         @UseExperimental(ExperimentalContracts::class)
+         @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
             LinearLayout {
             }
