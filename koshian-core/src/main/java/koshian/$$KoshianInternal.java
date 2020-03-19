@@ -108,29 +108,145 @@ public final class $$KoshianInternal {
       return child;
    }
 
-   public static void assertNextView(final Object parent, final View view) {
+   public static void invokeViewInKoshian(final Object parent, final View view) {
+      if (applyingIndex == -1) {
+         if (view.getParent() != null) {
+            throw new IllegalStateException("A View(" + view + ") was specified in a Creator, " +
+                  "but the specified view was already added to another ViewGroup.");
+         }
+
+         addView(parent, view);
+      } else {
+         if (view.getParent() == null) {
+            insertView(parent, view);
+         } else {
+            assertNextView(parent, view);
+         }
+      }
+   }
+
+   public static void invokeViewInKoshian(final Object parent,
+                                          final KoshianApplicable applicable)
+   {
+      final View view = applicable.getView();
+
+      if (applyingIndex == -1) {
+         if (view.getParent() != null) {
+            throw new IllegalStateException(
+                  "An Applicable(" + applicable + ") was specified in a Creator, " +
+                  "but the specified view was already added to another ViewGroup.");
+         }
+
+         addApplicable(parent, applicable);
+      } else {
+         if (view.getParent() == null) {
+            insertApplicable(parent, applicable);
+         } else {
+            assertNextApplicable(parent, applicable);
+         }
+      }
+   }
+
+   private static void addView(final Object parent, final View view) {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
-               "but there is no ViewGroup in current Koshian.");
+               "but the current Koshian-View is not a ViewGroup.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+      viewGroup.addView(view, parentViewConstructor.instantiateLayoutParams());
+   }
+
+   private static void addApplicable(final Object parent,
+                                     final KoshianApplicable applicable)
+   {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException(
+               "An Applicable(" + applicable + ") was specified " +
+               "but the current Koshian-View is not a ViewGroup.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+      viewGroup.addView(applicable.getView(), parentViewConstructor.instantiateLayoutParams());
+   }
+
+   private static void insertView(final Object parent, final View view) {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException("A View(" + view + ") was specified " +
+               "but the current Koshian-View is not a ViewGroup.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+
+      viewGroup.addView(view, applyingIndex++,
+            parentViewConstructor.instantiateLayoutParams());
+   }
+
+   private static void insertApplicable(final Object parent,
+                                        final KoshianApplicable applicable)
+   {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException(
+               "An Applicable(" + applicable + ") was specified " +
+               "but the current Koshian-View is not a ViewGroup.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+
+      viewGroup.addView(applicable.getView(), applyingIndex++,
+            parentViewConstructor.instantiateLayoutParams());
+   }
+
+   private static void assertNextView(final Object parent, final View view) {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException("A View(" + view + ") was specified " +
+               "but the current Koshian-View is not a ViewGroup.");
       }
 
       final ViewGroup viewGroup = (ViewGroup) parent;
       final int applyingIndex = $$KoshianInternal.applyingIndex;
 
-      if (applyingIndex == -1) {
-         throw new IllegalStateException("A View (" + view + ") was specified " +
-               "but it seems that current Koshian is not in Applier context.");
-      }
-
       if (applyingIndex >= viewGroup.getChildCount()) {
-         throw new AssertionError("A View (" + view + ") was specified " +
-               "but current Koshian has children no longer.");
+         throw new AssertionError("A View (" + view + ") " +
+               "which is already added to some ViewGroup was specified, " +
+               "but it does not match with the next View. " +
+               "(Information: There is no next View)");
       }
 
       final View nextView = viewGroup.getChildAt(applyingIndex);
 
       if (view != nextView) {
-         throw new AssertionError("A View (" + view + ") was specified " +
+         throw new AssertionError("A View (" + view + ") " +
+               "which is already added to some ViewGroup was specified, " +
+               "but it does not match with the next View. " +
+               "(Information: the next View was " + nextView + ")");
+      }
+   }
+
+   private static void assertNextApplicable(final Object parent,
+                                            final KoshianApplicable applicable)
+   {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException(
+               "An Applicable(" + applicable + ") was specified " +
+               "but the current Koshian-View is not a ViewGroup.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+      final int applyingIndex = $$KoshianInternal.applyingIndex;
+
+      if (applyingIndex >= viewGroup.getChildCount()) {
+         throw new AssertionError("An Applicable (" + applicable + ") " +
+               "which is already added to some ViewGroup was specified, " +
+               "but it does not match with the next View. " +
+               "(Information: There is no next View)");
+      }
+
+      final View nextView = viewGroup.getChildAt(applyingIndex);
+
+      if (applicable.getView() != nextView) {
+         throw new AssertionError("An Applicable (" + applicable + ") " +
+               "which is already added to some ViewGroup was specified, " +
                "but it does not match with the next View. " +
                "(Information: the next View was " + nextView + ")");
       }

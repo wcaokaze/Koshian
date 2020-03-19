@@ -30,8 +30,10 @@ inline fun <R> koshian(
 
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
+   val oldApplyingIndex = `$$KoshianInternal`.applyingIndex
    `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = KoshianRoot.CONSTRUCTOR
+   `$$KoshianInternal`.applyingIndex = -1
 
    `$$KoshianInternal`.init(context)
 
@@ -41,6 +43,7 @@ inline fun <R> koshian(
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
+      `$$KoshianInternal`.applyingIndex = oldApplyingIndex
    }
 }
 
