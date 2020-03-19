@@ -43,6 +43,13 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
    val Double.px: Int inline get() = this.toInt()
 
    /**
+    * ## In [Creator][KoshianMode.Creator]
+    *
+    * add this view to the current Koshian-view. (throws if the current
+    * Koshian-View is not a ViewGroup)
+    *
+    * ## In [Applier][KoshianMode.Applier]
+    *
     * - If this view is already added into any ViewGroup
     *
     *     check the next view is this view.
@@ -55,16 +62,27 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
     *
     * ## Pseudocode
     * ```
-    * if (parent == null) {
-    *    if (currentKoshian.view !is ViewGroup) { throw IllegalStateException() }
+    * when (currentKoshian.mode == Creator) {
+    *    Creator -> {
+    *       if (this.parent != null) { throw IllegalStateException() }
+    *       if (currentKoshian.view !is ViewGroup) { throw IllegalStateException() }
     *
-    *    currentKoshian.view.addView(this)
-    *    applyAction()
-    * } else {
-    *    if (currentKoshian.view !is ViewGroup) { throw IllegalStateException() }
-    *    if (currentKoshian.view[++cursor] !== this) { throw IllegalStateException() }
+    *       currentKoshian.view.addView(this)
+    *    }
     *
-    *    applyAction()
+    *    Applier -> {
+    *       if (this.parent == null) {
+    *          if (currentKoshian.view !is ViewGroup) { throw IllegalStateException() }
+    *
+    *          currentKoshian.view.addView(cursor++, this)
+    *          applyAction()
+    *       } else {
+    *          if (currentKoshian.view !is ViewGroup) { throw IllegalStateException() }
+    *          if (currentKoshian.view[++cursor] !== this) { throw AssertionError() }
+    *
+    *          applyAction()
+    *       }
+    *    }
     * }
     * ```
     */

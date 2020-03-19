@@ -210,4 +210,77 @@ class SpecifyingViewTest {
          assertSame(insertedView, v.getChildAt(1))
       }
    }
+
+   @Test fun addView_inCreatorContext() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val addedView = View(activity)
+
+         @UseExperimental(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               View {
+               }
+               addedView {
+               }
+               View {
+               }
+            }
+         }
+
+         assertEquals(3, v.childCount)
+         assertEquals(View::class, v.getChildAt(0)::class)
+         assertSame(addedView, v.getChildAt(1))
+         assertEquals(View::class, v.getChildAt(2)::class)
+      }
+   }
+
+   @Test fun addView_inNotViewGroupBuilder() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val addedView = View(activity)
+
+         val exception = assertFailsWith<IllegalStateException> {
+            @UseExperimental(ExperimentalContracts::class)
+            koshian(activity) {
+               View {
+                  addedView {
+                  }
+               }
+            }
+         }
+
+         val message = exception.message
+         assertNotNull(message)
+         assertTrue(addedView.toString() in message)
+         assertTrue("current Koshian-View is not a ViewGroup." in message)
+      }
+   }
+
+   @Test fun addView_alreadyAddedView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val addedView: View
+
+         @UseExperimental(ExperimentalContracts::class)
+         koshian(activity) {
+            LinearLayout {
+               addedView = View {
+               }
+            }
+         }
+
+         val exception = assertFailsWith<IllegalStateException> {
+            @UseExperimental(ExperimentalContracts::class)
+            koshian(activity) {
+               LinearLayout {
+                  addedView {
+                  }
+               }
+            }
+         }
+
+         val message = exception.message
+         assertNotNull(message)
+         assertTrue(addedView.toString() in message)
+         assertTrue("already added to another ViewGroup." in message)
+      }
+   }
 }

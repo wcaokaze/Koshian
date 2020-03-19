@@ -109,14 +109,33 @@ public final class $$KoshianInternal {
    }
 
    public static void invokeViewInKoshian(final Object parent, final View view) {
-      if (view.getParent() == null) {
+      if (applyingIndex == -1) {
+         if (view.getParent() != null) {
+            throw new IllegalStateException("A View(" + view + ") was specified in a Creator, " +
+                  "but the specified view was already added to another ViewGroup.");
+         }
+
          addView(parent, view);
       } else {
-         assertNextView(parent, view);
+         if (view.getParent() == null) {
+            insertView(parent, view);
+         } else {
+            assertNextView(parent, view);
+         }
       }
    }
 
    private static void addView(final Object parent, final View view) {
+      if (!(parent instanceof ViewGroup)) {
+         throw new IllegalStateException("A View(" + view + ") was specified " +
+               "but the current Koshian-View is not a ViewGroup.");
+      }
+
+      final ViewGroup viewGroup = (ViewGroup) parent;
+      viewGroup.addView(view, parentViewConstructor.instantiateLayoutParams());
+   }
+
+   private static void insertView(final Object parent, final View view) {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
                "but the current Koshian-View is not a ViewGroup.");
@@ -136,11 +155,6 @@ public final class $$KoshianInternal {
 
       final ViewGroup viewGroup = (ViewGroup) parent;
       final int applyingIndex = $$KoshianInternal.applyingIndex;
-
-      if (applyingIndex == -1) {
-         throw new IllegalStateException("A View (" + view + ") was specified " +
-               "but it seems that current Koshian is not in Applier context.");
-      }
 
       if (applyingIndex >= viewGroup.getChildCount()) {
          throw new AssertionError("A View (" + view + ") " +
