@@ -84,7 +84,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_multipleViews() {
+   @Test fun multipleViews() {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -113,7 +113,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_viewGroup_multipleViews() {
+   @Test fun viewGroup_multipleViews() {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -156,7 +156,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_ignoreMismatchedClass() {
+   @Test fun ignoreMismatchedClass() {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -174,7 +174,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_viewGroup_ignoreMismatchedClass() {
+   @Test fun viewGroup_ignoreMismatchedClass() {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -192,7 +192,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_multipleNames() {
+   @Test fun multipleNames() {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -232,7 +232,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_viewGroup_multipleNames() {
+   @Test fun viewGroup_multipleNames() {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -294,7 +294,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_notAffectCursor() {
+   @Test fun notAffectCursor() {
       activityScenarioRule.scenario.onActivity { activity ->
          val first:  View
          val second: View
@@ -345,7 +345,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_viewGroup_notAffectCursor() {
+   @Test fun viewGroup_notAffectCursor() {
       activityScenarioRule.scenario.onActivity { activity ->
          val first:  FrameLayout
          val second: FrameLayout
@@ -396,7 +396,7 @@ class NamingApplierTest {
       }
    }
 
-   @Test fun naming_nestedViewGroup() {
+   @Test fun nestedViewGroup() {
       activityScenarioRule.scenario.onActivity { activity ->
          @UseExperimental(ExperimentalContracts::class)
          val v = koshian(activity) {
