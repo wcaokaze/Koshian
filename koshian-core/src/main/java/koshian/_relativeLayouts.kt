@@ -24,7 +24,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
-object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, RelativeLayout.LayoutParams> {
+object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, RelativeLayout.LayoutParams>() {
    override fun instantiate(context: Context?) = RelativeLayout(context)
    override fun instantiateLayoutParams() = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

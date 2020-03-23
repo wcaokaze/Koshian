@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Chronometer
 import kotlin.contracts.*
 
-object ChronometerConstructor : KoshianViewConstructor<Chronometer> {
+object ChronometerConstructor : KoshianViewConstructor<Chronometer>() {
    override fun instantiate(context: Context?) = Chronometer(context)
 }
 

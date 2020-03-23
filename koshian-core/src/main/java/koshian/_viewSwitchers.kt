@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ViewSwitcher
 import kotlin.contracts.*
 
-object ViewSwitcherConstructor : KoshianViewGroupConstructor<ViewSwitcher, FrameLayout.LayoutParams> {
+object ViewSwitcherConstructor : KoshianViewGroupConstructor<ViewSwitcher, FrameLayout.LayoutParams>() {
    override fun instantiate(context: Context?) = ViewSwitcher(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

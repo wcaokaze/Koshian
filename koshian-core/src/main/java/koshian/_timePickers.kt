@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.TimePicker
 import kotlin.contracts.*
 
-object TimePickerConstructor : KoshianViewConstructor<TimePicker> {
+object TimePickerConstructor : KoshianViewConstructor<TimePicker>() {
    override fun instantiate(context: Context?) = TimePicker(context)
 }
 

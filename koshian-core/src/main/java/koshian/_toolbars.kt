@@ -23,7 +23,7 @@ import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
 @RequiresApi(21)
-object ToolbarConstructor : KoshianViewConstructor<Toolbar> {
+object ToolbarConstructor : KoshianViewConstructor<Toolbar>() {
    override fun instantiate(context: Context?) = Toolbar(context)
 }
 

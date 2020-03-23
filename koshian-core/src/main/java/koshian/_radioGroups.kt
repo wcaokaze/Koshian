@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import kotlin.contracts.*
 
-object RadioGroupConstructor : KoshianViewGroupConstructor<RadioGroup, RadioGroup.LayoutParams> {
+object RadioGroupConstructor : KoshianViewGroupConstructor<RadioGroup, RadioGroup.LayoutParams>() {
    override fun instantiate(context: Context?) = RadioGroup(context)
    override fun instantiateLayoutParams() = RadioGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

@@ -26,7 +26,7 @@ public final class KoshianRoot implements ViewManager {
          CONSTRUCTOR = new KoshianRootConstructor();
 
    private static final class KoshianRootConstructor
-         implements KoshianViewGroupConstructor<ViewGroup, ViewGroup.LayoutParams>
+         extends KoshianViewGroupConstructor<ViewGroup, ViewGroup.LayoutParams>
    {
       @Override
       public ViewGroup instantiate(final Context context) {

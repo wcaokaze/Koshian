@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.RatingBar
 import kotlin.contracts.*
 
-object RatingBarConstructor : KoshianViewConstructor<RatingBar> {
+object RatingBarConstructor : KoshianViewConstructor<RatingBar>() {
    override fun instantiate(context: Context?) = RatingBar(context)
 }
 

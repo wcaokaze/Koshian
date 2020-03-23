@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Space
 import kotlin.contracts.*
 
-object SpaceConstructor : KoshianViewConstructor<Space> {
+object SpaceConstructor : KoshianViewConstructor<Space>() {
    override fun instantiate(context: Context?) = Space(context)
 }
 

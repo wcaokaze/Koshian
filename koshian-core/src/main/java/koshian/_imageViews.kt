@@ -23,7 +23,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import kotlin.contracts.*
 
-object ImageViewConstructor : KoshianViewConstructor<ImageView> {
+object ImageViewConstructor : KoshianViewConstructor<ImageView>() {
    override fun instantiate(context: Context?) = ImageView(context)
 }
 

@@ -19,6 +19,23 @@ package koshian;
 import android.content.*;
 import android.view.*;
 
-public interface KoshianViewConstructor<V extends View> {
-   public V instantiate(Context context);
+import kotlin.jvm.functions.Function1;
+
+public abstract class KoshianViewConstructor<V extends View> {
+   @SuppressWarnings("rawtypes")
+   private Function1 mStyleAction = null;
+
+   public abstract V instantiate(Context context);
+
+   @SuppressWarnings("rawtypes")
+   public final Function1 getStyleAction() {
+      return mStyleAction;
+   }
+
+   public final void setStyleAction(
+         @SuppressWarnings("rawtypes")
+         final Function1 styleAction
+   ) {
+      mStyleAction = styleAction;
+   }
 }

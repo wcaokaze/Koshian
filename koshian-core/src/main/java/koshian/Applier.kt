@@ -19,7 +19,7 @@ package koshian
 import android.content.*
 import android.view.*
 
-object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing> {
+object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing>() {
    override fun instantiate(context: Context?) = throw UnsupportedOperationException()
    override fun instantiateLayoutParams()      = throw UnsupportedOperationException()
 }
@@ -36,6 +36,36 @@ inline fun <V : View> V.applyKoshian(
 
    try {
       val koshian = ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>(this)
+      koshian.applyAction()
+   } finally {
+      `$$KoshianInternal`.context = oldContext
+      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
+      `$$KoshianInternal`.applyingIndex = oldApplyingIndex
+   }
+}
+
+inline fun <V : View> V.applyKoshian(
+      style: KoshianStyle,
+      constructor: KoshianViewConstructor<V>,
+      applyAction: ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   val oldContext = `$$KoshianInternal`.context
+   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
+   val oldApplyingIndex = `$$KoshianInternal`.applyingIndex
+   `$$KoshianInternal`.context = context
+   `$$KoshianInternal`.parentViewConstructor = NothingConstructor
+   `$$KoshianInternal`.applyingIndex = 0
+
+   style.defaultStyle()
+
+   try {
+      val koshian = ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>(this)
+
+      @Suppress("UNCHECKED_CAST")
+      val styleAction = constructor.styleAction
+            as ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>.() -> Unit
+
+      koshian.styleAction()
       koshian.applyAction()
    } finally {
       `$$KoshianInternal`.context = oldContext

@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.ImageSwitcher
 import kotlin.contracts.*
 
-object ImageSwitcherConstructor : KoshianViewConstructor<ImageSwitcher> {
+object ImageSwitcherConstructor : KoshianViewConstructor<ImageSwitcher>() {
    override fun instantiate(context: Context?) = ImageSwitcher(context)
 }
 

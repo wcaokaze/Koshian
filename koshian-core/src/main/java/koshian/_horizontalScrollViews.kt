@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import kotlin.contracts.*
 
-object HorizontalScrollViewConstructor : KoshianViewGroupConstructor<HorizontalScrollView, FrameLayout.LayoutParams> {
+object HorizontalScrollViewConstructor : KoshianViewGroupConstructor<HorizontalScrollView, FrameLayout.LayoutParams>() {
    override fun instantiate(context: Context?) = HorizontalScrollView(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

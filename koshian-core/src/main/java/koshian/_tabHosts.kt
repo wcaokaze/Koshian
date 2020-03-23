@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.TabHost
 import kotlin.contracts.*
 
-object TabHostConstructor : KoshianViewGroupConstructor<TabHost, FrameLayout.LayoutParams> {
+object TabHostConstructor : KoshianViewGroupConstructor<TabHost, FrameLayout.LayoutParams>() {
    override fun instantiate(context: Context?) = TabHost(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

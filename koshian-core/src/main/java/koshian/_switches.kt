@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Switch
 import kotlin.contracts.*
 
-object SwitchConstructor : KoshianViewConstructor<Switch> {
+object SwitchConstructor : KoshianViewConstructor<Switch>() {
    override fun instantiate(context: Context?) = Switch(context)
 }
 

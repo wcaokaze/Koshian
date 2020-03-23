@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.NumberPicker
 import kotlin.contracts.*
 
-object NumberPickerConstructor : KoshianViewConstructor<NumberPicker> {
+object NumberPickerConstructor : KoshianViewConstructor<NumberPicker>() {
    override fun instantiate(context: Context?) = NumberPicker(context)
 }
 
