@@ -92,7 +92,7 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
          )
          where V : View
    {
-      `$$KoshianInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
 
       val koshian = ViewBuilder<V, CL, KoshianMode.Applier>(this)
       koshian.applyAction()
@@ -148,7 +148,7 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
          )
          where A : KoshianApplicable
    {
-      `$$KoshianInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
 
       val koshian = ViewBuilder<A, CL, KoshianMode.Applier>(this)
       koshian.applyAction()
