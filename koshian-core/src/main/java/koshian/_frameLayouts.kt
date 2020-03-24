@@ -225,7 +225,7 @@ inline fun FrameLayout.applyKoshian(
  */
 @Suppress("FunctionName")
 inline fun KoshianStyle.FrameLayout(
-      crossinline styleAction: ViewBuilder<FrameLayout, Nothing, KoshianMode.Applier>.() -> Unit
+      crossinline styleAction: ViewBuilder<FrameLayout, Nothing, KoshianMode.Style>.() -> Unit
 ) {
    createStyle(FrameLayoutConstructor, styleAction)
 }

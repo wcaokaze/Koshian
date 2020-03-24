@@ -101,7 +101,7 @@ inline fun TextView.applyKoshian(
  */
 @Suppress("FunctionName")
 inline fun KoshianStyle.TextView(
-      crossinline styleAction: ViewBuilder<TextView, Nothing, KoshianMode.Applier>.() -> Unit
+      crossinline styleAction: ViewBuilder<TextView, Nothing, KoshianMode.Style>.() -> Unit
 ) {
    createStyle(TextViewConstructor, styleAction)
 }
