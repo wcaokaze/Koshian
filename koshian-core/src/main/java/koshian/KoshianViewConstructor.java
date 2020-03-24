@@ -22,20 +22,19 @@ import android.view.*;
 import kotlin.jvm.functions.Function1;
 
 public abstract class KoshianViewConstructor<V extends View> {
-   @SuppressWarnings("rawtypes")
-   private Function1 mStyleAction = null;
+   private Function1<V, Void> mStyleAction = null;
+
+   protected KoshianViewConstructor(final Class<V> targetViewClass) {
+      $$StyleInternal.addViewConstructor(targetViewClass, this);
+   }
 
    public abstract V instantiate(Context context);
 
-   @SuppressWarnings("rawtypes")
-   public final Function1 getStyleAction() {
+   public final Function1<V, Void> getStyleAction() {
       return mStyleAction;
    }
 
-   public final void setStyleAction(
-         @SuppressWarnings("rawtypes")
-         final Function1 styleAction
-   ) {
+   public final void setStyleAction(final Function1<V, Void> styleAction) {
       mStyleAction = styleAction;
    }
 }

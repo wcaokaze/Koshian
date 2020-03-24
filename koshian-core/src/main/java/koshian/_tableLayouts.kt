@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import kotlin.contracts.*
 
-object TableLayoutConstructor : KoshianViewGroupConstructor<TableLayout, TableLayout.LayoutParams>() {
+object TableLayoutConstructor : KoshianViewGroupConstructor<TableLayout, TableLayout.LayoutParams>(TableLayout::class.java) {
    override fun instantiate(context: Context?) = TableLayout(context)
    override fun instantiateLayoutParams() = TableLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

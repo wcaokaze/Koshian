@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.CalendarView
 import kotlin.contracts.*
 
-object CalendarViewConstructor : KoshianViewConstructor<CalendarView>() {
+object CalendarViewConstructor : KoshianViewConstructor<CalendarView>(CalendarView::class.java) {
    override fun instantiate(context: Context) = CalendarView(context)
 }
 

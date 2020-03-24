@@ -25,7 +25,7 @@ import android.view.*
 import android.widget.TextView
 import kotlin.contracts.*
 
-object TextViewConstructor : KoshianViewConstructor<TextView>() {
+object TextViewConstructor : KoshianViewConstructor<TextView>(TextView::class.java) {
    override fun instantiate(context: Context?) = TextView(context)
 }
 
@@ -100,10 +100,10 @@ inline fun TextView.applyKoshian(
  * Styles can be applied via [applyKoshian]
  */
 @Suppress("FunctionName")
-fun KoshianStyle.TextView(
-      styleAction: ViewBuilder<TextView, Nothing, KoshianMode.Applier>.() -> Unit
+inline fun KoshianStyle.TextView(
+      crossinline styleAction: ViewBuilder<TextView, Nothing, KoshianMode.Applier>.() -> Unit
 ) {
-   TextViewConstructor.styleAction = styleAction
+   createStyle(TextViewConstructor, styleAction)
 }
 
 var TextView.textColor: Int

@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.MultiAutoCompleteTextView
 import kotlin.contracts.*
 
-object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCompleteTextView>() {
+object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCompleteTextView>(MultiAutoCompleteTextView::class.java) {
    override fun instantiate(context: Context?) = MultiAutoCompleteTextView(context)
 }
 

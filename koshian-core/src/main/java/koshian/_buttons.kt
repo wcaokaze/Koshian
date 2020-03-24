@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Button
 import kotlin.contracts.*
 
-object ButtonConstructor : KoshianViewConstructor<Button>() {
+object ButtonConstructor : KoshianViewConstructor<Button>(Button::class.java) {
    override fun instantiate(context: Context?) = Button(context)
 }
 

@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import kotlin.contracts.*
 
-object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, LinearLayout.LayoutParams>() {
+object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, LinearLayout.LayoutParams>(LinearLayout::class.java) {
    override fun instantiate(context: Context?) = LinearLayout(context)
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

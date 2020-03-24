@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.SeekBar
 import kotlin.contracts.*
 
-object SeekBarConstructor : KoshianViewConstructor<SeekBar>() {
+object SeekBarConstructor : KoshianViewConstructor<SeekBar>(SeekBar::class.java) {
    override fun instantiate(context: Context?) = SeekBar(context)
 }
 

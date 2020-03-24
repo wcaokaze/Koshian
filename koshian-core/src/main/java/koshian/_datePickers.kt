@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.DatePicker
 import kotlin.contracts.*
 
-object DatePickerConstructor : KoshianViewConstructor<DatePicker>() {
+object DatePickerConstructor : KoshianViewConstructor<DatePicker>(DatePicker::class.java) {
    override fun instantiate(context: Context?) = DatePicker(context)
 }
 

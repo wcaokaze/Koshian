@@ -31,15 +31,15 @@ class StyleTest {
    @get:Rule
    val activityScenarioRule = activityScenarioRule<EmptyTestActivity>()
 
-   class Style : KoshianStyle() {
-      override fun defaultStyle() {
-         TextView {
-            view.text = "Koshian"
+   @Test fun rootView() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.hint = "Koshian"
+            }
          }
       }
-   }
 
-   @Test fun rootView() {
       activityScenarioRule.scenario.onActivity { activity ->
          @OptIn(ExperimentalContracts::class)
          val v = koshian(activity) {
@@ -48,9 +48,84 @@ class StyleTest {
          }
 
          v.applyKoshian(Style()) {
+            view.text = "Koshian"
          }
 
+         assertEquals("Koshian", v.hint)
          assertEquals("Koshian", v.text)
+      }
+   }
+
+   @Test fun viewGroup() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            FrameLayout {
+               view.elevation = 4.0f
+            }
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            view.alpha = 0.4f
+         }
+
+         assertEquals(4.0f, v.elevation)
+         assertEquals(0.4f, v.alpha)
+      }
+   }
+
+   @Test fun nestedViews() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.text = "Koshian"
+            }
+
+            FrameLayout {
+               view.elevation = 4.0f
+            }
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               FrameLayout {
+                  TextView {
+                  }
+               }
+
+               TextView {
+               }
+            }
+         }
+
+         v.applyKoshian(Style()) {
+         }
+
+         assertEquals(4.0f, v.elevation)
+         assertEquals(2, v.childCount)
+
+         val child1 = v.getChildAt(0)
+         assertTrue(child1 is FrameLayout)
+         assertEquals(4.0f, child1.elevation)
+         assertEquals(1, child1.childCount)
+
+         val child1_1 = child1.getChildAt(0)
+         assertTrue(child1_1 is TextView)
+         assertEquals("Koshian", child1_1.text)
+
+         val child2 = v.getChildAt(1)
+         assertTrue(child2 is TextView)
+         assertEquals("Koshian", child1_1.text)
       }
    }
 }

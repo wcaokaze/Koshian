@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ViewFlipper
 import kotlin.contracts.*
 
-object ViewFlipperConstructor : KoshianViewGroupConstructor<ViewFlipper, FrameLayout.LayoutParams>() {
+object ViewFlipperConstructor : KoshianViewGroupConstructor<ViewFlipper, FrameLayout.LayoutParams>(ViewFlipper::class.java) {
    override fun instantiate(context: Context?) = ViewFlipper(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
