@@ -6,6 +6,40 @@ abstract class KoshianStyle {
    open fun defaultStyle() {}
 }
 
+inline fun <V : View> V.applyKoshian(
+      style: KoshianStyle,
+      constructor: KoshianViewConstructor<V>,
+      applyAction: ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>.() -> Unit
+) {
+   val oldContext = `$$KoshianInternal`.context
+   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
+   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
+   `$$KoshianInternal`.context = context
+   `$$KoshianInternal`.parentViewConstructor = NothingConstructor
+   `$$ApplierInternal`.applyingIndex = 0
+
+   style.defaultStyle()
+
+   try {
+      val koshian = ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>(this)
+
+      /*
+      @Suppress("UNCHECKED_CAST")
+      val styleAction = constructor.styleAction
+            as ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>.() -> Unit
+
+      koshian.styleAction()
+      */
+
+      `$$StyleInternal`.applyStyle(this)
+      koshian.applyAction()
+   } finally {
+      `$$KoshianInternal`.context = oldContext
+      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
+      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
+   }
+}
+
 inline fun <V : View> createStyle(
       viewConstructor: KoshianViewConstructor<V>,
       crossinline styleAction: ViewBuilder<V, Nothing, KoshianMode.Style>.() -> Unit
