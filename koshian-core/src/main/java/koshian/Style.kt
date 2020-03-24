@@ -22,15 +22,6 @@ inline fun <V : View> V.applyKoshian(
 
    try {
       val koshian = ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>(this)
-
-      /*
-      @Suppress("UNCHECKED_CAST")
-      val styleAction = constructor.styleAction
-            as ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>.() -> Unit
-
-      koshian.styleAction()
-      */
-
       `$$StyleInternal`.applyStyle(this)
       koshian.applyAction()
    } finally {
