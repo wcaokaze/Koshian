@@ -193,4 +193,64 @@ class StyleTest {
          assertEquals("TextView2", child2.text)
       }
    }
+
+   @Test fun nestedViews_withPartialApplying() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.hint = "Koshian"
+            }
+
+            FrameLayout {
+               view.elevation = 4.0f
+            }
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               FrameLayout {
+                  TextView {
+                  }
+                  TextView {
+                  }
+               }
+
+               TextView {
+               }
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            FrameLayout {
+               TextView {
+                  view.text = "TextView1"
+               }
+            }
+         }
+
+         assertEquals(4.0f, v.elevation)
+         assertEquals(2, v.childCount)
+
+         val child1 = v.getChildAt(0)
+         assertTrue(child1 is FrameLayout)
+         assertEquals(4.0f, child1.elevation)
+         assertEquals(2, child1.childCount)
+
+         val child1_1 = child1.getChildAt(0)
+         assertTrue(child1_1 is TextView)
+         assertEquals("Koshian", child1_1.hint)
+         assertEquals("TextView1", child1_1.text)
+
+         val child1_2 = child1.getChildAt(1)
+         assertTrue(child1_2 is TextView)
+         assertEquals("Koshian", child1_2.hint)
+
+         val child2 = v.getChildAt(1)
+         assertTrue(child2 is TextView)
+         assertEquals("Koshian", child2.hint)
+      }
+   }
 }
