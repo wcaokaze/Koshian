@@ -41,6 +41,5 @@ public final class $$StyleInternal {
       final Function1<V, Void> styleAction = viewConstructor.getStyleAction();
       if (styleAction == null) { return; }
       styleAction.invoke(view);
-
    }
 }
