@@ -308,6 +308,39 @@ class StyleTest {
       }
    }
 
+   @Test fun insertedViews_inInsertedViewGroups() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.text = "Koshian"
+            }
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            FrameLayout {
+               TextView {
+               }
+            }
+         }
+
+         val child = v.getChildAt(0)
+         assertTrue(child is FrameLayout)
+         assertEquals(1, child.childCount)
+
+         val child2 = child.getChildAt(0)
+         assertTrue(child2 is TextView)
+         assertEquals("Koshian", child2.text)
+      }
+   }
+
    @Test fun insertedBySpecifyingViews() {
       class Style : KoshianStyle() {
          override fun defaultStyle() {
