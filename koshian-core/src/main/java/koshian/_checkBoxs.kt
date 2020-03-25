@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.CheckBox
 import kotlin.contracts.*
 
-object CheckBoxConstructor : KoshianViewConstructor<CheckBox> {
+object CheckBoxConstructor : KoshianViewConstructor<CheckBox>(CheckBox::class.java) {
    override fun instantiate(context: Context?) = CheckBox(context)
 }
 

@@ -22,7 +22,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
-object ViewConstructor : KoshianViewConstructor<View> {
+object ViewConstructor : KoshianViewConstructor<View>(View::class.java) {
    override fun instantiate(context: Context?) = View(context)
 }
 

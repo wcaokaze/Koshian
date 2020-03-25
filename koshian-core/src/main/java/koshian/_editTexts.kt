@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.EditText
 import kotlin.contracts.*
 
-object EditTextConstructor : KoshianViewConstructor<EditText> {
+object EditTextConstructor : KoshianViewConstructor<EditText>(EditText::class.java) {
    override fun instantiate(context: Context?) = EditText(context)
 }
 

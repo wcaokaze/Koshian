@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.CheckedTextView
 import kotlin.contracts.*
 
-object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView> {
+object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView>(CheckedTextView::class.java) {
    override fun instantiate(context: Context?) = CheckedTextView(context)
 }
 

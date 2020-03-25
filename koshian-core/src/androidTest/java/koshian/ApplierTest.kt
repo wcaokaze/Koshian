@@ -269,6 +269,127 @@ class ApplierTest {
       }
    }
 
+   @Test fun insertViewGroup_first() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               View {
+               }
+            }
+         }
+
+         v.applyKoshian {
+            FrameLayout {
+               view.elevation = 4.0f
+            }
+
+            View {
+               view.elevation = 8.0f
+            }
+         }
+
+         val child1 = v.getChildAt(0)
+         assertTrue(child1 is FrameLayout)
+         assertEquals(4.0f, child1.elevation)
+
+         val child2 = v.getChildAt(1)
+         assertEquals(View::class, child2::class)
+         assertEquals(8.0f, child2.elevation)
+      }
+   }
+
+   @Test fun insertViewGroup_middle() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               View {
+               }
+
+               View {
+               }
+            }
+         }
+
+         v.applyKoshian {
+            View {
+               view.elevation = 4.0f
+            }
+
+            FrameLayout {
+               view.elevation = 8.0f
+            }
+
+            View {
+               view.elevation = 12.0f
+            }
+         }
+
+         val child1 = v.getChildAt(0)
+         assertEquals(View::class, child1::class)
+         assertEquals(4.0f, child1.elevation)
+
+         val child2 = v.getChildAt(1)
+         assertTrue(child2 is FrameLayout)
+         assertEquals(8.0f, child2.elevation)
+
+         val child3 = v.getChildAt(2)
+         assertEquals(View::class, child3::class)
+         assertEquals(12.0f, child3.elevation)
+      }
+   }
+
+   @Test fun insertViewGroup_last() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               View {
+               }
+            }
+         }
+
+         v.applyKoshian {
+            View {
+               view.elevation = 4.0f
+            }
+
+            FrameLayout {
+               view.elevation = 8.0f
+            }
+         }
+
+         val child1 = v.getChildAt(0)
+         assertEquals(View::class, child1::class)
+         assertEquals(4.0f, child1.elevation)
+
+         val child2 = v.getChildAt(1)
+         assertTrue(child2 is FrameLayout)
+         assertEquals(8.0f, child2.elevation)
+      }
+   }
+
+   @Test fun insertViewGroup_intoEmptyView() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+            }
+         }
+
+         v.applyKoshian {
+            FrameLayout {
+               view.elevation = 4.0f
+            }
+         }
+
+         val child = v.getChildAt(0)
+         assertTrue(child is FrameLayout)
+         assertEquals(4.0f, child.elevation)
+      }
+   }
+
    @Test fun layoutParams_singleView() {
       activityScenarioRule.scenario.onActivity { activity ->
          @OptIn(ExperimentalContracts::class)
@@ -355,6 +476,26 @@ class ApplierTest {
 
          v.applyKoshian {
             View {
+               layout.weight = 4.0f
+            }
+         }
+
+         val layoutParams = v.getChildAt(0).layoutParams
+         assertTrue(layoutParams is LinearLayout.LayoutParams)
+         assertEquals(4.0f, layoutParams.weight)
+      }
+   }
+
+   @Test fun layoutParams_insertedViewGroup() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+            }
+         }
+
+         v.applyKoshian {
+            FrameLayout {
                layout.weight = 4.0f
             }
          }

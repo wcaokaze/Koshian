@@ -21,7 +21,7 @@ import android.content.Context
 import android.webkit.WebView
 import kotlin.contracts.*
 
-object WebViewConstructor : KoshianViewConstructor<WebView> {
+object WebViewConstructor : KoshianViewConstructor<WebView>(WebView::class.java) {
    override fun instantiate(context: Context?) = WebView(context)
 }
 

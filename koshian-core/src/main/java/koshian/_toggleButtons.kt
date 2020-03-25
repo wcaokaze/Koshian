@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.ToggleButton
 import kotlin.contracts.*
 
-object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton> {
+object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton>(ToggleButton::class.java) {
    override fun instantiate(context: Context?) = ToggleButton(context)
 }
 

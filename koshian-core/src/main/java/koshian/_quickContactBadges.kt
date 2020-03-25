@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.QuickContactBadge
 import kotlin.contracts.*
 
-object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge> {
+object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge>(QuickContactBadge::class.java) {
    override fun instantiate(context: Context?) = QuickContactBadge(context)
 }
 

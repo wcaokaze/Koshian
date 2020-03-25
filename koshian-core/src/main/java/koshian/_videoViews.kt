@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.VideoView
 import kotlin.contracts.*
 
-object VideoViewConstructor : KoshianViewConstructor<VideoView> {
+object VideoViewConstructor : KoshianViewConstructor<VideoView>(VideoView::class.java) {
    override fun instantiate(context: Context?) = VideoView(context)
 }
 

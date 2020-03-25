@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.ProgressBar
 import kotlin.contracts.*
 
-object ProgressBarConstructor : KoshianViewConstructor<ProgressBar> {
+object ProgressBarConstructor : KoshianViewConstructor<ProgressBar>(ProgressBar::class.java) {
    override fun instantiate(context: Context?) = ProgressBar(context)
 }
 

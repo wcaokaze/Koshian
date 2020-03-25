@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.MediaController
 import kotlin.contracts.*
 
-object MediaControllerConstructor : KoshianViewConstructor<MediaController> {
+object MediaControllerConstructor : KoshianViewConstructor<MediaController>(MediaController::class.java) {
    override fun instantiate(context: Context?) = MediaController(context)
 }
 

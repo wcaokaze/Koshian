@@ -19,7 +19,7 @@ package koshian
 import android.content.*
 import android.view.*
 
-object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing> {
+object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing>(null) {
    override fun instantiate(context: Context?) = throw UnsupportedOperationException()
    override fun instantiateLayoutParams()      = throw UnsupportedOperationException()
 }
@@ -29,10 +29,10 @@ inline fun <V : View> V.applyKoshian(
 ) {
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   val oldApplyingIndex = `$$KoshianInternal`.applyingIndex
+   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = NothingConstructor
-   `$$KoshianInternal`.applyingIndex = 0
+   `$$ApplierInternal`.applyingIndex = 0
 
    try {
       val koshian = ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier>(this)
@@ -40,7 +40,7 @@ inline fun <V : View> V.applyKoshian(
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
-      `$$KoshianInternal`.applyingIndex = oldApplyingIndex
+      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
    }
 }
 
@@ -50,10 +50,10 @@ inline fun <V : View, L : ViewGroup.LayoutParams> V.applyKoshian(
 ) {
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   val oldApplyingIndex = `$$KoshianInternal`.applyingIndex
+   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = constructor
-   `$$KoshianInternal`.applyingIndex = 0
+   `$$ApplierInternal`.applyingIndex = 0
 
    try {
       val koshian = ViewGroupBuilder<V, ViewGroup.LayoutParams, L, KoshianMode.Applier>(this)
@@ -61,7 +61,7 @@ inline fun <V : View, L : ViewGroup.LayoutParams> V.applyKoshian(
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
-      `$$KoshianInternal`.applyingIndex = oldApplyingIndex
+      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
    }
 }
 
@@ -74,10 +74,10 @@ inline fun <reified V, L>
 {
    val parent = `$$koshianInternal$view` as ViewManager
 
-   var view = `$$KoshianInternal`.findView(parent, V::class.java)
+   var view = `$$ApplierInternal`.findView(parent, V::class.java)
 
    if (view == null) {
-      view = `$$KoshianInternal`.addNewView(parent, constructor)
+      view = `$$ApplierInternal`.addNewViewAndApplyStyle(parent, constructor)
    }
 
    val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
@@ -93,7 +93,7 @@ inline fun <reified V, L>
 {
    val parent = `$$koshianInternal$view` as ViewManager
 
-   for (view in `$$KoshianInternal`.findViewByName(parent, name, V::class.java)) {
+   for (view in `$$ApplierInternal`.findViewByName(parent, name, V::class.java)) {
       val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
       koshian.buildAction()
    }
@@ -112,15 +112,18 @@ inline fun <reified V, L, CL>
 
    val parent = `$$koshianInternal$view` as ViewManager
 
-   val view = `$$KoshianInternal`.findView(parent, V::class.java)
-         ?: constructor.instantiate(`$$KoshianInternal`.context)
+   var view = `$$ApplierInternal`.findView(parent, V::class.java)
+
+   if (view == null) {
+      view = `$$ApplierInternal`.addNewViewAndApplyStyle(parent, constructor)
+   }
 
    val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
 
-   val oldApplyingIndex = `$$KoshianInternal`.applyingIndex
-   `$$KoshianInternal`.applyingIndex = 0
+   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
+   `$$ApplierInternal`.applyingIndex = 0
    koshian.applyAction()
-   `$$KoshianInternal`.applyingIndex = oldApplyingIndex
+   `$$ApplierInternal`.applyingIndex = oldApplyingIndex
 
    `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
 }
@@ -138,15 +141,15 @@ inline fun <reified V, L, CL>
    `$$KoshianInternal`.parentViewConstructor = constructor
 
    val parent = `$$koshianInternal$view` as ViewManager
-   val oldApplyingIndex = `$$KoshianInternal`.applyingIndex
+   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
 
-   for (view in `$$KoshianInternal`.findViewByName(parent, name, V::class.java)) {
+   for (view in `$$ApplierInternal`.findViewByName(parent, name, V::class.java)) {
       val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
 
-      `$$KoshianInternal`.applyingIndex = 0
+      `$$ApplierInternal`.applyingIndex = 0
       koshian.applyAction()
    }
 
-   `$$KoshianInternal`.applyingIndex = oldApplyingIndex
+   `$$ApplierInternal`.applyingIndex = oldApplyingIndex
    `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
 }

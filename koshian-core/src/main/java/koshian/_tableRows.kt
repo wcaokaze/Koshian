@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.TableRow
 import kotlin.contracts.*
 
-object TableRowConstructor : KoshianViewConstructor<TableRow> {
+object TableRowConstructor : KoshianViewConstructor<TableRow>(TableRow::class.java) {
    override fun instantiate(context: Context?) = TableRow(context)
 }
 

@@ -19,4 +19,5 @@ package koshian
 sealed class KoshianMode {
    object Creator : KoshianMode()
    object Applier : KoshianMode()
+   object Style : KoshianMode()
 }

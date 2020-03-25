@@ -21,10 +21,11 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.TypedValue
+import android.view.*
 import android.widget.TextView
 import kotlin.contracts.*
 
-object TextViewConstructor : KoshianViewConstructor<TextView> {
+object TextViewConstructor : KoshianViewConstructor<TextView>(TextView::class.java) {
    override fun instantiate(context: Context?) = TextView(context)
 }
 
@@ -81,6 +82,18 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
       buildAction: ViewBuilder<TextView, L, KoshianMode.Applier>.() -> Unit
 ) {
    apply(name, buildAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.TextView(
+      crossinline styleAction: ViewBuilder<TextView, Nothing, KoshianMode.Style>.() -> Unit
+) {
+   createStyle(TextViewConstructor, styleAction)
 }
 
 var TextView.textColor: Int

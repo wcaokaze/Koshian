@@ -23,7 +23,7 @@ import android.widget.LinearLayout
 import android.widget.TabWidget
 import kotlin.contracts.*
 
-object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayout.LayoutParams> {
+object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayout.LayoutParams>(TabWidget::class.java) {
    override fun instantiate(context: Context?) = TabWidget(context)
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }

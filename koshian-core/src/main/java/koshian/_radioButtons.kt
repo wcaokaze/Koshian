@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.RadioButton
 import kotlin.contracts.*
 
-object RadioButtonConstructor : KoshianViewConstructor<RadioButton> {
+object RadioButtonConstructor : KoshianViewConstructor<RadioButton>(RadioButton::class.java) {
    override fun instantiate(context: Context?) = RadioButton(context)
 }
 
