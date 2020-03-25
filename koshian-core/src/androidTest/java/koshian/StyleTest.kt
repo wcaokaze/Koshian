@@ -307,4 +307,33 @@ class StyleTest {
          assertEquals(4.0f, child.elevation)
       }
    }
+
+   @Test fun insertedBySpecifyingViews() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.text = "Koshian"
+            }
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         val textView = TextView(activity)
+
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            textView {
+            }
+         }
+
+         val child = v.getChildAt(0)
+         assertSame(textView, child)
+         assertEquals("Koshian", textView.text)
+      }
+   }
 }

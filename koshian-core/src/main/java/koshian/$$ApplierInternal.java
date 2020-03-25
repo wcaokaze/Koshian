@@ -52,6 +52,8 @@ public final class $$ApplierInternal {
          } else {
             assertNextView(parent, view);
          }
+
+         $$StyleInternal.applyStyle(view);
       }
    }
 
