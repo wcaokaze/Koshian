@@ -8,12 +8,14 @@ import com.wcaokaze.koshian.R;
 
 import java.util.Iterator;
 
+import kotlin.jvm.functions.Function1;
+
 public final class $$ApplierInternal {
    public static int applyingIndex = -1;
 
    public static <V extends View>
-         V addNewView(final ViewManager parentView,
-                      final KoshianViewConstructor<V> childConstructor)
+         V addNewViewAndApplyStyle(final ViewManager parentView,
+                                   final KoshianViewConstructor<V> childConstructor)
    {
       final V child = childConstructor.instantiate($$KoshianInternal.context);
 
@@ -25,6 +27,12 @@ public final class $$ApplierInternal {
          parentView.addView(
                child,
                $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+      }
+
+      final Function1<V, Void> styleAction = childConstructor.getStyleAction();
+
+      if (styleAction != null) {
+         styleAction.invoke(child);
       }
 
       return child;

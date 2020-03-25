@@ -85,16 +85,6 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
 }
 
 /**
- * applies Koshian DSL to this TextView.
- */
-inline fun TextView.applyKoshian(
-      style: KoshianStyle,
-      applyAction: ViewBuilder<TextView, ViewGroup.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   applyKoshian(style, TextViewConstructor, applyAction)
-}
-
-/**
  * registers a style applier function into this [KoshianStyle].
  *
  * Styles can be applied via [applyKoshian]

@@ -77,7 +77,7 @@ inline fun <reified V, L>
    var view = `$$ApplierInternal`.findView(parent, V::class.java)
 
    if (view == null) {
-      view = `$$ApplierInternal`.addNewView(parent, constructor)
+      view = `$$ApplierInternal`.addNewViewAndApplyStyle(parent, constructor)
    }
 
    val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
@@ -112,8 +112,11 @@ inline fun <reified V, L, CL>
 
    val parent = `$$koshianInternal$view` as ViewManager
 
-   val view = `$$ApplierInternal`.findView(parent, V::class.java)
-         ?: constructor.instantiate(`$$KoshianInternal`.context)
+   var view = `$$ApplierInternal`.findView(parent, V::class.java)
+
+   if (view == null) {
+      view = `$$ApplierInternal`.addNewViewAndApplyStyle(parent, constructor)
+   }
 
    val koshian = ViewBuilder<V, L, KoshianMode.Applier>(view)
 

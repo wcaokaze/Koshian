@@ -37,9 +37,10 @@ public final class $$StyleInternal {
       final KoshianViewConstructor<V> viewConstructor
             = (KoshianViewConstructor<V>) viewConstructorMap.get(view.getClass());
 
-      if (viewConstructor != null) {
-         final Function1<V, Void> styleAction = viewConstructor.getStyleAction();
-         styleAction.invoke(view);
-      }
+      if (viewConstructor == null) { return; }
+      final Function1<V, Void> styleAction = viewConstructor.getStyleAction();
+      if (styleAction == null) { return; }
+      styleAction.invoke(view);
+
    }
 }
