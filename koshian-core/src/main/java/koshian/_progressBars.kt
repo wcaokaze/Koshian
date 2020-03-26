@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.ProgressBar
 import kotlin.contracts.*
 
-object ProgressBarConstructor : KoshianViewConstructor<ProgressBar>(ProgressBar::class.java) {
+object ProgressBarConstructor : KoshianViewConstructor<ProgressBar> {
    override fun instantiate(context: Context?) = ProgressBar(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ProgressBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ProgressBar(
-      buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ProgressBar(
+            buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ProgressBarConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ProgressBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ProgressBar(
-      name: String,
-      buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ProgressBar(
+            name: String,
+            buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

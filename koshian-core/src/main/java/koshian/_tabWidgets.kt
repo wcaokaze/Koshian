@@ -23,7 +23,7 @@ import android.widget.LinearLayout
 import android.widget.TabWidget
 import kotlin.contracts.*
 
-object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayout.LayoutParams>(TabWidget::class.java) {
+object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayout.LayoutParams> {
    override fun instantiate(context: Context?) = TabWidget(context)
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -123,7 +123,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabWidget(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TabWidget.applyKoshian(
-      applyAction: ViewGroupBuilder<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(TabWidgetConstructor, applyAction)
 }
@@ -136,9 +136,11 @@ inline fun TabWidget.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabWidget(
-      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TabWidget(
+            buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(TabWidgetConstructor, buildAction)
 }
 
@@ -149,9 +151,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabWidget(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabWidget(
-      name: String,
-      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TabWidget(
+            name: String,
+            buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, TabWidgetConstructor, buildAction)
 }

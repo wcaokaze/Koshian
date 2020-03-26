@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlin.contracts.*
 
-object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLayout.LayoutParams>(FrameLayout::class.java) {
+object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context) = FrameLayout(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -122,7 +122,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun FrameLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(FrameLayoutConstructor, applyAction)
 }
@@ -135,9 +135,11 @@ inline fun FrameLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
+            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(FrameLayoutConstructor, buildAction)
 }
 
@@ -148,10 +150,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
-      name: String,
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
+            name: String,
+            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, FrameLayoutConstructor, buildAction)
 }
 
@@ -211,9 +215,9 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
-inline fun FrameLayout.applyKoshian(
-      style: KoshianStyle,
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
+      style: S,
+      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
 ) {
    applyKoshian(style, FrameLayoutConstructor, applyAction)
 }
@@ -227,5 +231,5 @@ inline fun FrameLayout.applyKoshian(
 inline fun KoshianStyle.FrameLayout(
       crossinline styleAction: ViewBuilder<FrameLayout, Nothing, KoshianMode.Style>.() -> Unit
 ) {
-   createStyle(FrameLayoutConstructor, styleAction)
+   createStyleElement(styleAction)
 }

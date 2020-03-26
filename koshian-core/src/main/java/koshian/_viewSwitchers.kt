@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ViewSwitcher
 import kotlin.contracts.*
 
-object ViewSwitcherConstructor : KoshianViewGroupConstructor<ViewSwitcher, FrameLayout.LayoutParams>(ViewSwitcher::class.java) {
+object ViewSwitcherConstructor : KoshianViewGroupConstructor<ViewSwitcher, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context?) = ViewSwitcher(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -123,7 +123,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun ViewSwitcher.applyKoshian(
-      applyAction: ViewGroupBuilder<ViewSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<ViewSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(ViewSwitcherConstructor, applyAction)
 }
@@ -136,9 +136,11 @@ inline fun ViewSwitcher.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewSwitcher(
-      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ViewSwitcher(
+            buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ViewSwitcherConstructor, buildAction)
 }
 
@@ -149,9 +151,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewSwitcher(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewSwitcher(
-      name: String,
-      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ViewSwitcher(
+            name: String,
+            buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, ViewSwitcherConstructor, buildAction)
 }

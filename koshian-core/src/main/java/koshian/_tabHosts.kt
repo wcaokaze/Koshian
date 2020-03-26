@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.TabHost
 import kotlin.contracts.*
 
-object TabHostConstructor : KoshianViewGroupConstructor<TabHost, FrameLayout.LayoutParams>(TabHost::class.java) {
+object TabHostConstructor : KoshianViewGroupConstructor<TabHost, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context?) = TabHost(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -123,7 +123,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabHost(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TabHost.applyKoshian(
-      applyAction: ViewGroupBuilder<TabHost, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<TabHost, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(TabHostConstructor, applyAction)
 }
@@ -136,9 +136,11 @@ inline fun TabHost.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabHost(
-      buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TabHost(
+            buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(TabHostConstructor, buildAction)
 }
 
@@ -149,9 +151,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabHost(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabHost(
-      name: String,
-      buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TabHost(
+            name: String,
+            buildAction: ViewGroupBuilder<TabHost, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, TabHostConstructor, buildAction)
 }

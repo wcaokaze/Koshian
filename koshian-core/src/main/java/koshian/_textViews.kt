@@ -21,11 +21,10 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.TypedValue
-import android.view.*
 import android.widget.TextView
 import kotlin.contracts.*
 
-object TextViewConstructor : KoshianViewConstructor<TextView>(TextView::class.java) {
+object TextViewConstructor : KoshianViewConstructor<TextView> {
    override fun instantiate(context: Context?) = TextView(context)
 }
 
@@ -64,10 +63,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
-      buildAction: ViewBuilder<TextView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
+            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(TextViewConstructor, buildAction)
+}
+
+/**
+ * If the next View is a TextView, applies Koshian to it.
+ *
+ * Otherwise, creates a new TextView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
+            styleElement: KoshianStyle.StyleElement<TextView>,
+            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
+   apply(TextViewConstructor, styleElement, buildAction)
 }
 
 /**
@@ -77,10 +95,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
-      name: String,
-      buildAction: ViewBuilder<TextView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
+            name: String,
+            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
+   apply(name, buildAction)
+}
+
+/**
+ * Applies Koshian to all TextViews that are named the specified in this ViewGroup.
+ * If there are no TextViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<TextView>,
+            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }
 
@@ -92,8 +129,8 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TextView(
 @Suppress("FunctionName")
 inline fun KoshianStyle.TextView(
       crossinline styleAction: ViewBuilder<TextView, Nothing, KoshianMode.Style>.() -> Unit
-) {
-   createStyle(TextViewConstructor, styleAction)
+): KoshianStyle.StyleElement<TextView> {
+   return createStyleElement(styleAction)
 }
 
 var TextView.textColor: Int

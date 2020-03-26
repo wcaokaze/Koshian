@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.CalendarView
 import kotlin.contracts.*
 
-object CalendarViewConstructor : KoshianViewConstructor<CalendarView>(CalendarView::class.java) {
+object CalendarViewConstructor : KoshianViewConstructor<CalendarView> {
    override fun instantiate(context: Context) = CalendarView(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CalendarView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CalendarView(
-      buildAction: ViewBuilder<CalendarView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.CalendarView(
+            buildAction: ViewBuilder<CalendarView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(CalendarViewConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.CalendarView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CalendarView(
-      name: String,
-      buildAction: ViewBuilder<CalendarView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.CalendarView(
+            name: String,
+            buildAction: ViewBuilder<CalendarView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

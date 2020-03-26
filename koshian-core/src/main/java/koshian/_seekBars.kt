@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.SeekBar
 import kotlin.contracts.*
 
-object SeekBarConstructor : KoshianViewConstructor<SeekBar>(SeekBar::class.java) {
+object SeekBarConstructor : KoshianViewConstructor<SeekBar> {
    override fun instantiate(context: Context?) = SeekBar(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.SeekBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.SeekBar(
-      buildAction: ViewBuilder<SeekBar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.SeekBar(
+            buildAction: ViewBuilder<SeekBar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(SeekBarConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.SeekBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.SeekBar(
-      name: String,
-      buildAction: ViewBuilder<SeekBar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.SeekBar(
+            name: String,
+            buildAction: ViewBuilder<SeekBar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

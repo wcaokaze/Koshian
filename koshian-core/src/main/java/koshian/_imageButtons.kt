@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.ImageButton
 import kotlin.contracts.*
 
-object ImageButtonConstructor : KoshianViewConstructor<ImageButton>(ImageButton::class.java) {
+object ImageButtonConstructor : KoshianViewConstructor<ImageButton> {
    override fun instantiate(context: Context?) = ImageButton(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageButton(
-      buildAction: ViewBuilder<ImageButton, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ImageButton(
+            buildAction: ViewBuilder<ImageButton, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ImageButtonConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageButton(
-      name: String,
-      buildAction: ViewBuilder<ImageButton, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ImageButton(
+            name: String,
+            buildAction: ViewBuilder<ImageButton, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

@@ -18,13 +18,9 @@ package koshian;
 
 import android.view.*;
 
-public abstract class KoshianViewGroupConstructor
+public interface KoshianViewGroupConstructor
       <V extends View, L extends ViewGroup.LayoutParams>
       extends KoshianViewConstructor<V>
 {
-   protected KoshianViewGroupConstructor(final Class<V> targetViewClass) {
-      super(targetViewClass);
-   }
-
-   public abstract L instantiateLayoutParams();
+   public L instantiateLayoutParams();
 }

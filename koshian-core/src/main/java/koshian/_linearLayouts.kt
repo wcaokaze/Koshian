@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import kotlin.contracts.*
 
-object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, LinearLayout.LayoutParams>(LinearLayout::class.java) {
+object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, LinearLayout.LayoutParams> {
    override fun instantiate(context: Context?) = LinearLayout(context)
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -122,7 +122,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun LinearLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(LinearLayoutConstructor, applyAction)
 }
@@ -135,9 +135,11 @@ inline fun LinearLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
-      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.LinearLayout(
+            buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(LinearLayoutConstructor, buildAction)
 }
 
@@ -148,10 +150,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.LinearLayout(
-      name: String,
-      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.LinearLayout(
+            name: String,
+            buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, LinearLayoutConstructor, buildAction)
 }
 

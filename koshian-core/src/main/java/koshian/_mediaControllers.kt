@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.MediaController
 import kotlin.contracts.*
 
-object MediaControllerConstructor : KoshianViewConstructor<MediaController>(MediaController::class.java) {
+object MediaControllerConstructor : KoshianViewConstructor<MediaController> {
    override fun instantiate(context: Context?) = MediaController(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.MediaController(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.MediaController(
-      buildAction: ViewBuilder<MediaController, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.MediaController(
+            buildAction: ViewBuilder<MediaController, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(MediaControllerConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.MediaController(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.MediaController(
-      name: String,
-      buildAction: ViewBuilder<MediaController, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.MediaController(
+            name: String,
+            buildAction: ViewBuilder<MediaController, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.CheckedTextView
 import kotlin.contracts.*
 
-object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView>(CheckedTextView::class.java) {
+object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView> {
    override fun instantiate(context: Context?) = CheckedTextView(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckedTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
-      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.CheckedTextView(
+            buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(CheckedTextViewConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
-      name: String,
-      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.CheckedTextView(
+            name: String,
+            buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

@@ -19,22 +19,6 @@ package koshian;
 import android.content.*;
 import android.view.*;
 
-import kotlin.jvm.functions.Function1;
-
-public abstract class KoshianViewConstructor<V extends View> {
-   private Function1<V, Void> mStyleAction = null;
-
-   protected KoshianViewConstructor(final Class<V> targetViewClass) {
-      $$StyleInternal.addViewConstructor(targetViewClass, this);
-   }
-
-   public abstract V instantiate(Context context);
-
-   public final Function1<V, Void> getStyleAction() {
-      return mStyleAction;
-   }
-
-   public final void setStyleAction(final Function1<V, Void> styleAction) {
-      mStyleAction = styleAction;
-   }
+public interface KoshianViewConstructor<V extends View> {
+   public V instantiate(Context context);
 }

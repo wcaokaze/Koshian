@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.RatingBar
 import kotlin.contracts.*
 
-object RatingBarConstructor : KoshianViewConstructor<RatingBar>(RatingBar::class.java) {
+object RatingBarConstructor : KoshianViewConstructor<RatingBar> {
    override fun instantiate(context: Context?) = RatingBar(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RatingBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RatingBar(
-      buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.RatingBar(
+            buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(RatingBarConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.RatingBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RatingBar(
-      name: String,
-      buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.RatingBar(
+            name: String,
+            buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

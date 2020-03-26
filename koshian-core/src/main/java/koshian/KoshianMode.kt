@@ -18,6 +18,6 @@ package koshian
 
 sealed class KoshianMode {
    object Creator : KoshianMode()
-   object Applier : KoshianMode()
+   class Applier<S : KoshianStyle> : KoshianMode()
    object Style : KoshianMode()
 }

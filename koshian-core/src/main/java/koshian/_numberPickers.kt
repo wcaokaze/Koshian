@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.NumberPicker
 import kotlin.contracts.*
 
-object NumberPickerConstructor : KoshianViewConstructor<NumberPicker>(NumberPicker::class.java) {
+object NumberPickerConstructor : KoshianViewConstructor<NumberPicker> {
    override fun instantiate(context: Context?) = NumberPicker(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.NumberPicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.NumberPicker(
-      buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.NumberPicker(
+            buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(NumberPickerConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.NumberPicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.NumberPicker(
-      name: String,
-      buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.NumberPicker(
+            name: String,
+            buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

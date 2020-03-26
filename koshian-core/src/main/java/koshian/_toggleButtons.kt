@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.ToggleButton
 import kotlin.contracts.*
 
-object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton>(ToggleButton::class.java) {
+object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton> {
    override fun instantiate(context: Context?) = ToggleButton(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ToggleButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ToggleButton(
-      buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ToggleButton(
+            buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ToggleButtonConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ToggleButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ToggleButton(
-      name: String,
-      buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ToggleButton(
+            name: String,
+            buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

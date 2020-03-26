@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.VideoView
 import kotlin.contracts.*
 
-object VideoViewConstructor : KoshianViewConstructor<VideoView>(VideoView::class.java) {
+object VideoViewConstructor : KoshianViewConstructor<VideoView> {
    override fun instantiate(context: Context?) = VideoView(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.VideoView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
-      buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.VideoView(
+            buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(VideoViewConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
-      name: String,
-      buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.VideoView(
+            name: String,
+            buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

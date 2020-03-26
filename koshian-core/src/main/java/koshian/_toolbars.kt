@@ -23,7 +23,7 @@ import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
 @RequiresApi(21)
-object ToolbarConstructor : KoshianViewConstructor<Toolbar>(Toolbar::class.java) {
+object ToolbarConstructor : KoshianViewConstructor<Toolbar> {
    override fun instantiate(context: Context?) = Toolbar(context)
 }
 
@@ -65,9 +65,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Toolbar(
  */
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Toolbar(
-      buildAction: ViewBuilder<Toolbar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Toolbar(
+            buildAction: ViewBuilder<Toolbar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ToolbarConstructor, buildAction)
 }
 
@@ -79,10 +81,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Toolbar(
  */
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Toolbar(
-      name: String,
-      buildAction: ViewBuilder<Toolbar, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Toolbar(
+            name: String,
+            buildAction: ViewBuilder<Toolbar, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }
 

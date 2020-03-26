@@ -23,7 +23,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import kotlin.contracts.*
 
-object ImageViewConstructor : KoshianViewConstructor<ImageView>(ImageView::class.java) {
+object ImageViewConstructor : KoshianViewConstructor<ImageView> {
    override fun instantiate(context: Context?) = ImageView(context)
 }
 
@@ -62,9 +62,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageView(
-      buildAction: ViewBuilder<ImageView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ImageView(
+            buildAction: ViewBuilder<ImageView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ImageViewConstructor, buildAction)
 }
 
@@ -75,10 +77,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageView(
-      name: String,
-      buildAction: ViewBuilder<ImageView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ImageView(
+            name: String,
+            buildAction: ViewBuilder<ImageView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }
 

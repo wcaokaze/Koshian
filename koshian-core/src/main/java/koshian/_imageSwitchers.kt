@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.ImageSwitcher
 import kotlin.contracts.*
 
-object ImageSwitcherConstructor : KoshianViewConstructor<ImageSwitcher>(ImageSwitcher::class.java) {
+object ImageSwitcherConstructor : KoshianViewConstructor<ImageSwitcher> {
    override fun instantiate(context: Context?) = ImageSwitcher(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageSwitcher(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageSwitcher(
-      buildAction: ViewBuilder<ImageSwitcher, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ImageSwitcher(
+            buildAction: ViewBuilder<ImageSwitcher, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ImageSwitcherConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageSwitcher(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageSwitcher(
-      name: String,
-      buildAction: ViewBuilder<ImageSwitcher, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ImageSwitcher(
+            name: String,
+            buildAction: ViewBuilder<ImageSwitcher, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

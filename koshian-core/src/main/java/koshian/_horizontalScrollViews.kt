@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import kotlin.contracts.*
 
-object HorizontalScrollViewConstructor : KoshianViewGroupConstructor<HorizontalScrollView, FrameLayout.LayoutParams>(HorizontalScrollView::class.java) {
+object HorizontalScrollViewConstructor : KoshianViewGroupConstructor<HorizontalScrollView, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context?) = HorizontalScrollView(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -123,7 +123,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.HorizontalScrollView(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun HorizontalScrollView.applyKoshian(
-      applyAction: ViewGroupBuilder<HorizontalScrollView, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<HorizontalScrollView, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(HorizontalScrollViewConstructor, applyAction)
 }
@@ -136,9 +136,11 @@ inline fun HorizontalScrollView.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.HorizontalScrollView(
-      buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.HorizontalScrollView(
+            buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(HorizontalScrollViewConstructor, buildAction)
 }
 
@@ -149,9 +151,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.HorizontalScrollView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.HorizontalScrollView(
-      name: String,
-      buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.HorizontalScrollView(
+            name: String,
+            buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, HorizontalScrollViewConstructor, buildAction)
 }

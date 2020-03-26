@@ -369,4 +369,88 @@ class StyleTest {
          assertEquals("Koshian", textView.text)
       }
    }
+
+   @Test fun namedStyle() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.hint = "Koshian Hint"
+            }
+         }
+
+         val style1 = TextView {
+            view.text = "Koshian Text"
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               TextView {
+               }
+               TextView {
+               }
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            TextView {
+            }
+            TextView(style.style1) {
+            }
+         }
+
+         val child1 = v.getChildAt(0)
+         val child2 = v.getChildAt(1)
+
+         assertTrue(child1 is TextView)
+         assertEquals("Koshian Hint", child1.hint)
+
+         assertTrue(child2 is TextView)
+         assertEquals("Koshian Hint", child2.hint)
+         assertEquals("Koshian Text", child2.text)
+      }
+   }
+
+   @Test fun namedStyle_insertedView() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.hint = "Koshian Hint"
+            }
+         }
+
+         val style1 = TextView {
+            view.text = "Koshian Text"
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               TextView {
+               }
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            TextView {
+            }
+            TextView(style.style1) {
+            }
+         }
+
+         val child1 = v.getChildAt(0)
+         val child2 = v.getChildAt(1)
+
+         assertTrue(child1 is TextView)
+         assertEquals("Koshian Hint", child1.hint)
+
+         assertTrue(child2 is TextView)
+         assertEquals("Koshian Hint", child2.hint)
+         assertEquals("Koshian Text", child2.text)
+      }
+   }
 }

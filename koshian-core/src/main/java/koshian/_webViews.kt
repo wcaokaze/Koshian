@@ -21,7 +21,7 @@ import android.content.Context
 import android.webkit.WebView
 import kotlin.contracts.*
 
-object WebViewConstructor : KoshianViewConstructor<WebView>(WebView::class.java) {
+object WebViewConstructor : KoshianViewConstructor<WebView> {
    override fun instantiate(context: Context?) = WebView(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.WebView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.WebView(
-      buildAction: ViewBuilder<WebView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.WebView(
+            buildAction: ViewBuilder<WebView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(WebViewConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.WebView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.WebView(
-      name: String,
-      buildAction: ViewBuilder<WebView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.WebView(
+            name: String,
+            buildAction: ViewBuilder<WebView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

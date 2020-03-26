@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Switch
 import kotlin.contracts.*
 
-object SwitchConstructor : KoshianViewConstructor<Switch>(Switch::class.java) {
+object SwitchConstructor : KoshianViewConstructor<Switch> {
    override fun instantiate(context: Context?) = Switch(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Switch(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Switch(
-      buildAction: ViewBuilder<Switch, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Switch(
+            buildAction: ViewBuilder<Switch, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(SwitchConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Switch(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Switch(
-      name: String,
-      buildAction: ViewBuilder<Switch, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Switch(
+            name: String,
+            buildAction: ViewBuilder<Switch, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

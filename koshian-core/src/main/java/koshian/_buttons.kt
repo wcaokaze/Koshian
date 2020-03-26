@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Button
 import kotlin.contracts.*
 
-object ButtonConstructor : KoshianViewConstructor<Button>(Button::class.java) {
+object ButtonConstructor : KoshianViewConstructor<Button> {
    override fun instantiate(context: Context?) = Button(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Button(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Button(
-      buildAction: ViewBuilder<Button, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Button(
+            buildAction: ViewBuilder<Button, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ButtonConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Button(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Button(
-      name: String,
-      buildAction: ViewBuilder<Button, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Button(
+            name: String,
+            buildAction: ViewBuilder<Button, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ViewFlipper
 import kotlin.contracts.*
 
-object ViewFlipperConstructor : KoshianViewGroupConstructor<ViewFlipper, FrameLayout.LayoutParams>(ViewFlipper::class.java) {
+object ViewFlipperConstructor : KoshianViewGroupConstructor<ViewFlipper, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context?) = ViewFlipper(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -123,7 +123,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun ViewFlipper.applyKoshian(
-      applyAction: ViewGroupBuilder<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(ViewFlipperConstructor, applyAction)
 }
@@ -136,9 +136,11 @@ inline fun ViewFlipper.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
-      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ViewFlipper(
+            buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ViewFlipperConstructor, buildAction)
 }
 
@@ -149,9 +151,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
-      name: String,
-      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.ViewFlipper(
+            name: String,
+            buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, ViewFlipperConstructor, buildAction)
 }

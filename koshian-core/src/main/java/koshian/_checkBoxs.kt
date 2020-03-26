@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.CheckBox
 import kotlin.contracts.*
 
-object CheckBoxConstructor : KoshianViewConstructor<CheckBox>(CheckBox::class.java) {
+object CheckBoxConstructor : KoshianViewConstructor<CheckBox> {
    override fun instantiate(context: Context?) = CheckBox(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckBox(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckBox(
-      buildAction: ViewBuilder<CheckBox, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.CheckBox(
+            buildAction: ViewBuilder<CheckBox, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(CheckBoxConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckBox(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckBox(
-      name: String,
-      buildAction: ViewBuilder<CheckBox, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.CheckBox(
+            name: String,
+            buildAction: ViewBuilder<CheckBox, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

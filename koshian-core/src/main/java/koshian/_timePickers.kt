@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.TimePicker
 import kotlin.contracts.*
 
-object TimePickerConstructor : KoshianViewConstructor<TimePicker>(TimePicker::class.java) {
+object TimePickerConstructor : KoshianViewConstructor<TimePicker> {
    override fun instantiate(context: Context?) = TimePicker(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TimePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TimePicker(
-      buildAction: ViewBuilder<TimePicker, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TimePicker(
+            buildAction: ViewBuilder<TimePicker, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(TimePickerConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TimePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TimePicker(
-      name: String,
-      buildAction: ViewBuilder<TimePicker, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TimePicker(
+            name: String,
+            buildAction: ViewBuilder<TimePicker, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

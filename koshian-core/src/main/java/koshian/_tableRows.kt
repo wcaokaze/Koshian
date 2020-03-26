@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.TableRow
 import kotlin.contracts.*
 
-object TableRowConstructor : KoshianViewConstructor<TableRow>(TableRow::class.java) {
+object TableRowConstructor : KoshianViewConstructor<TableRow> {
    override fun instantiate(context: Context?) = TableRow(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableRow(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableRow(
-      buildAction: ViewBuilder<TableRow, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TableRow(
+            buildAction: ViewBuilder<TableRow, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(TableRowConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableRow(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableRow(
-      name: String,
-      buildAction: ViewBuilder<TableRow, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TableRow(
+            name: String,
+            buildAction: ViewBuilder<TableRow, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }
