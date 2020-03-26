@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Chronometer
 import kotlin.contracts.*
 
-object ChronometerConstructor : KoshianViewConstructor<Chronometer>(Chronometer::class.java) {
+object ChronometerConstructor : KoshianViewConstructor<Chronometer> {
    override fun instantiate(context: Context?) = Chronometer(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Chronometer(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Chronometer(
-      buildAction: ViewBuilder<Chronometer, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Chronometer(
+            buildAction: ViewBuilder<Chronometer, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ChronometerConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Chronometer(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Chronometer(
-      name: String,
-      buildAction: ViewBuilder<Chronometer, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Chronometer(
+            name: String,
+            buildAction: ViewBuilder<Chronometer, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.QuickContactBadge
 import kotlin.contracts.*
 
-object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge>(QuickContactBadge::class.java) {
+object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge> {
    override fun instantiate(context: Context?) = QuickContactBadge(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.QuickContactBadge(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.QuickContactBadge(
-      buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.QuickContactBadge(
+            buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(QuickContactBadgeConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.QuickContactBadge(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.QuickContactBadge(
-      name: String,
-      buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.QuickContactBadge(
+            name: String,
+            buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

@@ -8,36 +8,13 @@ import com.wcaokaze.koshian.R;
 
 import java.util.Iterator;
 
-import kotlin.jvm.functions.Function1;
-
 public final class $$ApplierInternal {
    public static int applyingIndex = -1;
 
-   public static <V extends View>
-         V addNewViewAndApplyStyle(final ViewManager parentView,
-                                   final KoshianViewConstructor<V> childConstructor)
-   {
-      final V child = childConstructor.instantiate($$KoshianInternal.context);
-
-      if (parentView instanceof ViewGroup) {
-         final ViewGroup parentViewGroup = (ViewGroup) parentView;
-         parentViewGroup.addView(child, applyingIndex++,
-               $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
-      } else {
-         parentView.addView(
-               child,
-               $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
-      }
-
-      final Function1<V, Void> styleAction = childConstructor.getStyleAction();
-
-      if (styleAction != null) {
-         styleAction.invoke(child);
-      }
-
-      return child;
-   }
-
+   /**
+    * Implementation for Applier
+    * {@code view {} }
+    */
    public static void invokeViewInKoshian(final Object parent, final View view) {
       if (applyingIndex == -1) {
          if (view.getParent() != null) {
@@ -53,10 +30,14 @@ public final class $$ApplierInternal {
             assertNextView(parent, view);
          }
 
-         $$StyleInternal.applyStyle(view);
+         $$StyleInternal.applyCurrentStyleTo(view);
       }
    }
 
+   /**
+    * Implementation for Applier
+    * {@code applicable {} }
+    */
    public static void invokeViewInKoshian(final Object parent,
                                           final KoshianApplicable applicable)
    {
@@ -194,16 +175,87 @@ public final class $$ApplierInternal {
       }
    }
 
-   public static <V> V findView(final ViewManager parent,
-                                final Class<V> viewClass)
-   {
+   // ==========================================================================
+
+   /**
+    * Implementation for Applier
+    * {@code View {} }
+    */
+   public static <V extends View> V findViewOrInsertNew(
+         final ViewManager parent,
+         final KoshianViewConstructor<V> constructor,
+         final Class<V> viewClass
+   ) {
+      V foundView;
+
       if (parent instanceof ViewGroup) {
-         return findView((ViewGroup) parent, viewClass);
+         foundView = findView((ViewGroup) parent, viewClass);
       } else {
          throw new IllegalStateException();
       }
+
+      if (foundView == null) {
+         foundView = insertNewView(parent, constructor);
+      }
+
+      $$StyleInternal.applyCurrentStyleTo(foundView);
+
+      return foundView;
    }
 
+   /**
+    * Implementation for Applier
+    * {@code View(style) {} }
+    */
+   public static <V extends View> V findViewOrInsertNewAndApplyStyle(
+         final ViewManager parent,
+         final KoshianViewConstructor<V> constructor,
+         final KoshianStyle.StyleElement<V> styleElement,
+         final Class<V> viewClass
+   ) {
+      V foundView;
+
+      if (parent instanceof ViewGroup) {
+         foundView = findView((ViewGroup) parent, viewClass);
+      } else {
+         throw new IllegalStateException();
+      }
+
+      if (foundView == null) {
+         foundView = insertNewView(parent, constructor);
+      }
+
+      $$StyleInternal.applyCurrentStyleTo(foundView);
+      styleElement.applyStyleTo(foundView);
+
+      return foundView;
+   }
+
+   private static <V extends View>
+         V insertNewView(final ViewManager parentView,
+                         final KoshianViewConstructor<V> childConstructor)
+   {
+      final V child = childConstructor.instantiate($$KoshianInternal.context);
+
+      if (parentView instanceof ViewGroup) {
+         final ViewGroup parentViewGroup = (ViewGroup) parentView;
+         parentViewGroup.addView(child, applyingIndex++,
+               $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+      } else {
+         parentView.addView(
+               child,
+               $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+      }
+
+      return child;
+   }
+
+   // ==========================================================================
+
+   /**
+    * Implementation for Applier
+    * {@code View("name") {} }
+    */
    public static <V> Iterator<V>
          findViewByName(final ViewManager parent,
                         final String name,

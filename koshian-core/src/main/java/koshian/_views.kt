@@ -22,7 +22,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
-object ViewConstructor : KoshianViewConstructor<View>(View::class.java) {
+object ViewConstructor : KoshianViewConstructor<View> {
    override fun instantiate(context: Context?) = View(context)
 }
 
@@ -61,9 +61,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.View(
-      buildAction: ViewBuilder<View, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.View(
+            buildAction: ViewBuilder<View, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(ViewConstructor, buildAction)
 }
 
@@ -74,10 +76,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.View(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.View(
-      name: String,
-      buildAction: ViewBuilder<View, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.View(
+            name: String,
+            buildAction: ViewBuilder<View, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }
 

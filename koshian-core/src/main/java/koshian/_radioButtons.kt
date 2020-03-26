@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.RadioButton
 import kotlin.contracts.*
 
-object RadioButtonConstructor : KoshianViewConstructor<RadioButton>(RadioButton::class.java) {
+object RadioButtonConstructor : KoshianViewConstructor<RadioButton> {
    override fun instantiate(context: Context?) = RadioButton(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RadioButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RadioButton(
-      buildAction: ViewBuilder<RadioButton, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.RadioButton(
+            buildAction: ViewBuilder<RadioButton, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(RadioButtonConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.RadioButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RadioButton(
-      name: String,
-      buildAction: ViewBuilder<RadioButton, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.RadioButton(
+            name: String,
+            buildAction: ViewBuilder<RadioButton, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

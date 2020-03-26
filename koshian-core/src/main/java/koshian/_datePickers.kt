@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.DatePicker
 import kotlin.contracts.*
 
-object DatePickerConstructor : KoshianViewConstructor<DatePicker>(DatePicker::class.java) {
+object DatePickerConstructor : KoshianViewConstructor<DatePicker> {
    override fun instantiate(context: Context?) = DatePicker(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.DatePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.DatePicker(
-      buildAction: ViewBuilder<DatePicker, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.DatePicker(
+            buildAction: ViewBuilder<DatePicker, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(DatePickerConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.DatePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.DatePicker(
-      name: String,
-      buildAction: ViewBuilder<DatePicker, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.DatePicker(
+            name: String,
+            buildAction: ViewBuilder<DatePicker, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

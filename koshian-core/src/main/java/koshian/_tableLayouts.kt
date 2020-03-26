@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import kotlin.contracts.*
 
-object TableLayoutConstructor : KoshianViewGroupConstructor<TableLayout, TableLayout.LayoutParams>(TableLayout::class.java) {
+object TableLayoutConstructor : KoshianViewGroupConstructor<TableLayout, TableLayout.LayoutParams> {
    override fun instantiate(context: Context?) = TableLayout(context)
    override fun instantiateLayoutParams() = TableLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -122,7 +122,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TableLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<TableLayout, ViewGroup.LayoutParams, TableLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<TableLayout, ViewGroup.LayoutParams, TableLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(TableLayoutConstructor, applyAction)
 }
@@ -135,9 +135,11 @@ inline fun TableLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableLayout(
-      buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TableLayout(
+            buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(TableLayoutConstructor, buildAction)
 }
 
@@ -148,9 +150,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableLayout(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TableLayout(
-      name: String,
-      buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.TableLayout(
+            name: String,
+            buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, TableLayoutConstructor, buildAction)
 }

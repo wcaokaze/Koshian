@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.MultiAutoCompleteTextView
 import kotlin.contracts.*
 
-object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCompleteTextView>(MultiAutoCompleteTextView::class.java) {
+object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCompleteTextView> {
    override fun instantiate(context: Context?) = MultiAutoCompleteTextView(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.MultiAutoCompleteTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.MultiAutoCompleteTextView(
-      buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.MultiAutoCompleteTextView(
+            buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(MultiAutoCompleteTextViewConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.MultiAutoCompleteTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.MultiAutoCompleteTextView(
-      name: String,
-      buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.MultiAutoCompleteTextView(
+            name: String,
+            buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

@@ -31,9 +31,11 @@ inline fun <R> koshian(
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
+   val oldStyle = `$$StyleInternal`.style
    `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = KoshianRoot.CONSTRUCTOR
    `$$ApplierInternal`.applyingIndex = -1
+   `$$StyleInternal`.style = null
 
    `$$KoshianInternal`.init(context)
 
@@ -44,6 +46,7 @@ inline fun <R> koshian(
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
       `$$ApplierInternal`.applyingIndex = oldApplyingIndex
+      `$$StyleInternal`.style = oldStyle
    }
 }
 
@@ -60,8 +63,12 @@ inline fun <P, L, R>
 
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
+   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
+   val oldStyle = `$$StyleInternal`.style
    `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = parentConstructor
+   `$$ApplierInternal`.applyingIndex = -1
+   `$$StyleInternal`.style = null
 
    try {
       val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this)
@@ -69,6 +76,8 @@ inline fun <P, L, R>
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
+      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
+      `$$StyleInternal`.style = oldStyle
    }
 }
 

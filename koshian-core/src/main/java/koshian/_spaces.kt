@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.Space
 import kotlin.contracts.*
 
-object SpaceConstructor : KoshianViewConstructor<Space>(Space::class.java) {
+object SpaceConstructor : KoshianViewConstructor<Space> {
    override fun instantiate(context: Context?) = Space(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Space(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Space(
-      buildAction: ViewBuilder<Space, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Space(
+            buildAction: ViewBuilder<Space, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(SpaceConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Space(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Space(
-      name: String,
-      buildAction: ViewBuilder<Space, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.Space(
+            name: String,
+            buildAction: ViewBuilder<Space, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }

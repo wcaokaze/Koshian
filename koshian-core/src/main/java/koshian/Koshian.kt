@@ -88,13 +88,13 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
     */
    inline operator fun <V>
          V.invoke(
-               applyAction: ViewBuilder<V, CL, KoshianMode.Applier>.() -> Unit
+               applyAction: ViewBuilder<V, CL, KoshianMode.Applier<Nothing>>.() -> Unit
          )
          where V : View
    {
       `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
 
-      val koshian = ViewBuilder<V, CL, KoshianMode.Applier>(this)
+      val koshian = ViewBuilder<V, CL, KoshianMode.Applier<Nothing>>(this)
       koshian.applyAction()
    }
 
@@ -144,13 +144,13 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
     */
    inline operator fun <A>
          A.invoke(
-               applyAction: ViewBuilder<A, CL, KoshianMode.Applier>.() -> Unit
+               applyAction: ViewBuilder<A, CL, KoshianMode.Applier<Nothing>>.() -> Unit
          )
          where A : KoshianApplicable
    {
       `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
 
-      val koshian = ViewBuilder<A, CL, KoshianMode.Applier>(this)
+      val koshian = ViewBuilder<A, CL, KoshianMode.Applier<Nothing>>(this)
       koshian.applyAction()
    }
 }
@@ -164,7 +164,7 @@ inline val <V : View> Koshian<V, *, *, *>.view: V get() {
       "It always fails to apply koshian to the current koshian-view. Did you mean `View {}`?",
       ReplaceWith("View", "koshian.*"))
 inline fun <V : View, L> Koshian<V, *, L, *>.view(
-      applyAction: ViewBuilder<V, L, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewBuilder<V, L, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    view.invoke(applyAction)
 }

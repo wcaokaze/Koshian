@@ -3,44 +3,49 @@ package koshian;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import kotlin.jvm.functions.Function1;
+import androidx.annotation.NonNull;
 
 public final class $$StyleInternal {
-   private static final Map<Class<? extends View>, KoshianViewConstructor<?>>
-         viewConstructorMap = new HashMap<>();
+   public static KoshianStyle style = null;
 
-   static <V extends View> void addViewConstructor(
-         final Class<V> targetViewClass,
-         final KoshianViewConstructor<V> viewConstructor
-   ) {
-      viewConstructorMap.put(targetViewClass, viewConstructor);
+   public static void applyCurrentStyleRecursive(final View view) {
+      final KoshianStyle currentStyle = style;
+      if (currentStyle == null) { return; }
+
+      applyStyleRecursive(currentStyle, view);
    }
 
-   public static void applyStyle(final View view) {
-      apply(view);
+   static void applyCurrentStyleTo(final View view) {
+      final KoshianStyle currentStyle = style;
+      if (currentStyle == null) { return; }
+
+      applyStyle(currentStyle, view);
+   }
+
+   private static void applyStyleRecursive(@NonNull final KoshianStyle style,
+                                           final View view)
+   {
+      applyStyle(style, view);
 
       if (view instanceof ViewGroup) {
          final ViewGroup viewGroup = (ViewGroup) view;
 
          for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            final View child = viewGroup.getChildAt(i);
-            applyStyle(child);
+            applyCurrentStyleRecursive(viewGroup.getChildAt(i));
          }
       }
    }
 
-   private static <V extends View> void apply(final V view) {
+   private static <V extends View>
+         void applyStyle(@NonNull final KoshianStyle style, final V view)
+   {
       @SuppressWarnings("unchecked")
-      final KoshianViewConstructor<V> viewConstructor
-            = (KoshianViewConstructor<V>) viewConstructorMap.get(view.getClass());
+      final KoshianStyle.StyleElement<V> styleElement =
+            (KoshianStyle.StyleElement<V>) style.$$koshianInternal$elementMap
+                  .get(view.getClass());
 
-      if (viewConstructor == null) { return; }
-      final Function1<V, Void> styleAction = viewConstructor.getStyleAction();
-      if (styleAction == null) { return; }
-      styleAction.invoke(view);
+      if (styleElement == null) { return; }
 
+      styleElement.applyStyleTo(view);
    }
 }

@@ -24,7 +24,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
-object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, RelativeLayout.LayoutParams>(RelativeLayout::class.java) {
+object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, RelativeLayout.LayoutParams> {
    override fun instantiate(context: Context?) = RelativeLayout(context)
    override fun instantiateLayoutParams() = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -124,7 +124,7 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RelativeLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun RelativeLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<RelativeLayout, ViewGroup.LayoutParams, RelativeLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applyAction: ViewGroupBuilder<RelativeLayout, ViewGroup.LayoutParams, RelativeLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
 ) {
    applyKoshian(RelativeLayoutConstructor, applyAction)
 }
@@ -137,9 +137,11 @@ inline fun RelativeLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RelativeLayout(
-      buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.RelativeLayout(
+            buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(RelativeLayoutConstructor, buildAction)
 }
 
@@ -150,10 +152,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.RelativeLayout(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RelativeLayout(
-      name: String,
-      buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.RelativeLayout(
+            name: String,
+            buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, RelativeLayoutConstructor, buildAction)
 }
 

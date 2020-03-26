@@ -21,7 +21,7 @@ import android.content.Context
 import android.widget.EditText
 import kotlin.contracts.*
 
-object EditTextConstructor : KoshianViewConstructor<EditText>(EditText::class.java) {
+object EditTextConstructor : KoshianViewConstructor<EditText> {
    override fun instantiate(context: Context?) = EditText(context)
 }
 
@@ -60,9 +60,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.EditText(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.EditText(
-      buildAction: ViewBuilder<EditText, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.EditText(
+            buildAction: ViewBuilder<EditText, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(EditTextConstructor, buildAction)
 }
 
@@ -73,9 +75,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.EditText(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.EditText(
-      name: String,
-      buildAction: ViewBuilder<EditText, L, KoshianMode.Applier>.() -> Unit
-) {
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.EditText(
+            name: String,
+            buildAction: ViewBuilder<EditText, L, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
    apply(name, buildAction)
 }
