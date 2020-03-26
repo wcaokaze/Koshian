@@ -118,7 +118,7 @@ inline fun <L, S : KoshianStyle>
             buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, styleElement, buildAction)
 }
 
 /**

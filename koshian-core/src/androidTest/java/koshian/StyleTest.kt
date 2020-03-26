@@ -636,4 +636,88 @@ class StyleTest {
          assertEquals("Koshian text", child2.text)
       }
    }
+
+   @Test fun namedStyle_forNamedView() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            TextView {
+               view.hint = "Koshian Hint"
+            }
+         }
+
+         val style1 = TextView {
+            view.text = "Koshian Text"
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               TextView("View1") {
+               }
+               TextView("View1") {
+               }
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            TextView("View1", style.style1) {
+            }
+         }
+
+         val child1 = v.getChildAt(0)
+         val child2 = v.getChildAt(1)
+
+         assertTrue(child1 is TextView)
+         assertEquals("Koshian Hint", child1.hint)
+         assertEquals("Koshian Text", child1.text)
+
+         assertTrue(child2 is TextView)
+         assertEquals("Koshian Hint", child2.hint)
+         assertEquals("Koshian Text", child2.text)
+      }
+   }
+
+   @Test fun namedStyle_forNamedViewGroup() {
+      class Style : KoshianStyle() {
+         override fun defaultStyle() {
+            FrameLayout {
+               view.elevation = 4.0f
+            }
+         }
+
+         val style1 = FrameLayout {
+            view.alpha = 0.4f
+         }
+      }
+
+      activityScenarioRule.scenario.onActivity { activity ->
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            FrameLayout {
+               FrameLayout("View1") {
+               }
+               FrameLayout("View1") {
+               }
+            }
+         }
+
+         v.applyKoshian(Style()) {
+            FrameLayout("View1", style.style1) {
+            }
+         }
+
+         val child1 = v.getChildAt(0)
+         val child2 = v.getChildAt(1)
+
+         assertTrue(child1 is FrameLayout)
+         assertEquals(4.0f, child1.elevation)
+         assertEquals(0.4f, child1.alpha)
+
+         assertTrue(child2 is FrameLayout)
+         assertEquals(4.0f, child2.elevation)
+         assertEquals(0.4f, child2.alpha)
+      }
+   }
 }

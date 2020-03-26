@@ -177,6 +177,23 @@ inline fun <L, S : KoshianStyle>
 }
 
 /**
+ * Applies Koshian to all FrameLayouts that are named the specified in this ViewGroup.
+ * If there are no FrameLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<FrameLayout>,
+            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
+   apply(name, FrameLayoutConstructor, styleElement, buildAction)
+}
+
+/**
  * finds Views that are already added in this FrameLayout,
  * and applies Koshian DSL to them.
  *
