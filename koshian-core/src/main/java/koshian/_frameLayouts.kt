@@ -144,6 +144,23 @@ inline fun <L, S : KoshianStyle>
 }
 
 /**
+ * If the next View is a FrameLayout, applies Koshian to it.
+ *
+ * Otherwise, creates a new FrameLayout and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
+            styleElement: KoshianStyle.StyleElement<FrameLayout>,
+            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      )
+{
+   apply(FrameLayoutConstructor, styleElement, buildAction)
+}
+
+/**
  * Applies Koshian to all FrameLayouts that are named the specified in this ViewGroup.
  * If there are no FrameLayouts named the specified, do nothing.
  *
@@ -230,6 +247,6 @@ inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
 @Suppress("FunctionName")
 inline fun KoshianStyle.FrameLayout(
       crossinline styleAction: ViewBuilder<FrameLayout, Nothing, KoshianMode.Style>.() -> Unit
-) {
-   createStyleElement(styleAction)
+): KoshianStyle.StyleElement<FrameLayout> {
+   return createStyleElement(styleAction)
 }

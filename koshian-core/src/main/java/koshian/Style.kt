@@ -2,6 +2,7 @@ package koshian
 
 import android.view.*
 
+@KoshianMarker
 abstract class KoshianStyle {
    private var isCreatingDefaultStyle = false
 
