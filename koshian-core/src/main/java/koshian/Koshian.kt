@@ -145,13 +145,15 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
    inline operator fun <A>
          A.invoke(
                applyAction: ViewBuilder<A, CL, KoshianMode.Applier<Nothing>>.() -> Unit
-         )
+         ): A
          where A : KoshianApplicable
    {
       `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
 
       val koshian = ViewBuilder<A, CL, KoshianMode.Applier<Nothing>>(this)
       koshian.applyAction()
+
+      return this
    }
 }
 
