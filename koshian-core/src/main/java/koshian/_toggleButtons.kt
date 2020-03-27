@@ -30,11 +30,11 @@ object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ToggleButton(
-      buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.ToggleButton(
+      creatorAction: ViewCreator<ToggleButton, L>.() -> Unit
 ): ToggleButton {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(ToggleButtonConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(ToggleButtonConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ToggleButton(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ToggleButton(
+inline fun <L> CreatorParent<L>.ToggleButton(
       name: String,
-      buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<ToggleButton, L>.() -> Unit
 ): ToggleButton {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, ToggleButtonConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ToggleButtonConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ToggleButton(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.ToggleButton(
-            buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.ToggleButton(
+            applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
       )
 {
-   apply(ToggleButtonConstructor, buildAction)
+   apply(ToggleButtonConstructor, applierAction)
+}
+
+/**
+ * If the next View is a ToggleButton, applies Koshian to it.
+ *
+ * Otherwise, creates a new ToggleButton and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ToggleButton(
+            styleElement: KoshianStyle.StyleElement<ToggleButton>,
+            applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
+      )
+{
+   apply(ToggleButtonConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.ToggleButton(
+      ApplierParent<L, S>.ToggleButton(
             name: String,
-            buildAction: ViewBuilder<ToggleButton, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all ToggleButtons that are named the specified in this ViewGroup.
+ * If there are no ToggleButtons named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ToggleButton(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<ToggleButton>,
+            applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.ToggleButton(
+      crossinline styleAction: ViewStyle<ToggleButton>.() -> Unit
+): KoshianStyle.StyleElement<ToggleButton> {
+   return createStyleElement(styleAction)
 }

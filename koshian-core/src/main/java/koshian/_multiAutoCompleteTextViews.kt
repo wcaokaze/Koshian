@@ -30,11 +30,11 @@ object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCo
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.MultiAutoCompleteTextView(
-      buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.MultiAutoCompleteTextView(
+      creatorAction: ViewCreator<MultiAutoCompleteTextView, L>.() -> Unit
 ): MultiAutoCompleteTextView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(MultiAutoCompleteTextViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(MultiAutoCompleteTextViewConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.MultiAutoCompleteTextView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.MultiAutoCompleteTextView(
+inline fun <L> CreatorParent<L>.MultiAutoCompleteTextView(
       name: String,
-      buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<MultiAutoCompleteTextView, L>.() -> Unit
 ): MultiAutoCompleteTextView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, MultiAutoCompleteTextViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, MultiAutoCompleteTextViewConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.MultiAutoCompleteTextView(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.MultiAutoCompleteTextView(
-            buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.MultiAutoCompleteTextView(
+            applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
       )
 {
-   apply(MultiAutoCompleteTextViewConstructor, buildAction)
+   apply(MultiAutoCompleteTextViewConstructor, applierAction)
+}
+
+/**
+ * If the next View is a MultiAutoCompleteTextView, applies Koshian to it.
+ *
+ * Otherwise, creates a new MultiAutoCompleteTextView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.MultiAutoCompleteTextView(
+            styleElement: KoshianStyle.StyleElement<MultiAutoCompleteTextView>,
+            applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
+      )
+{
+   apply(MultiAutoCompleteTextViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.MultiAutoCompleteTextView(
+      ApplierParent<L, S>.MultiAutoCompleteTextView(
             name: String,
-            buildAction: ViewBuilder<MultiAutoCompleteTextView, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all MultiAutoCompleteTextViews that are named the specified in this ViewGroup.
+ * If there are no MultiAutoCompleteTextViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.MultiAutoCompleteTextView(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<MultiAutoCompleteTextView>,
+            applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.MultiAutoCompleteTextView(
+      crossinline styleAction: ViewStyle<MultiAutoCompleteTextView>.() -> Unit
+): KoshianStyle.StyleElement<MultiAutoCompleteTextView> {
+   return createStyleElement(styleAction)
 }

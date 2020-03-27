@@ -31,11 +31,11 @@ object ViewConstructor : KoshianViewConstructor<View> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
-      buildAction: ViewBuilder<View, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.View(
+      creatorAction: ViewCreator<View, L>.() -> Unit
 ): View {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(ViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(ViewConstructor, creatorAction)
 }
 
 /**
@@ -45,12 +45,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
+inline fun <L> CreatorParent<L>.View(
       name: String,
-      buildAction: ViewBuilder<View, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<View, L>.() -> Unit
 ): View {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, ViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ViewConstructor, creatorAction)
 }
 
 /**
@@ -62,11 +62,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.View(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.View(
-            buildAction: ViewBuilder<View, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.View(
+            applierAction: ViewApplier<View, L, S>.() -> Unit
       )
 {
-   apply(ViewConstructor, buildAction)
+   apply(ViewConstructor, applierAction)
+}
+
+/**
+ * If the next View is a View, applies Koshian to it.
+ *
+ * Otherwise, creates a new View and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.View(
+            styleElement: KoshianStyle.StyleElement<View>,
+            applierAction: ViewApplier<View, L, S>.() -> Unit
+      )
+{
+   apply(ViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -77,12 +94,41 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.View(
+      ApplierParent<L, S>.View(
             name: String,
-            buildAction: ViewBuilder<View, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<View, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all Views that are named the specified in this ViewGroup.
+ * If there are no Views named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.View(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<View>,
+            applierAction: ViewApplier<View, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.View(
+      crossinline styleAction: ViewStyle<View>.() -> Unit
+): KoshianStyle.StyleElement<View> {
+   return createStyleElement(styleAction)
 }
 
 var View.backgroundColor: Int

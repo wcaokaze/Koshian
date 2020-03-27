@@ -33,10 +33,10 @@ object ViewSwitcherConstructor : KoshianViewGroupConstructor<ViewSwitcher, Frame
  */
 @ExperimentalContracts
 inline fun <R> ViewSwitcher.addView(
-      buildAction: ViewGroupBuilder<ViewSwitcher, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<ViewSwitcher, Nothing, FrameLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(ViewSwitcherConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(ViewSwitcherConstructor, creatorAction)
 }
 
 /**
@@ -44,11 +44,11 @@ inline fun <R> ViewSwitcher.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
-      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.ViewSwitcher(
+      creatorAction: ViewGroupCreator<ViewSwitcher, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewSwitcher {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(ViewSwitcherConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(ViewSwitcherConstructor, creatorAction)
 }
 
 /**
@@ -58,12 +58,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
+inline fun <L> CreatorParent<L>.ViewSwitcher(
       name: String,
-      buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<ViewSwitcher, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewSwitcher {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, ViewSwitcherConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ViewSwitcherConstructor, creatorAction)
 }
 
 /**
@@ -123,9 +123,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewSwitcher(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun ViewSwitcher.applyKoshian(
-      applyAction: ViewGroupBuilder<ViewSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
+      applierAction: ViewGroupApplier<ViewSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(ViewSwitcherConstructor, applyAction)
+   applyKoshian(ViewSwitcherConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this ViewSwitcher,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> ViewSwitcher.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<ViewSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, ViewSwitcherConstructor, applierAction)
 }
 
 /**
@@ -137,11 +200,28 @@ inline fun ViewSwitcher.applyKoshian(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.ViewSwitcher(
-            buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.ViewSwitcher(
+            applierAction: ViewGroupApplier<ViewSwitcher, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ViewSwitcherConstructor, buildAction)
+   apply(ViewSwitcherConstructor, applierAction)
+}
+
+/**
+ * If the next View is a ViewSwitcher, applies Koshian to it.
+ *
+ * Otherwise, creates a new ViewSwitcher and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ViewSwitcher(
+            styleElement: KoshianStyle.StyleElement<ViewSwitcher>,
+            applierAction: ViewGroupApplier<ViewSwitcher, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(ViewSwitcherConstructor, styleElement, applierAction)
 }
 
 /**
@@ -152,10 +232,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.ViewSwitcher(
+      ApplierParent<L, S>.ViewSwitcher(
             name: String,
-            buildAction: ViewGroupBuilder<ViewSwitcher, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewGroupApplier<ViewSwitcher, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(name, ViewSwitcherConstructor, buildAction)
+   apply(name, ViewSwitcherConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all ViewSwitchers that are named the specified in this ViewGroup.
+ * If there are no ViewSwitchers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ViewSwitcher(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<ViewSwitcher>,
+            applierAction: ViewGroupApplier<ViewSwitcher, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, ViewSwitcherConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.ViewSwitcher(
+      crossinline styleAction: ViewStyle<ViewSwitcher>.() -> Unit
+): KoshianStyle.StyleElement<ViewSwitcher> {
+   return createStyleElement(styleAction)
 }

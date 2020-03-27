@@ -30,11 +30,11 @@ object RadioButtonConstructor : KoshianViewConstructor<RadioButton> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.RadioButton(
-      buildAction: ViewBuilder<RadioButton, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.RadioButton(
+      creatorAction: ViewCreator<RadioButton, L>.() -> Unit
 ): RadioButton {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(RadioButtonConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(RadioButtonConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RadioButton(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.RadioButton(
+inline fun <L> CreatorParent<L>.RadioButton(
       name: String,
-      buildAction: ViewBuilder<RadioButton, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<RadioButton, L>.() -> Unit
 ): RadioButton {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, RadioButtonConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, RadioButtonConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RadioButton(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.RadioButton(
-            buildAction: ViewBuilder<RadioButton, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.RadioButton(
+            applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
       )
 {
-   apply(RadioButtonConstructor, buildAction)
+   apply(RadioButtonConstructor, applierAction)
+}
+
+/**
+ * If the next View is a RadioButton, applies Koshian to it.
+ *
+ * Otherwise, creates a new RadioButton and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RadioButton(
+            styleElement: KoshianStyle.StyleElement<RadioButton>,
+            applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
+      )
+{
+   apply(RadioButtonConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.RadioButton(
+      ApplierParent<L, S>.RadioButton(
             name: String,
-            buildAction: ViewBuilder<RadioButton, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all RadioButtons that are named the specified in this ViewGroup.
+ * If there are no RadioButtons named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RadioButton(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<RadioButton>,
+            applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.RadioButton(
+      crossinline styleAction: ViewStyle<RadioButton>.() -> Unit
+): KoshianStyle.StyleElement<RadioButton> {
+   return createStyleElement(styleAction)
 }

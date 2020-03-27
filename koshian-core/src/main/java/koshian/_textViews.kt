@@ -33,11 +33,11 @@ object TextViewConstructor : KoshianViewConstructor<TextView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
-      buildAction: ViewBuilder<TextView, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.TextView(
+      creatorAction: ViewCreator<TextView, L>.() -> Unit
 ): TextView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(TextViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(TextViewConstructor, creatorAction)
 }
 
 /**
@@ -47,12 +47,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
+inline fun <L> CreatorParent<L>.TextView(
       name: String,
-      buildAction: ViewBuilder<TextView, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<TextView, L>.() -> Unit
 ): TextView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, TextViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TextViewConstructor, creatorAction)
 }
 
 /**
@@ -64,11 +64,11 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TextView(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
-            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.TextView(
+            applierAction: ViewApplier<TextView, L, S>.() -> Unit
       )
 {
-   apply(TextViewConstructor, buildAction)
+   apply(TextViewConstructor, applierAction)
 }
 
 /**
@@ -80,12 +80,12 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
+      ApplierParent<L, S>.TextView(
             styleElement: KoshianStyle.StyleElement<TextView>,
-            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<TextView, L, S>.() -> Unit
       )
 {
-   apply(TextViewConstructor, styleElement, buildAction)
+   apply(TextViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -96,12 +96,12 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
+      ApplierParent<L, S>.TextView(
             name: String,
-            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<TextView, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
 }
 
 /**
@@ -112,13 +112,13 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.TextView(
+      ApplierParent<L, S>.TextView(
             name: String,
             styleElement: KoshianStyle.StyleElement<TextView>,
-            buildAction: ViewBuilder<TextView, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<TextView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, buildAction)
+   apply(name, styleElement, applierAction)
 }
 
 /**
@@ -128,7 +128,7 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun KoshianStyle.TextView(
-      crossinline styleAction: ViewBuilder<TextView, Nothing, KoshianMode.Style>.() -> Unit
+      crossinline styleAction: ViewStyle<TextView>.() -> Unit
 ): KoshianStyle.StyleElement<TextView> {
    return createStyleElement(styleAction)
 }

@@ -30,11 +30,11 @@ object CheckBoxConstructor : KoshianViewConstructor<CheckBox> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckBox(
-      buildAction: ViewBuilder<CheckBox, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.CheckBox(
+      creatorAction: ViewCreator<CheckBox, L>.() -> Unit
 ): CheckBox {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(CheckBoxConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(CheckBoxConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckBox(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckBox(
+inline fun <L> CreatorParent<L>.CheckBox(
       name: String,
-      buildAction: ViewBuilder<CheckBox, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<CheckBox, L>.() -> Unit
 ): CheckBox {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, CheckBoxConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, CheckBoxConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckBox(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.CheckBox(
-            buildAction: ViewBuilder<CheckBox, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.CheckBox(
+            applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
       )
 {
-   apply(CheckBoxConstructor, buildAction)
+   apply(CheckBoxConstructor, applierAction)
+}
+
+/**
+ * If the next View is a CheckBox, applies Koshian to it.
+ *
+ * Otherwise, creates a new CheckBox and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CheckBox(
+            styleElement: KoshianStyle.StyleElement<CheckBox>,
+            applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
+      )
+{
+   apply(CheckBoxConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.CheckBox(
+      ApplierParent<L, S>.CheckBox(
             name: String,
-            buildAction: ViewBuilder<CheckBox, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all CheckBoxs that are named the specified in this ViewGroup.
+ * If there are no CheckBoxs named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CheckBox(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<CheckBox>,
+            applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.CheckBox(
+      crossinline styleAction: ViewStyle<CheckBox>.() -> Unit
+): KoshianStyle.StyleElement<CheckBox> {
+   return createStyleElement(styleAction)
 }
