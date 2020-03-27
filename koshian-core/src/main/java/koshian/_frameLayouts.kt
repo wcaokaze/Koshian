@@ -128,6 +128,69 @@ inline fun FrameLayout.applyKoshian(
 }
 
 /**
+ * finds Views that are already added in this FrameLayout,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
+      style: S,
+      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+) {
+   applyKoshian(style, FrameLayoutConstructor, applyAction)
+}
+
+/**
  * If the next View is a FrameLayout, applies Koshian to it.
  *
  * Otherwise, creates a new FrameLayout and inserts it to the current position.
@@ -191,69 +254,6 @@ inline fun <L, S : KoshianStyle>
       )
 {
    apply(name, FrameLayoutConstructor, styleElement, buildAction)
-}
-
-/**
- * finds Views that are already added in this FrameLayout,
- * and applies Koshian DSL to them.
- *
- * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
- *
- * The following 2 snippets are equivalent.
- *
- * 1.
- *     ```kotlin
- *     val contentView = koshian(context) {
- *        LinearLayout {
- *           TextView {
- *              view.text = "hello"
- *              view.textColor = 0xffffff opacity 0.8
- *           }
- *        }
- *     }
- *     ```
- *
- * 2.
- *     ```kotlin
- *     val contentView = koshian(context) {
- *        LinearLayout {
- *           TextView {
- *              view.text = "hello"
- *           }
- *        }
- *     }
- *
- *     contentView.applyKoshian {
- *        TextView {
- *           view.textColor = 0xffffff opacity 0.8
- *        }
- *     }
- *     ```
- *
- * When mismatched View is specified, Koshian creates a new View and inserts it.
- *
- * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
- *
- * Also, naming View is a good way.
- *
- * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
- *
- * Koshian specifying a name doesn't affect the cursor.
- * Koshian not specifying a name ignores named Views.
- * Named Views and non-named Views are simply in other worlds.
- *
- * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
- *
- * For readability, it is recommended to put named Views
- * as synchronized with the cursor.
- *
- * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
- */
-inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
-      style: S,
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
-) {
-   applyKoshian(style, FrameLayoutConstructor, applyAction)
 }
 
 /**
