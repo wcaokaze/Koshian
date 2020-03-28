@@ -120,16 +120,6 @@ Also, naming View is a good way.
 
 ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
 
-Koshian specifying a name doesn't affect the cursor.
-Koshian not specifying a name ignores named Views.
-Named Views and non-named Views are simply in other worlds.
-
-![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
-
-For readability, it is recommended to put named Views
-as synchronized with the cursor.
-
-![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
 
 
 Install
