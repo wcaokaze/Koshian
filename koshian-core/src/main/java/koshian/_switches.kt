@@ -30,11 +30,11 @@ object SwitchConstructor : KoshianViewConstructor<Switch> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.Switch(
-      buildAction: ViewBuilder<Switch, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.Switch(
+      creatorAction: ViewCreator<Switch, L>.() -> Unit
 ): Switch {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(SwitchConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(SwitchConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Switch(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.Switch(
+inline fun <L> CreatorParent<L>.Switch(
       name: String,
-      buildAction: ViewBuilder<Switch, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<Switch, L>.() -> Unit
 ): Switch {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, SwitchConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, SwitchConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Switch(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Switch(
-      buildAction: ViewBuilder<Switch, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(SwitchConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Switch(
+            applierAction: ViewApplier<Switch, L, S>.() -> Unit
+      )
+{
+   apply(SwitchConstructor, applierAction)
+}
+
+/**
+ * If the next View is a Switch, applies Koshian to it.
+ *
+ * Otherwise, creates a new Switch and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Switch(
+            styleElement: KoshianStyle.StyleElement<Switch>,
+            applierAction: ViewApplier<Switch, L, S>.() -> Unit
+      )
+{
+   apply(SwitchConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Switch(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Switch(
-      name: String,
-      buildAction: ViewBuilder<Switch, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Switch(
+            name: String,
+            applierAction: ViewApplier<Switch, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all Switchs that are named the specified in this ViewGroup.
+ * If there are no Switchs named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Switch(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<Switch>,
+            applierAction: ViewApplier<Switch, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.Switch(
+      crossinline styleAction: ViewStyle<Switch>.() -> Unit
+): KoshianStyle.StyleElement<Switch> {
+   return createStyleElement(styleAction)
 }

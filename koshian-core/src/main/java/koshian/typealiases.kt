@@ -20,7 +20,12 @@ import android.view.*
 
 typealias KoshianExt<V, L> = Koshian<V, L, *, *>
 
-typealias KoshianParent<L, M> = Koshian<ViewManager, *, L, M>
+typealias CreatorParent<L> = Koshian<ViewManager, *, L, KoshianMode.Creator>
+typealias ViewCreator     <V, L>     = Koshian<V, L, Nothing, KoshianMode.Creator>
+typealias ViewGroupCreator<V, L, CL> = Koshian<V, L, CL,      KoshianMode.Creator>
 
-typealias ViewBuilder     <V, L,     M> = Koshian<V, L, Nothing, M>
-typealias ViewGroupBuilder<V, L, CL, M> = Koshian<V, L, CL,      M>
+typealias ApplierParent<L, S> = Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>
+typealias ViewApplier     <V, L,     S> = Koshian<V, L, Nothing, KoshianMode.Applier<S>>
+typealias ViewGroupApplier<V, L, CL, S> = Koshian<V, L, CL,      KoshianMode.Applier<S>>
+
+typealias ViewStyle<V> = Koshian<V, Nothing, Nothing, KoshianMode.Style>

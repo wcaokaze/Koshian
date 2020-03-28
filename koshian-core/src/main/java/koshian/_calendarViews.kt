@@ -22,7 +22,7 @@ import android.widget.CalendarView
 import kotlin.contracts.*
 
 object CalendarViewConstructor : KoshianViewConstructor<CalendarView> {
-   override fun instantiate(context: Context) = CalendarView(context)
+   override fun instantiate(context: Context?) = CalendarView(context)
 }
 
 /**
@@ -30,11 +30,11 @@ object CalendarViewConstructor : KoshianViewConstructor<CalendarView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.CalendarView(
-      buildAction: ViewBuilder<CalendarView, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.CalendarView(
+      creatorAction: ViewCreator<CalendarView, L>.() -> Unit
 ): CalendarView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(CalendarViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(CalendarViewConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CalendarView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.CalendarView(
+inline fun <L> CreatorParent<L>.CalendarView(
       name: String,
-      buildAction: ViewBuilder<CalendarView, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<CalendarView, L>.() -> Unit
 ): CalendarView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, CalendarViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, CalendarViewConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CalendarView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CalendarView(
-      buildAction: ViewBuilder<CalendarView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(CalendarViewConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CalendarView(
+            applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
+      )
+{
+   apply(CalendarViewConstructor, applierAction)
+}
+
+/**
+ * If the next View is a CalendarView, applies Koshian to it.
+ *
+ * Otherwise, creates a new CalendarView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CalendarView(
+            styleElement: KoshianStyle.StyleElement<CalendarView>,
+            applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
+      )
+{
+   apply(CalendarViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.CalendarView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CalendarView(
-      name: String,
-      buildAction: ViewBuilder<CalendarView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CalendarView(
+            name: String,
+            applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all CalendarViews that are named the specified in this ViewGroup.
+ * If there are no CalendarViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CalendarView(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<CalendarView>,
+            applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.CalendarView(
+      crossinline styleAction: ViewStyle<CalendarView>.() -> Unit
+): KoshianStyle.StyleElement<CalendarView> {
+   return createStyleElement(styleAction)
 }

@@ -30,11 +30,11 @@ object ImageButtonConstructor : KoshianViewConstructor<ImageButton> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageButton(
-      buildAction: ViewBuilder<ImageButton, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.ImageButton(
+      creatorAction: ViewCreator<ImageButton, L>.() -> Unit
 ): ImageButton {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(ImageButtonConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(ImageButtonConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageButton(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageButton(
+inline fun <L> CreatorParent<L>.ImageButton(
       name: String,
-      buildAction: ViewBuilder<ImageButton, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<ImageButton, L>.() -> Unit
 ): ImageButton {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, ImageButtonConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ImageButtonConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ImageButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageButton(
-      buildAction: ViewBuilder<ImageButton, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(ImageButtonConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ImageButton(
+            applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
+      )
+{
+   apply(ImageButtonConstructor, applierAction)
+}
+
+/**
+ * If the next View is a ImageButton, applies Koshian to it.
+ *
+ * Otherwise, creates a new ImageButton and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ImageButton(
+            styleElement: KoshianStyle.StyleElement<ImageButton>,
+            applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
+      )
+{
+   apply(ImageButtonConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ImageButton(
-      name: String,
-      buildAction: ViewBuilder<ImageButton, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ImageButton(
+            name: String,
+            applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all ImageButtons that are named the specified in this ViewGroup.
+ * If there are no ImageButtons named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ImageButton(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<ImageButton>,
+            applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.ImageButton(
+      crossinline styleAction: ViewStyle<ImageButton>.() -> Unit
+): KoshianStyle.StyleElement<ImageButton> {
+   return createStyleElement(styleAction)
 }

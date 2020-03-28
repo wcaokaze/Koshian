@@ -30,11 +30,11 @@ object EditTextConstructor : KoshianViewConstructor<EditText> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.EditText(
-      buildAction: ViewBuilder<EditText, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.EditText(
+      creatorAction: ViewCreator<EditText, L>.() -> Unit
 ): EditText {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(EditTextConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(EditTextConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.EditText(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.EditText(
+inline fun <L> CreatorParent<L>.EditText(
       name: String,
-      buildAction: ViewBuilder<EditText, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<EditText, L>.() -> Unit
 ): EditText {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, EditTextConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, EditTextConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.EditText(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.EditText(
-      buildAction: ViewBuilder<EditText, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(EditTextConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.EditText(
+            applierAction: ViewApplier<EditText, L, S>.() -> Unit
+      )
+{
+   apply(EditTextConstructor, applierAction)
+}
+
+/**
+ * If the next View is a EditText, applies Koshian to it.
+ *
+ * Otherwise, creates a new EditText and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.EditText(
+            styleElement: KoshianStyle.StyleElement<EditText>,
+            applierAction: ViewApplier<EditText, L, S>.() -> Unit
+      )
+{
+   apply(EditTextConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.EditText(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.EditText(
-      name: String,
-      buildAction: ViewBuilder<EditText, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.EditText(
+            name: String,
+            applierAction: ViewApplier<EditText, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all EditTexts that are named the specified in this ViewGroup.
+ * If there are no EditTexts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.EditText(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<EditText>,
+            applierAction: ViewApplier<EditText, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.EditText(
+      crossinline styleAction: ViewStyle<EditText>.() -> Unit
+): KoshianStyle.StyleElement<EditText> {
+   return createStyleElement(styleAction)
 }

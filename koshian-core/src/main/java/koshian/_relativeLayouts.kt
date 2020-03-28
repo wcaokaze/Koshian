@@ -34,10 +34,10 @@ object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, R
  */
 @ExperimentalContracts
 inline fun <R> RelativeLayout.addView(
-      buildAction: ViewGroupBuilder<RelativeLayout, Nothing, RelativeLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<RelativeLayout, Nothing, RelativeLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(RelativeLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(RelativeLayoutConstructor, creatorAction)
 }
 
 /**
@@ -45,11 +45,11 @@ inline fun <R> RelativeLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.RelativeLayout(
-      buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.RelativeLayout(
+      creatorAction: ViewGroupCreator<RelativeLayout, L, RelativeLayout.LayoutParams>.() -> Unit
 ): RelativeLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(RelativeLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(RelativeLayoutConstructor, creatorAction)
 }
 
 /**
@@ -59,12 +59,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RelativeLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.RelativeLayout(
+inline fun <L> CreatorParent<L>.RelativeLayout(
       name: String,
-      buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<RelativeLayout, L, RelativeLayout.LayoutParams>.() -> Unit
 ): RelativeLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, RelativeLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, RelativeLayoutConstructor, creatorAction)
 }
 
 /**
@@ -124,9 +124,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RelativeLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun RelativeLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<RelativeLayout, ViewGroup.LayoutParams, RelativeLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applierAction: ViewGroupApplier<RelativeLayout, ViewGroup.LayoutParams, RelativeLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(RelativeLayoutConstructor, applyAction)
+   applyKoshian(RelativeLayoutConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this RelativeLayout,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> RelativeLayout.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<RelativeLayout, ViewGroup.LayoutParams, RelativeLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, RelativeLayoutConstructor, applierAction)
 }
 
 /**
@@ -137,10 +200,29 @@ inline fun RelativeLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RelativeLayout(
-      buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(RelativeLayoutConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RelativeLayout(
+            applierAction: ViewGroupApplier<RelativeLayout, L, RelativeLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(RelativeLayoutConstructor, applierAction)
+}
+
+/**
+ * If the next View is a RelativeLayout, applies Koshian to it.
+ *
+ * Otherwise, creates a new RelativeLayout and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RelativeLayout(
+            styleElement: KoshianStyle.StyleElement<RelativeLayout>,
+            applierAction: ViewGroupApplier<RelativeLayout, L, RelativeLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(RelativeLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -150,11 +232,42 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.RelativeLayout(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.RelativeLayout(
-      name: String,
-      buildAction: ViewGroupBuilder<RelativeLayout, L, RelativeLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, RelativeLayoutConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RelativeLayout(
+            name: String,
+            applierAction: ViewGroupApplier<RelativeLayout, L, RelativeLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, RelativeLayoutConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all RelativeLayouts that are named the specified in this ViewGroup.
+ * If there are no RelativeLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RelativeLayout(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<RelativeLayout>,
+            applierAction: ViewGroupApplier<RelativeLayout, L, RelativeLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, RelativeLayoutConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.RelativeLayout(
+      crossinline styleAction: ViewStyle<RelativeLayout>.() -> Unit
+): KoshianStyle.StyleElement<RelativeLayout> {
+   return createStyleElement(styleAction)
 }
 
 var RelativeLayout.LayoutParams.alignParentStart: Boolean

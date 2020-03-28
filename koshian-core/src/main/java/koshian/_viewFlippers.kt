@@ -33,10 +33,10 @@ object ViewFlipperConstructor : KoshianViewGroupConstructor<ViewFlipper, FrameLa
  */
 @ExperimentalContracts
 inline fun <R> ViewFlipper.addView(
-      buildAction: ViewGroupBuilder<ViewFlipper, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<ViewFlipper, Nothing, FrameLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(ViewFlipperConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(ViewFlipperConstructor, creatorAction)
 }
 
 /**
@@ -44,11 +44,11 @@ inline fun <R> ViewFlipper.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
-      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.ViewFlipper(
+      creatorAction: ViewGroupCreator<ViewFlipper, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewFlipper {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(ViewFlipperConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(ViewFlipperConstructor, creatorAction)
 }
 
 /**
@@ -58,12 +58,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
+inline fun <L> CreatorParent<L>.ViewFlipper(
       name: String,
-      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<ViewFlipper, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewFlipper {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, ViewFlipperConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ViewFlipperConstructor, creatorAction)
 }
 
 /**
@@ -123,9 +123,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ViewFlipper(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun ViewFlipper.applyKoshian(
-      applyAction: ViewGroupBuilder<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applierAction: ViewGroupApplier<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(ViewFlipperConstructor, applyAction)
+   applyKoshian(ViewFlipperConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this ViewFlipper,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> ViewFlipper.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, ViewFlipperConstructor, applierAction)
 }
 
 /**
@@ -136,10 +199,29 @@ inline fun ViewFlipper.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
-      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(ViewFlipperConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ViewFlipper(
+            applierAction: ViewGroupApplier<ViewFlipper, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(ViewFlipperConstructor, applierAction)
+}
+
+/**
+ * If the next View is a ViewFlipper, applies Koshian to it.
+ *
+ * Otherwise, creates a new ViewFlipper and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ViewFlipper(
+            styleElement: KoshianStyle.StyleElement<ViewFlipper>,
+            applierAction: ViewGroupApplier<ViewFlipper, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(ViewFlipperConstructor, styleElement, applierAction)
 }
 
 /**
@@ -149,9 +231,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.ViewFlipper(
-      name: String,
-      buildAction: ViewGroupBuilder<ViewFlipper, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, ViewFlipperConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ViewFlipper(
+            name: String,
+            applierAction: ViewGroupApplier<ViewFlipper, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, ViewFlipperConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all ViewFlippers that are named the specified in this ViewGroup.
+ * If there are no ViewFlippers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ViewFlipper(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<ViewFlipper>,
+            applierAction: ViewGroupApplier<ViewFlipper, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, ViewFlipperConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.ViewFlipper(
+      crossinline styleAction: ViewStyle<ViewFlipper>.() -> Unit
+): KoshianStyle.StyleElement<ViewFlipper> {
+   return createStyleElement(styleAction)
 }

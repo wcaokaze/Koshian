@@ -30,11 +30,11 @@ object SpaceConstructor : KoshianViewConstructor<Space> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.Space(
-      buildAction: ViewBuilder<Space, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.Space(
+      creatorAction: ViewCreator<Space, L>.() -> Unit
 ): Space {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(SpaceConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(SpaceConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Space(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.Space(
+inline fun <L> CreatorParent<L>.Space(
       name: String,
-      buildAction: ViewBuilder<Space, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<Space, L>.() -> Unit
 ): Space {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, SpaceConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, SpaceConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Space(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Space(
-      buildAction: ViewBuilder<Space, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(SpaceConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Space(
+            applierAction: ViewApplier<Space, L, S>.() -> Unit
+      )
+{
+   apply(SpaceConstructor, applierAction)
+}
+
+/**
+ * If the next View is a Space, applies Koshian to it.
+ *
+ * Otherwise, creates a new Space and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Space(
+            styleElement: KoshianStyle.StyleElement<Space>,
+            applierAction: ViewApplier<Space, L, S>.() -> Unit
+      )
+{
+   apply(SpaceConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Space(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Space(
-      name: String,
-      buildAction: ViewBuilder<Space, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Space(
+            name: String,
+            applierAction: ViewApplier<Space, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all Spaces that are named the specified in this ViewGroup.
+ * If there are no Spaces named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Space(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<Space>,
+            applierAction: ViewApplier<Space, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.Space(
+      crossinline styleAction: ViewStyle<Space>.() -> Unit
+): KoshianStyle.StyleElement<Space> {
+   return createStyleElement(styleAction)
 }

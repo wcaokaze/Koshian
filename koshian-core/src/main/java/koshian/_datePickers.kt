@@ -30,11 +30,11 @@ object DatePickerConstructor : KoshianViewConstructor<DatePicker> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.DatePicker(
-      buildAction: ViewBuilder<DatePicker, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.DatePicker(
+      creatorAction: ViewCreator<DatePicker, L>.() -> Unit
 ): DatePicker {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(DatePickerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(DatePickerConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.DatePicker(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.DatePicker(
+inline fun <L> CreatorParent<L>.DatePicker(
       name: String,
-      buildAction: ViewBuilder<DatePicker, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<DatePicker, L>.() -> Unit
 ): DatePicker {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, DatePickerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, DatePickerConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.DatePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.DatePicker(
-      buildAction: ViewBuilder<DatePicker, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(DatePickerConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.DatePicker(
+            applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
+      )
+{
+   apply(DatePickerConstructor, applierAction)
+}
+
+/**
+ * If the next View is a DatePicker, applies Koshian to it.
+ *
+ * Otherwise, creates a new DatePicker and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.DatePicker(
+            styleElement: KoshianStyle.StyleElement<DatePicker>,
+            applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
+      )
+{
+   apply(DatePickerConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,41 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.DatePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.DatePicker(
-      name: String,
-      buildAction: ViewBuilder<DatePicker, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.DatePicker(
+            name: String,
+            applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
 }
+
+/**
+ * Applies Koshian to all DatePickers that are named the specified in this ViewGroup.
+ * If there are no DatePickers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.DatePicker(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<DatePicker>,
+            applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.DatePicker(
+      crossinline styleAction: ViewStyle<DatePicker>.() -> Unit
+): KoshianStyle.StyleElement<DatePicker> {
+   return createStyleElement(styleAction)
+}
+

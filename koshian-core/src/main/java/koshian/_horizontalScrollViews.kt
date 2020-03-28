@@ -33,10 +33,10 @@ object HorizontalScrollViewConstructor : KoshianViewGroupConstructor<HorizontalS
  */
 @ExperimentalContracts
 inline fun <R> HorizontalScrollView.addView(
-      buildAction: ViewGroupBuilder<HorizontalScrollView, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<HorizontalScrollView, Nothing, FrameLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(HorizontalScrollViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(HorizontalScrollViewConstructor, creatorAction)
 }
 
 /**
@@ -44,11 +44,11 @@ inline fun <R> HorizontalScrollView.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.HorizontalScrollView(
-      buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.HorizontalScrollView(
+      creatorAction: ViewGroupCreator<HorizontalScrollView, L, FrameLayout.LayoutParams>.() -> Unit
 ): HorizontalScrollView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(HorizontalScrollViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(HorizontalScrollViewConstructor, creatorAction)
 }
 
 /**
@@ -58,12 +58,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.HorizontalScrollView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.HorizontalScrollView(
+inline fun <L> CreatorParent<L>.HorizontalScrollView(
       name: String,
-      buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<HorizontalScrollView, L, FrameLayout.LayoutParams>.() -> Unit
 ): HorizontalScrollView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, HorizontalScrollViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, HorizontalScrollViewConstructor, creatorAction)
 }
 
 /**
@@ -123,9 +123,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.HorizontalScrollView(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun HorizontalScrollView.applyKoshian(
-      applyAction: ViewGroupBuilder<HorizontalScrollView, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applierAction: ViewGroupApplier<HorizontalScrollView, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(HorizontalScrollViewConstructor, applyAction)
+   applyKoshian(HorizontalScrollViewConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this HorizontalScrollView,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> HorizontalScrollView.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<HorizontalScrollView, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, HorizontalScrollViewConstructor, applierAction)
 }
 
 /**
@@ -136,10 +199,29 @@ inline fun HorizontalScrollView.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.HorizontalScrollView(
-      buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(HorizontalScrollViewConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.HorizontalScrollView(
+            applierAction: ViewGroupApplier<HorizontalScrollView, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(HorizontalScrollViewConstructor, applierAction)
+}
+
+/**
+ * If the next View is a HorizontalScrollView, applies Koshian to it.
+ *
+ * Otherwise, creates a new HorizontalScrollView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.HorizontalScrollView(
+            styleElement: KoshianStyle.StyleElement<HorizontalScrollView>,
+            applierAction: ViewGroupApplier<HorizontalScrollView, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(HorizontalScrollViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -149,9 +231,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.HorizontalScrollView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.HorizontalScrollView(
-      name: String,
-      buildAction: ViewGroupBuilder<HorizontalScrollView, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, HorizontalScrollViewConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.HorizontalScrollView(
+            name: String,
+            applierAction: ViewGroupApplier<HorizontalScrollView, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, HorizontalScrollViewConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all HorizontalScrollViews that are named the specified in this ViewGroup.
+ * If there are no HorizontalScrollViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.HorizontalScrollView(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<HorizontalScrollView>,
+            applierAction: ViewGroupApplier<HorizontalScrollView, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, HorizontalScrollViewConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.HorizontalScrollView(
+      crossinline styleAction: ViewStyle<HorizontalScrollView>.() -> Unit
+): KoshianStyle.StyleElement<HorizontalScrollView> {
+   return createStyleElement(styleAction)
 }

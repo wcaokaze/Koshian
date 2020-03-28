@@ -33,10 +33,10 @@ object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayou
  */
 @ExperimentalContracts
 inline fun <R> TabWidget.addView(
-      buildAction: ViewGroupBuilder<TabWidget, Nothing, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<TabWidget, Nothing, LinearLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(TabWidgetConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(TabWidgetConstructor, creatorAction)
 }
 
 /**
@@ -44,11 +44,11 @@ inline fun <R> TabWidget.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabWidget(
-      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.TabWidget(
+      creatorAction: ViewGroupCreator<TabWidget, L, LinearLayout.LayoutParams>.() -> Unit
 ): TabWidget {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(TabWidgetConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(TabWidgetConstructor, creatorAction)
 }
 
 /**
@@ -58,12 +58,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabWidget(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabWidget(
+inline fun <L> CreatorParent<L>.TabWidget(
       name: String,
-      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<TabWidget, L, LinearLayout.LayoutParams>.() -> Unit
 ): TabWidget {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, TabWidgetConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TabWidgetConstructor, creatorAction)
 }
 
 /**
@@ -123,9 +123,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TabWidget(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TabWidget.applyKoshian(
-      applyAction: ViewGroupBuilder<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applierAction: ViewGroupApplier<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(TabWidgetConstructor, applyAction)
+   applyKoshian(TabWidgetConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this TabWidget,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> TabWidget.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, TabWidgetConstructor, applierAction)
 }
 
 /**
@@ -136,10 +199,29 @@ inline fun TabWidget.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabWidget(
-      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(TabWidgetConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TabWidget(
+            applierAction: ViewGroupApplier<TabWidget, L, LinearLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(TabWidgetConstructor, applierAction)
+}
+
+/**
+ * If the next View is a TabWidget, applies Koshian to it.
+ *
+ * Otherwise, creates a new TabWidget and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TabWidget(
+            styleElement: KoshianStyle.StyleElement<TabWidget>,
+            applierAction: ViewGroupApplier<TabWidget, L, LinearLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(TabWidgetConstructor, styleElement, applierAction)
 }
 
 /**
@@ -149,9 +231,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabWidget(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TabWidget(
-      name: String,
-      buildAction: ViewGroupBuilder<TabWidget, L, LinearLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, TabWidgetConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TabWidget(
+            name: String,
+            applierAction: ViewGroupApplier<TabWidget, L, LinearLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, TabWidgetConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all TabWidgets that are named the specified in this ViewGroup.
+ * If there are no TabWidgets named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TabWidget(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<TabWidget>,
+            applierAction: ViewGroupApplier<TabWidget, L, LinearLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, TabWidgetConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.TabWidget(
+      crossinline styleAction: ViewStyle<TabWidget>.() -> Unit
+): KoshianStyle.StyleElement<TabWidget> {
+   return createStyleElement(styleAction)
 }

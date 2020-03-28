@@ -30,11 +30,11 @@ object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge> 
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.QuickContactBadge(
-      buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.QuickContactBadge(
+      creatorAction: ViewCreator<QuickContactBadge, L>.() -> Unit
 ): QuickContactBadge {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(QuickContactBadgeConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(QuickContactBadgeConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.QuickContactBadge(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.QuickContactBadge(
+inline fun <L> CreatorParent<L>.QuickContactBadge(
       name: String,
-      buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<QuickContactBadge, L>.() -> Unit
 ): QuickContactBadge {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, QuickContactBadgeConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, QuickContactBadgeConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.QuickContactBadge(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.QuickContactBadge(
-      buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(QuickContactBadgeConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.QuickContactBadge(
+            applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
+      )
+{
+   apply(QuickContactBadgeConstructor, applierAction)
+}
+
+/**
+ * If the next View is a QuickContactBadge, applies Koshian to it.
+ *
+ * Otherwise, creates a new QuickContactBadge and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.QuickContactBadge(
+            styleElement: KoshianStyle.StyleElement<QuickContactBadge>,
+            applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
+      )
+{
+   apply(QuickContactBadgeConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.QuickContactBadge(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.QuickContactBadge(
-      name: String,
-      buildAction: ViewBuilder<QuickContactBadge, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.QuickContactBadge(
+            name: String,
+            applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all QuickContactBadges that are named the specified in this ViewGroup.
+ * If there are no QuickContactBadges named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.QuickContactBadge(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<QuickContactBadge>,
+            applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.QuickContactBadge(
+      crossinline styleAction: ViewStyle<QuickContactBadge>.() -> Unit
+): KoshianStyle.StyleElement<QuickContactBadge> {
+   return createStyleElement(styleAction)
 }

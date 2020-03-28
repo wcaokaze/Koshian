@@ -30,11 +30,11 @@ object VideoViewConstructor : KoshianViewConstructor<VideoView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.VideoView(
-      buildAction: ViewBuilder<VideoView, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.VideoView(
+      creatorAction: ViewCreator<VideoView, L>.() -> Unit
 ): VideoView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(VideoViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(VideoViewConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.VideoView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.VideoView(
+inline fun <L> CreatorParent<L>.VideoView(
       name: String,
-      buildAction: ViewBuilder<VideoView, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<VideoView, L>.() -> Unit
 ): VideoView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, VideoViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, VideoViewConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.VideoView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
-      buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(VideoViewConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.VideoView(
+            applierAction: ViewApplier<VideoView, L, S>.() -> Unit
+      )
+{
+   apply(VideoViewConstructor, applierAction)
+}
+
+/**
+ * If the next View is a VideoView, applies Koshian to it.
+ *
+ * Otherwise, creates a new VideoView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.VideoView(
+            styleElement: KoshianStyle.StyleElement<VideoView>,
+            applierAction: ViewApplier<VideoView, L, S>.() -> Unit
+      )
+{
+   apply(VideoViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.VideoView(
-      name: String,
-      buildAction: ViewBuilder<VideoView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.VideoView(
+            name: String,
+            applierAction: ViewApplier<VideoView, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all VideoViews that are named the specified in this ViewGroup.
+ * If there are no VideoViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.VideoView(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<VideoView>,
+            applierAction: ViewApplier<VideoView, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.VideoView(
+      crossinline styleAction: ViewStyle<VideoView>.() -> Unit
+): KoshianStyle.StyleElement<VideoView> {
+   return createStyleElement(styleAction)
 }

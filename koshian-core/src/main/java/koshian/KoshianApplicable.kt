@@ -16,8 +16,8 @@
 
 package koshian
 
-sealed class KoshianMode {
-   object Creator : KoshianMode()
-   class Applier<S : KoshianStyle> : KoshianMode()
-   object Style : KoshianMode()
+import android.view.*
+
+interface KoshianApplicable {
+   val view: View
 }

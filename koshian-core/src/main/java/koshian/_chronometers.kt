@@ -30,11 +30,11 @@ object ChronometerConstructor : KoshianViewConstructor<Chronometer> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.Chronometer(
-      buildAction: ViewBuilder<Chronometer, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.Chronometer(
+      creatorAction: ViewCreator<Chronometer, L>.() -> Unit
 ): Chronometer {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(ChronometerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(ChronometerConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Chronometer(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.Chronometer(
+inline fun <L> CreatorParent<L>.Chronometer(
       name: String,
-      buildAction: ViewBuilder<Chronometer, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<Chronometer, L>.() -> Unit
 ): Chronometer {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, ChronometerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ChronometerConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.Chronometer(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Chronometer(
-      buildAction: ViewBuilder<Chronometer, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(ChronometerConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Chronometer(
+            applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
+      )
+{
+   apply(ChronometerConstructor, applierAction)
+}
+
+/**
+ * If the next View is a Chronometer, applies Koshian to it.
+ *
+ * Otherwise, creates a new Chronometer and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Chronometer(
+            styleElement: KoshianStyle.StyleElement<Chronometer>,
+            applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
+      )
+{
+   apply(ChronometerConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.Chronometer(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.Chronometer(
-      name: String,
-      buildAction: ViewBuilder<Chronometer, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Chronometer(
+            name: String,
+            applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all Chronometers that are named the specified in this ViewGroup.
+ * If there are no Chronometers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.Chronometer(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<Chronometer>,
+            applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.Chronometer(
+      crossinline styleAction: ViewStyle<Chronometer>.() -> Unit
+): KoshianStyle.StyleElement<Chronometer> {
+   return createStyleElement(styleAction)
 }

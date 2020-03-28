@@ -30,11 +30,11 @@ object TimePickerConstructor : KoshianViewConstructor<TimePicker> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TimePicker(
-      buildAction: ViewBuilder<TimePicker, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.TimePicker(
+      creatorAction: ViewCreator<TimePicker, L>.() -> Unit
 ): TimePicker {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(TimePickerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(TimePickerConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TimePicker(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TimePicker(
+inline fun <L> CreatorParent<L>.TimePicker(
       name: String,
-      buildAction: ViewBuilder<TimePicker, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<TimePicker, L>.() -> Unit
 ): TimePicker {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, TimePickerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TimePickerConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TimePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TimePicker(
-      buildAction: ViewBuilder<TimePicker, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(TimePickerConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TimePicker(
+            applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
+      )
+{
+   apply(TimePickerConstructor, applierAction)
+}
+
+/**
+ * If the next View is a TimePicker, applies Koshian to it.
+ *
+ * Otherwise, creates a new TimePicker and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TimePicker(
+            styleElement: KoshianStyle.StyleElement<TimePicker>,
+            applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
+      )
+{
+   apply(TimePickerConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.TimePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.TimePicker(
-      name: String,
-      buildAction: ViewBuilder<TimePicker, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TimePicker(
+            name: String,
+            applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all TimePickers that are named the specified in this ViewGroup.
+ * If there are no TimePickers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TimePicker(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<TimePicker>,
+            applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.TimePicker(
+      crossinline styleAction: ViewStyle<TimePicker>.() -> Unit
+): KoshianStyle.StyleElement<TimePicker> {
+   return createStyleElement(styleAction)
 }

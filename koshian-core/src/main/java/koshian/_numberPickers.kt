@@ -30,11 +30,11 @@ object NumberPickerConstructor : KoshianViewConstructor<NumberPicker> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.NumberPicker(
-      buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.NumberPicker(
+      creatorAction: ViewCreator<NumberPicker, L>.() -> Unit
 ): NumberPicker {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(NumberPickerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(NumberPickerConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.NumberPicker(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.NumberPicker(
+inline fun <L> CreatorParent<L>.NumberPicker(
       name: String,
-      buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<NumberPicker, L>.() -> Unit
 ): NumberPicker {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, NumberPickerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, NumberPickerConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.NumberPicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.NumberPicker(
-      buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(NumberPickerConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.NumberPicker(
+            applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
+      )
+{
+   apply(NumberPickerConstructor, applierAction)
+}
+
+/**
+ * If the next View is a NumberPicker, applies Koshian to it.
+ *
+ * Otherwise, creates a new NumberPicker and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.NumberPicker(
+            styleElement: KoshianStyle.StyleElement<NumberPicker>,
+            applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
+      )
+{
+   apply(NumberPickerConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.NumberPicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.NumberPicker(
-      name: String,
-      buildAction: ViewBuilder<NumberPicker, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.NumberPicker(
+            name: String,
+            applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all NumberPickers that are named the specified in this ViewGroup.
+ * If there are no NumberPickers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.NumberPicker(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<NumberPicker>,
+            applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.NumberPicker(
+      crossinline styleAction: ViewStyle<NumberPicker>.() -> Unit
+): KoshianStyle.StyleElement<NumberPicker> {
+   return createStyleElement(styleAction)
 }

@@ -173,11 +173,11 @@ public final class koshiangen {
             " */\n" +
             "@ExperimentalContracts\n" +
             "@Suppress(\"FunctionName\")\n" +
-            "inline fun <L> KoshianParent<L, KoshianMode.Creator>."+view+"(\n" +
-            "      buildAction: ViewBuilder<"+view+", L, KoshianMode.Creator>.() -> Unit\n" +
+            "inline fun <L> CreatorParent<L>."+view+"(\n" +
+            "      creatorAction: ViewCreator<"+view+", L>.() -> Unit\n" +
             "): "+view+" {\n" +
-            "   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }\n" +
-            "   return create("+viewConstructor+", buildAction)\n" +
+            "   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }\n" +
+            "   return create("+viewConstructor+", creatorAction)\n" +
             "}\n" +
             "\n" +
             "/**\n" +
@@ -187,12 +187,12 @@ public final class koshiangen {
             " */\n" +
             "@ExperimentalContracts\n" +
             "@Suppress(\"FunctionName\")\n" +
-            "inline fun <L> KoshianParent<L, KoshianMode.Creator>."+view+"(\n" +
+            "inline fun <L> CreatorParent<L>."+view+"(\n" +
             "      name: String,\n" +
-            "      buildAction: ViewBuilder<"+view+", L, KoshianMode.Creator>.() -> Unit\n" +
+            "      creatorAction: ViewCreator<"+view+", L>.() -> Unit\n" +
             "): "+view+" {\n" +
-            "   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }\n" +
-            "   return create(name, "+viewConstructor+", buildAction)\n" +
+            "   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }\n" +
+            "   return create(name, "+viewConstructor+", creatorAction)\n" +
             "}\n" +
             "\n" +
             "/**\n" +
@@ -203,10 +203,29 @@ public final class koshiangen {
             " * @see applyKoshian\n" +
             " */\n" +
             "@Suppress(\"FunctionName\")\n" +
-            "inline fun <L> KoshianParent<L, KoshianMode.Applier>."+view+"(\n" +
-            "      buildAction: ViewBuilder<"+view+", L, KoshianMode.Applier>.() -> Unit\n" +
-            ") {\n" +
-            "   apply("+viewConstructor+", buildAction)\n" +
+            "inline fun <L, S : KoshianStyle>\n" +
+            "      ApplierParent<L, S>."+view+"(\n" +
+            "            applierAction: ViewApplier<"+view+", L, S>.() -> Unit\n" +
+            "      )\n" +
+            "{\n" +
+            "   apply("+viewConstructor+", applierAction)\n" +
+            "}\n" +
+            "\n" +
+            "/**\n" +
+            " * If the next View is a "+view+", applies Koshian to it.\n" +
+            " *\n" +
+            " * Otherwise, creates a new "+view+" and inserts it to the current position.\n" +
+            " *\n" +
+            " * @see applyKoshian\n" +
+            " */\n" +
+            "@Suppress(\"FunctionName\")\n" +
+            "inline fun <L, S : KoshianStyle>\n" +
+            "      ApplierParent<L, S>."+view+"(\n" +
+            "            styleElement: KoshianStyle.StyleElement<"+view+">,\n" +
+            "            applierAction: ViewApplier<"+view+", L, S>.() -> Unit\n" +
+            "      )\n" +
+            "{\n" +
+            "   apply("+viewConstructor+", styleElement, applierAction)\n" +
             "}\n" +
             "\n" +
             "/**\n" +
@@ -216,12 +235,43 @@ public final class koshiangen {
             " * @see applyKoshian\n" +
             " */\n" +
             "@Suppress(\"FunctionName\")\n" +
-            "inline fun <L> KoshianParent<L, KoshianMode.Applier>."+view+"(\n" +
-            "      name: String,\n" +
-            "      buildAction: ViewBuilder<"+view+", L, KoshianMode.Applier>.() -> Unit\n" +
-            ") {\n" +
-            "   apply(name, buildAction)\n" +
-            "}\n";
+            "inline fun <L, S : KoshianStyle>\n" +
+            "      ApplierParent<L, S>."+view+"(\n" +
+            "            name: String,\n" +
+            "            applierAction: ViewApplier<"+view+", L, S>.() -> Unit\n" +
+            "      )\n" +
+            "{\n" +
+            "   apply(name, applierAction)\n" +
+            "}\n" +
+            "\n" +
+            "/**\n" +
+            " * Applies Koshian to all "+view+"s that are named the specified in this ViewGroup.\n" +
+            " * If there are no "+view+"s named the specified, do nothing.\n" +
+            " *\n" +
+            " * @see applyKoshian\n" +
+            " */\n" +
+            "@Suppress(\"FunctionName\")\n" +
+            "inline fun <L, S : KoshianStyle>\n" +
+            "      ApplierParent<L, S>."+view+"(\n" +
+            "            name: String,\n" +
+            "            styleElement: KoshianStyle.StyleElement<"+view+">,\n" +
+            "            applierAction: ViewApplier<"+view+", L, S>.() -> Unit\n" +
+            "      )\n" +
+            "{\n" +
+            "   apply(name, styleElement, applierAction)\n" +
+            "}\n" +
+            "\n" +
+            "/**\n" +
+            " * registers a style applier function into this [KoshianStyle].\n" +
+            " *\n" +
+            " * Styles can be applied via [applyKoshian]\n" +
+            " */\n" +
+            "@Suppress(\"FunctionName\")\n" +
+            "inline fun KoshianStyle."+view+"(\n" +
+            "      crossinline styleAction: ViewStyle<"+view+">.() -> Unit\n" +
+            "): KoshianStyle.StyleElement<"+view+"> {\n" +
+            "   return createStyleElement(styleAction)\n" +
+            "}";
    }
 
    private static String generateKoshianViewGroupBuilderFunction(final String view) {
@@ -239,10 +289,10 @@ public final class koshiangen {
          " */\n" +
          "@ExperimentalContracts\n" +
          "inline fun <R> "+view+".addView(\n" +
-         "      buildAction: ViewGroupBuilder<"+view+", Nothing, "+layoutParams+", KoshianMode.Creator>.() -> R\n" +
+         "      creatorAction: ViewGroupCreator<"+view+", Nothing, "+layoutParams+">.() -> R\n" +
          "): R {\n" +
-         "   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }\n" +
-         "   return addView("+viewConstructor+", buildAction)\n" +
+         "   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }\n" +
+         "   return addView("+viewConstructor+", creatorAction)\n" +
          "}\n" +
          "\n" +
          "/**\n" +
@@ -250,11 +300,11 @@ public final class koshiangen {
          " */\n" +
          "@ExperimentalContracts\n" +
          "@Suppress(\"FunctionName\")\n" +
-         "inline fun <L> KoshianParent<L, KoshianMode.Creator>."+view+"(\n" +
-         "      buildAction: ViewGroupBuilder<"+view+", L, "+layoutParams+", KoshianMode.Creator>.() -> Unit\n" +
+         "inline fun <L> CreatorParent<L>."+view+"(\n" +
+         "      creatorAction: ViewGroupCreator<"+view+", L, "+layoutParams+">.() -> Unit\n" +
          "): "+view+" {\n" +
-         "   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }\n" +
-         "   return create("+viewConstructor+", buildAction)\n" +
+         "   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }\n" +
+         "   return create("+viewConstructor+", creatorAction)\n" +
          "}\n" +
          "\n" +
          "/**\n" +
@@ -264,12 +314,12 @@ public final class koshiangen {
          " */\n" +
          "@ExperimentalContracts\n" +
          "@Suppress(\"FunctionName\")\n" +
-         "inline fun <L> KoshianParent<L, KoshianMode.Creator>."+view+"(\n" +
+         "inline fun <L> CreatorParent<L>."+view+"(\n" +
          "      name: String,\n" +
-         "      buildAction: ViewGroupBuilder<"+view+", L, "+layoutParams+", KoshianMode.Creator>.() -> Unit\n" +
+         "      creatorAction: ViewGroupCreator<"+view+", L, "+layoutParams+">.() -> Unit\n" +
          "): "+view+" {\n" +
-         "   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }\n" +
-         "   return create(name, "+viewConstructor+", buildAction)\n" +
+         "   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }\n" +
+         "   return create(name, "+viewConstructor+", creatorAction)\n" +
          "}\n" +
          "\n" +
          "/**\n" +
@@ -329,9 +379,72 @@ public final class koshiangen {
          " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)\n" +
          " */\n" +
          "inline fun "+view+".applyKoshian(\n" +
-         "      applyAction: ViewGroupBuilder<"+view+", ViewGroup.LayoutParams, "+layoutParams+", KoshianMode.Applier>.() -> Unit\n" +
+         "      applierAction: ViewGroupApplier<"+view+", ViewGroup.LayoutParams, "+layoutParams+", Nothing>.() -> Unit\n" +
          ") {\n" +
-         "   applyKoshian("+viewConstructor+", applyAction)\n" +
+         "   applyKoshian("+viewConstructor+", applierAction)\n" +
+         "}\n" +
+         "\n" +
+         "/**\n" +
+         " * finds Views that are already added in this "+view+",\n" +
+         " * and applies Koshian DSL to them.\n" +
+         " *\n" +
+         " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)\n" +
+         " *\n" +
+         " * The following 2 snippets are equivalent.\n" +
+         " *\n" +
+         " * 1.\n" +
+         " *     ```kotlin\n" +
+         " *     val contentView = koshian(context) {\n" +
+         " *        LinearLayout {\n" +
+         " *           TextView {\n" +
+         " *              view.text = \"hello\"\n" +
+         " *              view.textColor = 0xffffff opacity 0.8\n" +
+         " *           }\n" +
+         " *        }\n" +
+         " *     }\n" +
+         " *     ```\n" +
+         " *\n" +
+         " * 2.\n" +
+         " *     ```kotlin\n" +
+         " *     val contentView = koshian(context) {\n" +
+         " *        LinearLayout {\n" +
+         " *           TextView {\n" +
+         " *              view.text = \"hello\"\n" +
+         " *           }\n" +
+         " *        }\n" +
+         " *     }\n" +
+         " *\n" +
+         " *     contentView.applyKoshian {\n" +
+         " *        TextView {\n" +
+         " *           view.textColor = 0xffffff opacity 0.8\n" +
+         " *        }\n" +
+         " *     }\n" +
+         " *     ```\n" +
+         " *\n" +
+         " * When mismatched View is specified, Koshian creates a new View and inserts it.\n" +
+         " *\n" +
+         " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)\n" +
+         " *\n" +
+         " * Also, naming View is a good way.\n" +
+         " *\n" +
+         " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)\n" +
+         " *\n" +
+         " * Koshian specifying a name doesn't affect the cursor.\n" +
+         " * Koshian not specifying a name ignores named Views.\n" +
+         " * Named Views and non-named Views are simply in other worlds.\n" +
+         " *\n" +
+         " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)\n" +
+         " *\n" +
+         " * For readability, it is recommended to put named Views\n" +
+         " * as synchronized with the cursor.\n" +
+         " *\n" +
+         " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)\n" +
+         " */\n" +
+         "inline fun <S : KoshianStyle> "+view+".applyKoshian(\n" +
+         "      style: S,\n" +
+         "      applierAction: ViewGroupApplier<"+view+", ViewGroup.LayoutParams, "+layoutParams+", S>.() -> Unit\n" +
+         ") {\n" +
+         "   applyKoshian(style, "+viewConstructor+", applierAction)\n" +
          "}\n" +
          "\n" +
          "/**\n" +
@@ -342,10 +455,29 @@ public final class koshiangen {
          " * @see applyKoshian\n" +
          " */\n" +
          "@Suppress(\"FunctionName\")\n" +
-         "inline fun <L> KoshianParent<L, KoshianMode.Applier>."+view+"(\n" +
-         "      buildAction: ViewGroupBuilder<"+view+", L, "+layoutParams+", KoshianMode.Applier>.() -> Unit\n" +
-         ") {\n" +
-         "   apply("+viewConstructor+", buildAction)\n" +
+         "inline fun <L, S : KoshianStyle>\n" +
+         "      ApplierParent<L, S>."+view+"(\n" +
+         "            applierAction: ViewGroupApplier<"+view+", L, "+layoutParams+", S>.() -> Unit\n" +
+         "      )\n" +
+         "{\n" +
+         "   apply("+viewConstructor+", applierAction)\n" +
+         "}\n" +
+         "\n" +
+         "/**\n" +
+         " * If the next View is a "+view+", applies Koshian to it.\n" +
+         " *\n" +
+         " * Otherwise, creates a new "+view+" and inserts it to the current position.\n" +
+         " *\n" +
+         " * @see applyKoshian\n" +
+         " */\n" +
+         "@Suppress(\"FunctionName\")\n" +
+         "inline fun <L, S : KoshianStyle>\n" +
+         "      ApplierParent<L, S>."+view+"(\n" +
+         "            styleElement: KoshianStyle.StyleElement<"+view+">,\n" +
+         "            applierAction: ViewGroupApplier<"+view+", L, "+layoutParams+", S>.() -> Unit\n" +
+         "      )\n" +
+         "{\n" +
+         "   apply("+viewConstructor+", styleElement, applierAction)\n" +
          "}\n" +
          "\n" +
          "/**\n" +
@@ -355,12 +487,43 @@ public final class koshiangen {
          " * @see applyKoshian\n" +
          " */\n" +
          "@Suppress(\"FunctionName\")\n" +
-         "inline fun <L> KoshianParent<L, KoshianMode.Applier>."+view+"(\n" +
-         "      name: String,\n" +
-         "      buildAction: ViewGroupBuilder<"+view+", L, "+layoutParams+", KoshianMode.Applier>.() -> Unit\n" +
-         ") {\n" +
-         "   apply(name, "+viewConstructor+", buildAction)\n" +
-         "}\n";
+         "inline fun <L, S : KoshianStyle>\n" +
+         "      ApplierParent<L, S>."+view+"(\n" +
+         "            name: String,\n" +
+         "            applierAction: ViewGroupApplier<"+view+", L, "+layoutParams+", S>.() -> Unit\n" +
+         "      )\n" +
+         "{\n" +
+         "   apply(name, "+viewConstructor+", applierAction)\n" +
+         "}\n" +
+         "\n" +
+         "/**\n" +
+         " * Applies Koshian to all "+view+"s that are named the specified in this ViewGroup.\n" +
+         " * If there are no "+view+"s named the specified, do nothing.\n" +
+         " *\n" +
+         " * @see applyKoshian\n" +
+         " */\n" +
+         "@Suppress(\"FunctionName\")\n" +
+         "inline fun <L, S : KoshianStyle>\n" +
+         "      ApplierParent<L, S>."+view+"(\n" +
+         "            name: String,\n" +
+         "            styleElement: KoshianStyle.StyleElement<"+view+">,\n" +
+         "            applierAction: ViewGroupApplier<"+view+", L, "+layoutParams+", S>.() -> Unit\n" +
+         "      )\n" +
+         "{\n" +
+         "   apply(name, "+viewConstructor+", styleElement, applierAction)\n" +
+         "}\n" +
+         "\n" +
+         "/**\n" +
+         " * registers a style applier function into this [KoshianStyle].\n" +
+         " *\n" +
+         " * Styles can be applied via [applyKoshian]\n" +
+         " */\n" +
+         "@Suppress(\"FunctionName\")\n" +
+         "inline fun KoshianStyle."+view+"(\n" +
+         "      crossinline styleAction: ViewStyle<"+view+">.() -> Unit\n" +
+         "): KoshianStyle.StyleElement<"+view+"> {\n" +
+         "   return createStyleElement(styleAction)\n" +
+         "}";
    }
 }
 

@@ -30,11 +30,11 @@ object WebViewConstructor : KoshianViewConstructor<WebView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.WebView(
-      buildAction: ViewBuilder<WebView, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.WebView(
+      creatorAction: ViewCreator<WebView, L>.() -> Unit
 ): WebView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(WebViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(WebViewConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.WebView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.WebView(
+inline fun <L> CreatorParent<L>.WebView(
       name: String,
-      buildAction: ViewBuilder<WebView, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<WebView, L>.() -> Unit
 ): WebView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, WebViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, WebViewConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.WebView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.WebView(
-      buildAction: ViewBuilder<WebView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(WebViewConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.WebView(
+            applierAction: ViewApplier<WebView, L, S>.() -> Unit
+      )
+{
+   apply(WebViewConstructor, applierAction)
+}
+
+/**
+ * If the next View is a WebView, applies Koshian to it.
+ *
+ * Otherwise, creates a new WebView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.WebView(
+            styleElement: KoshianStyle.StyleElement<WebView>,
+            applierAction: ViewApplier<WebView, L, S>.() -> Unit
+      )
+{
+   apply(WebViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.WebView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.WebView(
-      name: String,
-      buildAction: ViewBuilder<WebView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.WebView(
+            name: String,
+            applierAction: ViewApplier<WebView, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all WebViews that are named the specified in this ViewGroup.
+ * If there are no WebViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.WebView(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<WebView>,
+            applierAction: ViewApplier<WebView, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.WebView(
+      crossinline styleAction: ViewStyle<WebView>.() -> Unit
+): KoshianStyle.StyleElement<WebView> {
+   return createStyleElement(styleAction)
 }

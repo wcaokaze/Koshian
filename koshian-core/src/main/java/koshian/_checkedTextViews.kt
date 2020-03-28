@@ -30,11 +30,11 @@ object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckedTextView(
-      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.CheckedTextView(
+      creatorAction: ViewCreator<CheckedTextView, L>.() -> Unit
 ): CheckedTextView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(CheckedTextViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(CheckedTextViewConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckedTextView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckedTextView(
+inline fun <L> CreatorParent<L>.CheckedTextView(
       name: String,
-      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<CheckedTextView, L>.() -> Unit
 ): CheckedTextView {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, CheckedTextViewConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, CheckedTextViewConstructor, creatorAction)
 }
 
 /**
@@ -60,10 +60,29 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.CheckedTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
-      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(CheckedTextViewConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CheckedTextView(
+            applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
+      )
+{
+   apply(CheckedTextViewConstructor, applierAction)
+}
+
+/**
+ * If the next View is a CheckedTextView, applies Koshian to it.
+ *
+ * Otherwise, creates a new CheckedTextView and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CheckedTextView(
+            styleElement: KoshianStyle.StyleElement<CheckedTextView>,
+            applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
+      )
+{
+   apply(CheckedTextViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -73,9 +92,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.CheckedTextView(
-      name: String,
-      buildAction: ViewBuilder<CheckedTextView, L, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CheckedTextView(
+            name: String,
+            applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
+      )
+{
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all CheckedTextViews that are named the specified in this ViewGroup.
+ * If there are no CheckedTextViews named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.CheckedTextView(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<CheckedTextView>,
+            applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.CheckedTextView(
+      crossinline styleAction: ViewStyle<CheckedTextView>.() -> Unit
+): KoshianStyle.StyleElement<CheckedTextView> {
+   return createStyleElement(styleAction)
 }

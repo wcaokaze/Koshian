@@ -32,10 +32,10 @@ object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLa
  */
 @ExperimentalContracts
 inline fun <R> FrameLayout.addView(
-      buildAction: ViewGroupBuilder<FrameLayout, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<FrameLayout, Nothing, FrameLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(FrameLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(FrameLayoutConstructor, creatorAction)
 }
 
 /**
@@ -43,11 +43,11 @@ inline fun <R> FrameLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.FrameLayout(
+      creatorAction: ViewGroupCreator<FrameLayout, L, FrameLayout.LayoutParams>.() -> Unit
 ): FrameLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(FrameLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(FrameLayoutConstructor, creatorAction)
 }
 
 /**
@@ -57,12 +57,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
+inline fun <L> CreatorParent<L>.FrameLayout(
       name: String,
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<FrameLayout, L, FrameLayout.LayoutParams>.() -> Unit
 ): FrameLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, FrameLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, FrameLayoutConstructor, creatorAction)
 }
 
 /**
@@ -122,9 +122,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun FrameLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
+      applierAction: ViewGroupApplier<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(FrameLayoutConstructor, applyAction)
+   applyKoshian(FrameLayoutConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this FrameLayout,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, FrameLayoutConstructor, applierAction)
 }
 
 /**
@@ -135,10 +198,29 @@ inline fun FrameLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(FrameLayoutConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.FrameLayout(
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(FrameLayoutConstructor, applierAction)
+}
+
+/**
+ * If the next View is a FrameLayout, applies Koshian to it.
+ *
+ * Otherwise, creates a new FrameLayout and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.FrameLayout(
+            styleElement: KoshianStyle.StyleElement<FrameLayout>,
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(FrameLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -148,9 +230,40 @@ inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Applier>.FrameLayout(
-      name: String,
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier>.() -> Unit
-) {
-   apply(name, FrameLayoutConstructor, buildAction)
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.FrameLayout(
+            name: String,
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, FrameLayoutConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all FrameLayouts that are named the specified in this ViewGroup.
+ * If there are no FrameLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.FrameLayout(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<FrameLayout>,
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, FrameLayoutConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.FrameLayout(
+      crossinline styleAction: ViewStyle<FrameLayout>.() -> Unit
+): KoshianStyle.StyleElement<FrameLayout> {
+   return createStyleElement(styleAction)
 }
