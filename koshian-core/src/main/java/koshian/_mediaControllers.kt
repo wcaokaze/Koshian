@@ -30,11 +30,11 @@ object MediaControllerConstructor : KoshianViewConstructor<MediaController> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.MediaController(
-      buildAction: ViewBuilder<MediaController, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.MediaController(
+      creatorAction: ViewCreator<MediaController, L>.() -> Unit
 ): MediaController {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(MediaControllerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(MediaControllerConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.MediaController(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.MediaController(
+inline fun <L> CreatorParent<L>.MediaController(
       name: String,
-      buildAction: ViewBuilder<MediaController, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<MediaController, L>.() -> Unit
 ): MediaController {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, MediaControllerConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, MediaControllerConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.MediaController(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.MediaController(
-            buildAction: ViewBuilder<MediaController, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.MediaController(
+            applierAction: ViewApplier<MediaController, L, S>.() -> Unit
       )
 {
-   apply(MediaControllerConstructor, buildAction)
+   apply(MediaControllerConstructor, applierAction)
+}
+
+/**
+ * If the next View is a MediaController, applies Koshian to it.
+ *
+ * Otherwise, creates a new MediaController and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.MediaController(
+            styleElement: KoshianStyle.StyleElement<MediaController>,
+            applierAction: ViewApplier<MediaController, L, S>.() -> Unit
+      )
+{
+   apply(MediaControllerConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.MediaController(
+      ApplierParent<L, S>.MediaController(
             name: String,
-            buildAction: ViewBuilder<MediaController, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<MediaController, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all MediaControllers that are named the specified in this ViewGroup.
+ * If there are no MediaControllers named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.MediaController(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<MediaController>,
+            applierAction: ViewApplier<MediaController, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.MediaController(
+      crossinline styleAction: ViewStyle<MediaController>.() -> Unit
+): KoshianStyle.StyleElement<MediaController> {
+   return createStyleElement(styleAction)
 }

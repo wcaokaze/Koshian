@@ -32,10 +32,10 @@ object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLa
  */
 @ExperimentalContracts
 inline fun <R> FrameLayout.addView(
-      buildAction: ViewGroupBuilder<FrameLayout, Nothing, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<FrameLayout, Nothing, FrameLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(FrameLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(FrameLayoutConstructor, creatorAction)
 }
 
 /**
@@ -43,11 +43,11 @@ inline fun <R> FrameLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.FrameLayout(
+      creatorAction: ViewGroupCreator<FrameLayout, L, FrameLayout.LayoutParams>.() -> Unit
 ): FrameLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(FrameLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(FrameLayoutConstructor, creatorAction)
 }
 
 /**
@@ -57,12 +57,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
+inline fun <L> CreatorParent<L>.FrameLayout(
       name: String,
-      buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<FrameLayout, L, FrameLayout.LayoutParams>.() -> Unit
 ): FrameLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, FrameLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, FrameLayoutConstructor, creatorAction)
 }
 
 /**
@@ -122,9 +122,9 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.FrameLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun FrameLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
+      applierAction: ViewGroupApplier<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(FrameLayoutConstructor, applyAction)
+   applyKoshian(FrameLayoutConstructor, applierAction)
 }
 
 /**
@@ -185,9 +185,9 @@ inline fun FrameLayout.applyKoshian(
  */
 inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
       style: S,
-      applyAction: ViewGroupBuilder<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      applierAction: ViewGroupApplier<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit
 ) {
-   applyKoshian(style, FrameLayoutConstructor, applyAction)
+   applyKoshian(style, FrameLayoutConstructor, applierAction)
 }
 
 /**
@@ -199,11 +199,11 @@ inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
-            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.FrameLayout(
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(FrameLayoutConstructor, buildAction)
+   apply(FrameLayoutConstructor, applierAction)
 }
 
 /**
@@ -215,12 +215,12 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
+      ApplierParent<L, S>.FrameLayout(
             styleElement: KoshianStyle.StyleElement<FrameLayout>,
-            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(FrameLayoutConstructor, styleElement, buildAction)
+   apply(FrameLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -231,12 +231,12 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
+      ApplierParent<L, S>.FrameLayout(
             name: String,
-            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(name, FrameLayoutConstructor, buildAction)
+   apply(name, FrameLayoutConstructor, applierAction)
 }
 
 /**
@@ -247,13 +247,13 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.FrameLayout(
+      ApplierParent<L, S>.FrameLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<FrameLayout>,
-            buildAction: ViewGroupBuilder<FrameLayout, L, FrameLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(name, FrameLayoutConstructor, styleElement, buildAction)
+   apply(name, FrameLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -263,7 +263,7 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun KoshianStyle.FrameLayout(
-      crossinline styleAction: ViewBuilder<FrameLayout, Nothing, KoshianMode.Style>.() -> Unit
+      crossinline styleAction: ViewStyle<FrameLayout>.() -> Unit
 ): KoshianStyle.StyleElement<FrameLayout> {
    return createStyleElement(styleAction)
 }

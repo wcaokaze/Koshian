@@ -32,10 +32,10 @@ object TableLayoutConstructor : KoshianViewGroupConstructor<TableLayout, TableLa
  */
 @ExperimentalContracts
 inline fun <R> TableLayout.addView(
-      buildAction: ViewGroupBuilder<TableLayout, Nothing, TableLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<TableLayout, Nothing, TableLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(TableLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(TableLayoutConstructor, creatorAction)
 }
 
 /**
@@ -43,11 +43,11 @@ inline fun <R> TableLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
-      buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.TableLayout(
+      creatorAction: ViewGroupCreator<TableLayout, L, TableLayout.LayoutParams>.() -> Unit
 ): TableLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(TableLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(TableLayoutConstructor, creatorAction)
 }
 
 /**
@@ -57,12 +57,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
+inline fun <L> CreatorParent<L>.TableLayout(
       name: String,
-      buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<TableLayout, L, TableLayout.LayoutParams>.() -> Unit
 ): TableLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, TableLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, TableLayoutConstructor, creatorAction)
 }
 
 /**
@@ -122,9 +122,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.TableLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun TableLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<TableLayout, ViewGroup.LayoutParams, TableLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
+      applierAction: ViewGroupApplier<TableLayout, ViewGroup.LayoutParams, TableLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(TableLayoutConstructor, applyAction)
+   applyKoshian(TableLayoutConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this TableLayout,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> TableLayout.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<TableLayout, ViewGroup.LayoutParams, TableLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, TableLayoutConstructor, applierAction)
 }
 
 /**
@@ -136,11 +199,28 @@ inline fun TableLayout.applyKoshian(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.TableLayout(
-            buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.TableLayout(
+            applierAction: ViewGroupApplier<TableLayout, L, TableLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(TableLayoutConstructor, buildAction)
+   apply(TableLayoutConstructor, applierAction)
+}
+
+/**
+ * If the next View is a TableLayout, applies Koshian to it.
+ *
+ * Otherwise, creates a new TableLayout and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TableLayout(
+            styleElement: KoshianStyle.StyleElement<TableLayout>,
+            applierAction: ViewGroupApplier<TableLayout, L, TableLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(TableLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -151,10 +231,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.TableLayout(
+      ApplierParent<L, S>.TableLayout(
             name: String,
-            buildAction: ViewGroupBuilder<TableLayout, L, TableLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewGroupApplier<TableLayout, L, TableLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(name, TableLayoutConstructor, buildAction)
+   apply(name, TableLayoutConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all TableLayouts that are named the specified in this ViewGroup.
+ * If there are no TableLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.TableLayout(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<TableLayout>,
+            applierAction: ViewGroupApplier<TableLayout, L, TableLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, TableLayoutConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.TableLayout(
+      crossinline styleAction: ViewStyle<TableLayout>.() -> Unit
+): KoshianStyle.StyleElement<TableLayout> {
+   return createStyleElement(styleAction)
 }

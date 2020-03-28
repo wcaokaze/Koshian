@@ -30,11 +30,11 @@ object SeekBarConstructor : KoshianViewConstructor<SeekBar> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.SeekBar(
-      buildAction: ViewBuilder<SeekBar, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.SeekBar(
+      creatorAction: ViewCreator<SeekBar, L>.() -> Unit
 ): SeekBar {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(SeekBarConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(SeekBarConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.SeekBar(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.SeekBar(
+inline fun <L> CreatorParent<L>.SeekBar(
       name: String,
-      buildAction: ViewBuilder<SeekBar, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<SeekBar, L>.() -> Unit
 ): SeekBar {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, SeekBarConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, SeekBarConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.SeekBar(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.SeekBar(
-            buildAction: ViewBuilder<SeekBar, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.SeekBar(
+            applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
       )
 {
-   apply(SeekBarConstructor, buildAction)
+   apply(SeekBarConstructor, applierAction)
+}
+
+/**
+ * If the next View is a SeekBar, applies Koshian to it.
+ *
+ * Otherwise, creates a new SeekBar and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.SeekBar(
+            styleElement: KoshianStyle.StyleElement<SeekBar>,
+            applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
+      )
+{
+   apply(SeekBarConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.SeekBar(
+      ApplierParent<L, S>.SeekBar(
             name: String,
-            buildAction: ViewBuilder<SeekBar, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all SeekBars that are named the specified in this ViewGroup.
+ * If there are no SeekBars named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.SeekBar(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<SeekBar>,
+            applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.SeekBar(
+      crossinline styleAction: ViewStyle<SeekBar>.() -> Unit
+): KoshianStyle.StyleElement<SeekBar> {
+   return createStyleElement(styleAction)
 }

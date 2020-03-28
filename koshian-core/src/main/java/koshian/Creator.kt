@@ -18,15 +18,15 @@ package koshian
 
 import android.content.*
 import android.view.*
-import com.wcaokaze.koshian.*
+
 import kotlin.contracts.*
 
 @ExperimentalContracts
 inline fun <R> koshian(
       context: Context,
-      koshianBuilder: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>.() -> R
 ): R {
-   contract { callsInPlace(koshianBuilder, InvocationKind.EXACTLY_ONCE) }
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
@@ -41,7 +41,7 @@ inline fun <R> koshian(
 
    try {
       val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(KoshianRoot.INSTANCE)
-      return koshian.koshianBuilder()
+      return koshian.creatorAction()
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
@@ -54,12 +54,12 @@ inline fun <R> koshian(
 inline fun <P, L, R>
       P.addView(
             parentConstructor: KoshianViewGroupConstructor<P, L>,
-            buildAction: Koshian<P, Nothing, L, KoshianMode.Creator>.() -> R
+            creatorAction: Koshian<P, Nothing, L, KoshianMode.Creator>.() -> R
       ): R
       where P : ViewGroup,
             L : ViewGroup.LayoutParams
 {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
    val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
@@ -72,7 +72,7 @@ inline fun <P, L, R>
 
    try {
       val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this)
-      return koshian.buildAction()
+      return koshian.creatorAction()
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
@@ -81,100 +81,76 @@ inline fun <P, L, R>
    }
 }
 
-inline fun <V, L, C, CL>
-      Koshian<V, L, CL, KoshianMode.Creator>.create(
-            constructor: KoshianViewConstructor<C>,
-            buildAction: ViewBuilder<C, CL, KoshianMode.Creator>.() -> Unit
-      ): C
-      where V : ViewManager,
-            C : View
+inline fun <V, L>
+      Koshian<ViewManager, *, L, KoshianMode.Creator>.create(
+            constructor: KoshianViewConstructor<V>,
+            creatorAction: ViewCreator<V, L>.() -> Unit
+      ): V
+      where V : View
 {
-   val view = constructor.instantiate(`$$KoshianInternal`.context)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, constructor)
 
-   val parent = `$$koshianInternal$view` as ViewManager
-   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
-   val layoutParams = parentViewConstructor.instantiateLayoutParams()
-
-   parent.addView(view, layoutParams)
-
-   val koshian = ViewBuilder<C, CL, KoshianMode.Creator>(view)
-   koshian.buildAction()
+   val koshian = ViewCreator<V, L>(view)
+   koshian.creatorAction()
    return view
 }
 
-inline fun <V, L, C, CL>
-      Koshian<V, L, CL, KoshianMode.Creator>.create(
+inline fun <V, L>
+      Koshian<ViewManager, *, L, KoshianMode.Creator>.create(
             name: String,
-            constructor: KoshianViewConstructor<C>,
-            buildAction: ViewBuilder<C, CL, KoshianMode.Creator>.() -> Unit
-      ): C
-      where V : ViewManager,
-            C : View
+            constructor: KoshianViewConstructor<V>,
+            creatorAction: ViewCreator<V, L>.() -> Unit
+      ): V
+      where V : View
 {
-   val view = constructor.instantiate(`$$KoshianInternal`.context)
-   view.setTag(R.id.view_tag_name, name)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, name, constructor)
 
-   val parent = `$$koshianInternal$view` as ViewManager
-   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
-   val layoutParams = parentViewConstructor.instantiateLayoutParams()
-
-   parent.addView(view, layoutParams)
-
-   val koshian = ViewBuilder<C, CL, KoshianMode.Creator>(view)
-   koshian.buildAction()
+   val koshian = ViewCreator<V, L>(view)
+   koshian.creatorAction()
    return view
 }
 
-inline fun <V, L, C, CL, CCL>
-      Koshian<V, L, CL, KoshianMode.Creator>.create(
-            constructor: KoshianViewGroupConstructor<C, CCL>,
-            buildAction: ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>.() -> Unit
-      ): C
-      where V : ViewManager,
-            C : View,
-            CCL : ViewGroup.LayoutParams
+inline fun <V, L, CL>
+      Koshian<ViewManager, *, L, KoshianMode.Creator>.create(
+            constructor: KoshianViewGroupConstructor<V, CL>,
+            creatorAction: ViewGroupCreator<V, L, CL>.() -> Unit
+      ): V
+      where V : ViewGroup,
+            L : ViewGroup.LayoutParams,
+            CL : ViewGroup.LayoutParams
 {
-   val view = constructor.instantiate(`$$KoshianInternal`.context)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, constructor)
 
-   val parent = `$$koshianInternal$view` as ViewManager
-   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
-
-   val layoutParams = parentViewConstructor.instantiateLayoutParams()
-
-   parent.addView(view, layoutParams)
-
+   val oldParentViewConstructor = `$$KoshianInternal`.parentViewConstructor
    `$$KoshianInternal`.parentViewConstructor = constructor
-   val koshian = ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>(view)
-   koshian.buildAction()
-   `$$KoshianInternal`.parentViewConstructor = parentViewConstructor
+
+   val koshian = ViewGroupCreator<V, L, CL>(view)
+   koshian.creatorAction()
+
+   `$$KoshianInternal`.parentViewConstructor = oldParentViewConstructor
 
    return view
 }
 
-inline fun <V, L, C, CL, CCL>
-      Koshian<V, L, CL, KoshianMode.Creator>.create(
+inline fun <V, L, CL>
+      Koshian<ViewManager, L, CL, KoshianMode.Creator>.create(
             name: String,
-            constructor: KoshianViewGroupConstructor<C, CCL>,
-            buildAction: ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>.() -> Unit
-      ): C
-      where V : ViewManager,
-            C : View,
-            CCL : ViewGroup.LayoutParams
+            constructor: KoshianViewGroupConstructor<V, CL>,
+            creatorAction: ViewGroupCreator<V, L, CL>.() -> Unit
+      ): V
+      where V : View,
+            L : ViewGroup.LayoutParams,
+            CL : ViewGroup.LayoutParams
 {
-   val view = constructor.instantiate(`$$KoshianInternal`.context)
-   view.setTag(R.id.view_tag_name, name)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, name, constructor)
 
-   val parent = `$$koshianInternal$view` as ViewManager
-   val parentViewConstructor = `$$KoshianInternal`.parentViewConstructor
-
-   val layoutParams = parentViewConstructor.instantiateLayoutParams()
-
-   parent.addView(view, layoutParams)
-
+   val oldParentViewConstructor = `$$KoshianInternal`.parentViewConstructor
    `$$KoshianInternal`.parentViewConstructor = constructor
-   val koshian = ViewGroupBuilder<C, CL, CCL, KoshianMode.Creator>(view)
-   koshian.buildAction()
-   `$$KoshianInternal`.parentViewConstructor = parentViewConstructor
+
+   val koshian = ViewGroupCreator<V, L, CL>(view)
+   koshian.creatorAction()
+
+   `$$KoshianInternal`.parentViewConstructor = oldParentViewConstructor
 
    return view
 }

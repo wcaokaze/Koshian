@@ -30,11 +30,11 @@ object ProgressBarConstructor : KoshianViewConstructor<ProgressBar> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ProgressBar(
-      buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.ProgressBar(
+      creatorAction: ViewCreator<ProgressBar, L>.() -> Unit
 ): ProgressBar {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(ProgressBarConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(ProgressBarConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ProgressBar(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.ProgressBar(
+inline fun <L> CreatorParent<L>.ProgressBar(
       name: String,
-      buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<ProgressBar, L>.() -> Unit
 ): ProgressBar {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, ProgressBarConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, ProgressBarConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.ProgressBar(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.ProgressBar(
-            buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.ProgressBar(
+            applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
       )
 {
-   apply(ProgressBarConstructor, buildAction)
+   apply(ProgressBarConstructor, applierAction)
+}
+
+/**
+ * If the next View is a ProgressBar, applies Koshian to it.
+ *
+ * Otherwise, creates a new ProgressBar and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ProgressBar(
+            styleElement: KoshianStyle.StyleElement<ProgressBar>,
+            applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
+      )
+{
+   apply(ProgressBarConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.ProgressBar(
+      ApplierParent<L, S>.ProgressBar(
             name: String,
-            buildAction: ViewBuilder<ProgressBar, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all ProgressBars that are named the specified in this ViewGroup.
+ * If there are no ProgressBars named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.ProgressBar(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<ProgressBar>,
+            applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.ProgressBar(
+      crossinline styleAction: ViewStyle<ProgressBar>.() -> Unit
+): KoshianStyle.StyleElement<ProgressBar> {
+   return createStyleElement(styleAction)
 }

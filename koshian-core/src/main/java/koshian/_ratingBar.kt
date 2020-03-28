@@ -30,11 +30,11 @@ object RatingBarConstructor : KoshianViewConstructor<RatingBar> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.RatingBar(
-      buildAction: ViewBuilder<RatingBar, L, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.RatingBar(
+      creatorAction: ViewCreator<RatingBar, L>.() -> Unit
 ): RatingBar {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(RatingBarConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(RatingBarConstructor, creatorAction)
 }
 
 /**
@@ -44,12 +44,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RatingBar(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.RatingBar(
+inline fun <L> CreatorParent<L>.RatingBar(
       name: String,
-      buildAction: ViewBuilder<RatingBar, L, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewCreator<RatingBar, L>.() -> Unit
 ): RatingBar {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, RatingBarConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, RatingBarConstructor, creatorAction)
 }
 
 /**
@@ -61,11 +61,28 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.RatingBar(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.RatingBar(
-            buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.RatingBar(
+            applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
       )
 {
-   apply(RatingBarConstructor, buildAction)
+   apply(RatingBarConstructor, applierAction)
+}
+
+/**
+ * If the next View is a RatingBar, applies Koshian to it.
+ *
+ * Otherwise, creates a new RatingBar and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RatingBar(
+            styleElement: KoshianStyle.StyleElement<RatingBar>,
+            applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
+      )
+{
+   apply(RatingBarConstructor, styleElement, applierAction)
 }
 
 /**
@@ -76,10 +93,39 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.RatingBar(
+      ApplierParent<L, S>.RatingBar(
             name: String,
-            buildAction: ViewBuilder<RatingBar, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
       )
 {
-   apply(name, buildAction)
+   apply(name, applierAction)
+}
+
+/**
+ * Applies Koshian to all RatingBars that are named the specified in this ViewGroup.
+ * If there are no RatingBars named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.RatingBar(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<RatingBar>,
+            applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
+      )
+{
+   apply(name, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.RatingBar(
+      crossinline styleAction: ViewStyle<RatingBar>.() -> Unit
+): KoshianStyle.StyleElement<RatingBar> {
+   return createStyleElement(styleAction)
 }

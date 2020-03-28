@@ -198,20 +198,16 @@ public final class $$ApplierInternal {
     * {@code View {} }
     */
    public static <V extends View> V findViewOrInsertNew(
-         final ViewManager parent,
+         final Object parent,
          final KoshianViewConstructor<V> constructor,
          final Class<V> viewClass
    ) {
-      V foundView;
+      final ViewGroup parentViewGroup = (ViewGroup) parent;
 
-      if (parent instanceof ViewGroup) {
-         foundView = findView((ViewGroup) parent, viewClass);
-      } else {
-         throw new IllegalStateException();
-      }
+      V foundView = findView(parentViewGroup, viewClass);
 
       if (foundView == null) {
-         foundView = insertNewView(parent, constructor);
+         foundView = insertNewView(parentViewGroup, constructor);
       }
 
       $$StyleInternal.applyCurrentStyleTo(foundView);
@@ -224,21 +220,17 @@ public final class $$ApplierInternal {
     * {@code View(style) {} }
     */
    public static <V extends View> V findViewOrInsertNewAndApplyStyle(
-         final ViewManager parent,
+         final Object parent,
          final KoshianViewConstructor<V> constructor,
          final KoshianStyle.StyleElement<V> styleElement,
          final Class<V> viewClass
    ) {
-      V foundView;
+      final ViewGroup parentViewGroup = (ViewGroup) parent;
 
-      if (parent instanceof ViewGroup) {
-         foundView = findView((ViewGroup) parent, viewClass);
-      } else {
-         throw new IllegalStateException();
-      }
+      V foundView = findView(parentViewGroup, viewClass);
 
       if (foundView == null) {
-         foundView = insertNewView(parent, constructor);
+         foundView = insertNewView(parentViewGroup, constructor);
       }
 
       $$StyleInternal.applyCurrentStyleTo(foundView);
@@ -273,15 +265,11 @@ public final class $$ApplierInternal {
     * {@code View("name") {} }
     */
    public static <V> Iterator<V>
-         findViewByName(final ViewManager parent,
+         findViewByName(final Object parent,
                         final String name,
                         final Class<V> viewClass)
    {
-      if (parent instanceof ViewGroup) {
-         return findViewByName((ViewGroup) parent, name, viewClass);
-      } else {
-         throw new IllegalStateException();
-      }
+      return new ViewNameFilterIterator<>((ViewGroup) parent, name, viewClass);
    }
 
    private static <V> V findView(final ViewGroup parent,
@@ -306,14 +294,6 @@ public final class $$ApplierInternal {
 
       $$ApplierInternal.applyingIndex = applyingIndex;
       return null;
-   }
-
-   private static <V> Iterator<V>
-         findViewByName(final ViewGroup parent,
-                        final String name,
-                        final Class<V> viewClass)
-   {
-      return new ViewNameFilterIterator<>(parent, name, viewClass);
    }
 
    private static final class ViewNameFilterIterator<V> implements Iterator<V> {

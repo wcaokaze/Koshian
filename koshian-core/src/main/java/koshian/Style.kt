@@ -43,11 +43,11 @@ abstract class KoshianStyle {
    }
 
    inline fun <reified V : View> createStyleElement(
-         crossinline styleAction: ViewBuilder<V, Nothing, KoshianMode.Style>.() -> Unit
+         crossinline styleAction: ViewStyle<V>.() -> Unit
    ): StyleElement<V> {
       val styleElement = object : StyleElement<V> {
          override fun applyStyleTo(view: V) {
-            val viewBuilder = ViewBuilder<V, Nothing, KoshianMode.Style>(view)
+            val viewBuilder = ViewStyle<V>(view)
             viewBuilder.styleAction()
          }
       }
@@ -77,7 +77,7 @@ inline val <S : KoshianStyle>
 inline fun <V, S>
       V.applyKoshian(
             style: S,
-            applyAction: ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewApplier<V, ViewGroup.LayoutParams, S>.() -> Unit
       )
       where V : View, S : KoshianStyle
 {
@@ -93,9 +93,9 @@ inline fun <V, S>
    style.initializeDefaultStyle()
 
    try {
-      val koshian = ViewBuilder<V, ViewGroup.LayoutParams, KoshianMode.Applier<S>>(this)
+      val koshian = ViewApplier<V, ViewGroup.LayoutParams, S>(this)
       `$$StyleInternal`.applyCurrentStyleRecursive(this)
-      koshian.applyAction()
+      koshian.applierAction()
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
@@ -108,7 +108,7 @@ inline fun <V, L, S>
       V.applyKoshian(
             style: S,
             constructor: KoshianViewGroupConstructor<V, L>,
-            applyAction: ViewGroupBuilder<V, ViewGroup.LayoutParams, L, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewGroupApplier<V, ViewGroup.LayoutParams, L, S>.() -> Unit
       )
       where V : View, L : ViewGroup.LayoutParams, S : KoshianStyle
 {
@@ -124,9 +124,9 @@ inline fun <V, L, S>
    style.initializeDefaultStyle()
 
    try {
-      val koshian = ViewGroupBuilder<V, ViewGroup.LayoutParams, L, KoshianMode.Applier<S>>(this)
+      val koshian = ViewGroupApplier<V, ViewGroup.LayoutParams, L, S>(this)
       `$$StyleInternal`.applyCurrentStyleRecursive(this)
-      koshian.applyAction()
+      koshian.applierAction()
    } finally {
       `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor

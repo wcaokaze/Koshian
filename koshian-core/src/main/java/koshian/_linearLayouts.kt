@@ -32,10 +32,10 @@ object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, Linea
  */
 @ExperimentalContracts
 inline fun <R> LinearLayout.addView(
-      buildAction: ViewGroupBuilder<LinearLayout, Nothing, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: ViewGroupCreator<LinearLayout, Nothing, LinearLayout.LayoutParams>.() -> R
 ): R {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return addView(LinearLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return addView(LinearLayoutConstructor, creatorAction)
 }
 
 /**
@@ -43,11 +43,11 @@ inline fun <R> LinearLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
-      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+inline fun <L> CreatorParent<L>.LinearLayout(
+      creatorAction: ViewGroupCreator<LinearLayout, L, LinearLayout.LayoutParams>.() -> Unit
 ): LinearLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(LinearLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(LinearLayoutConstructor, creatorAction)
 }
 
 /**
@@ -57,12 +57,12 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
+inline fun <L> CreatorParent<L>.LinearLayout(
       name: String,
-      buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Creator>.() -> Unit
+      creatorAction: ViewGroupCreator<LinearLayout, L, LinearLayout.LayoutParams>.() -> Unit
 ): LinearLayout {
-   contract { callsInPlace(buildAction, InvocationKind.EXACTLY_ONCE) }
-   return create(name, LinearLayoutConstructor, buildAction)
+   contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
+   return create(name, LinearLayoutConstructor, creatorAction)
 }
 
 /**
@@ -122,9 +122,72 @@ inline fun <L> KoshianParent<L, KoshianMode.Creator>.LinearLayout(
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
 inline fun LinearLayout.applyKoshian(
-      applyAction: ViewGroupBuilder<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, KoshianMode.Applier<Nothing>>.() -> Unit
+      applierAction: ViewGroupApplier<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(LinearLayoutConstructor, applyAction)
+   applyKoshian(LinearLayoutConstructor, applierAction)
+}
+
+/**
+ * finds Views that are already added in this LinearLayout,
+ * and applies Koshian DSL to them.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+ *
+ * The following 2 snippets are equivalent.
+ *
+ * 1.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *              view.textColor = 0xffffff opacity 0.8
+ *           }
+ *        }
+ *     }
+ *     ```
+ *
+ * 2.
+ *     ```kotlin
+ *     val contentView = koshian(context) {
+ *        LinearLayout {
+ *           TextView {
+ *              view.text = "hello"
+ *           }
+ *        }
+ *     }
+ *
+ *     contentView.applyKoshian {
+ *        TextView {
+ *           view.textColor = 0xffffff opacity 0.8
+ *        }
+ *     }
+ *     ```
+ *
+ * When mismatched View is specified, Koshian creates a new View and inserts it.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+ *
+ * Also, naming View is a good way.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+ *
+ * Koshian specifying a name doesn't affect the cursor.
+ * Koshian not specifying a name ignores named Views.
+ * Named Views and non-named Views are simply in other worlds.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_mixing_named_and_non_named.svg?sanitize=true)
+ *
+ * For readability, it is recommended to put named Views
+ * as synchronized with the cursor.
+ *
+ * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
+ */
+inline fun <S : KoshianStyle> LinearLayout.applyKoshian(
+      style: S,
+      applierAction: ViewGroupApplier<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, S>.() -> Unit
+) {
+   applyKoshian(style, LinearLayoutConstructor, applierAction)
 }
 
 /**
@@ -136,11 +199,28 @@ inline fun LinearLayout.applyKoshian(
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.LinearLayout(
-            buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+      ApplierParent<L, S>.LinearLayout(
+            applierAction: ViewGroupApplier<LinearLayout, L, LinearLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(LinearLayoutConstructor, buildAction)
+   apply(LinearLayoutConstructor, applierAction)
+}
+
+/**
+ * If the next View is a LinearLayout, applies Koshian to it.
+ *
+ * Otherwise, creates a new LinearLayout and inserts it to the current position.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.LinearLayout(
+            styleElement: KoshianStyle.StyleElement<LinearLayout>,
+            applierAction: ViewGroupApplier<LinearLayout, L, LinearLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(LinearLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -151,12 +231,41 @@ inline fun <L, S : KoshianStyle>
  */
 @Suppress("FunctionName")
 inline fun <L, S : KoshianStyle>
-      KoshianParent<L, KoshianMode.Applier<S>>.LinearLayout(
+      ApplierParent<L, S>.LinearLayout(
             name: String,
-            buildAction: ViewGroupBuilder<LinearLayout, L, LinearLayout.LayoutParams, KoshianMode.Applier<S>>.() -> Unit
+            applierAction: ViewGroupApplier<LinearLayout, L, LinearLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(name, LinearLayoutConstructor, buildAction)
+   apply(name, LinearLayoutConstructor, applierAction)
+}
+
+/**
+ * Applies Koshian to all LinearLayouts that are named the specified in this ViewGroup.
+ * If there are no LinearLayouts named the specified, do nothing.
+ *
+ * @see applyKoshian
+ */
+@Suppress("FunctionName")
+inline fun <L, S : KoshianStyle>
+      ApplierParent<L, S>.LinearLayout(
+            name: String,
+            styleElement: KoshianStyle.StyleElement<LinearLayout>,
+            applierAction: ViewGroupApplier<LinearLayout, L, LinearLayout.LayoutParams, S>.() -> Unit
+      )
+{
+   apply(name, LinearLayoutConstructor, styleElement, applierAction)
+}
+
+/**
+ * registers a style applier function into this [KoshianStyle].
+ *
+ * Styles can be applied via [applyKoshian]
+ */
+@Suppress("FunctionName")
+inline fun KoshianStyle.LinearLayout(
+      crossinline styleAction: ViewStyle<LinearLayout>.() -> Unit
+): KoshianStyle.StyleElement<LinearLayout> {
+   return createStyleElement(styleAction)
 }
 
 val KoshianExt<LinearLayout, *>.VERTICAL   inline get() = LinearLayout.VERTICAL
