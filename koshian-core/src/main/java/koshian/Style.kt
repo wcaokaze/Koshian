@@ -18,6 +18,51 @@ package koshian
 
 import android.view.*
 
+/**
+ * extend this class and define your styles.
+ * ```kotlin
+ * class LightStyle : KoshianStyle() {
+ *    val primaryText = TextView {
+ *       view.textColor = 0x2196f3.opaque
+ *       view.typeface = BOLD
+ *    }
+ * }
+ * ```
+ * We can use styles in [applyKoshian].
+ * ```kotlin
+ * layout.applyKoshian(LightStyle()) {
+ *    TextView(style.primaryText) {
+ *       view.text = "User"
+ *    }
+ * }
+ * ```
+ *
+ * We can also define defaultStyle.
+ * ```kotlin
+ * class LightStyle : KoshianStyle() {
+ *    override fun defaultStyle() {
+ *       TextView {
+ *          view.setPadding(8.dip)
+ *          view.textSizeSp = 12
+ *          view.lineSpace = 4.dip
+ *       }
+ *    }
+ *
+ *    val primaryText = TextView {
+ *       view.textColor = 0x2196f3.opaque
+ *       view.typeface = BOLD
+ *    }
+ * }
+ * ```
+ * ```kotlin
+ * layout.applyKoshian(LightStyle()) {
+ *    TextView(style.primaryText) {
+ *       // The TextView will be applied defaultStyle, `primaryText`, and this lambda.
+ *       view.text = "User"
+ *    }
+ * }
+ * ```
+ */
 @KoshianMarker
 abstract class KoshianStyle {
    private var isCreatingDefaultStyle = false
