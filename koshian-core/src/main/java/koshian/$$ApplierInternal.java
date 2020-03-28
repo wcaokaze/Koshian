@@ -202,9 +202,7 @@ public final class $$ApplierInternal {
          final KoshianViewConstructor<V> constructor,
          final Class<V> viewClass
    ) {
-      if (!(parent instanceof ViewGroup)) { throw new IllegalStateException(); }
-
-      final ViewGroup parentViewGroup =  (ViewGroup) parent;
+      final ViewGroup parentViewGroup = (ViewGroup) parent;
 
       V foundView = findView(parentViewGroup, viewClass);
 
@@ -227,9 +225,7 @@ public final class $$ApplierInternal {
          final KoshianStyle.StyleElement<V> styleElement,
          final Class<V> viewClass
    ) {
-      if (!(parent instanceof ViewGroup)) { throw new IllegalStateException(); }
-
-      final ViewGroup parentViewGroup =  (ViewGroup) parent;
+      final ViewGroup parentViewGroup = (ViewGroup) parent;
 
       V foundView = findView(parentViewGroup, viewClass);
 
@@ -273,11 +269,7 @@ public final class $$ApplierInternal {
                         final String name,
                         final Class<V> viewClass)
    {
-      if (parent instanceof ViewGroup) {
-         return findViewByName((ViewGroup) parent, name, viewClass);
-      } else {
-         throw new IllegalStateException();
-      }
+      return new ViewNameFilterIterator<>((ViewGroup) parent, name, viewClass);
    }
 
    private static <V> V findView(final ViewGroup parent,
@@ -302,14 +294,6 @@ public final class $$ApplierInternal {
 
       $$ApplierInternal.applyingIndex = applyingIndex;
       return null;
-   }
-
-   private static <V> Iterator<V>
-         findViewByName(final ViewGroup parent,
-                        final String name,
-                        final Class<V> viewClass)
-   {
-      return new ViewNameFilterIterator<>(parent, name, viewClass);
    }
 
    private static final class ViewNameFilterIterator<V> implements Iterator<V> {
