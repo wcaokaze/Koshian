@@ -128,7 +128,7 @@ We can define styles.
 
 Enjoy the powerful DSL.
 
-![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/enjoy.svg?sanitize=true)
 
 
 Install
