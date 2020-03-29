@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-     width="634" height="320" viewBox="0 0 634 320">
+     width="1160" height="640" viewBox="0 0 1160 640">
 
     <defs>
         <marker id="arrow" orient="auto" overflow="visible">
@@ -9,87 +9,229 @@
     </defs>
 
     <g font-family="monospace" font-size="13px">
-        <rect width="312" height="320" fill="#2b2b2b" />
+        <rect width="355" height="640" fill="#2b2b2b"/>
 
         <text x="5" y="20">
-            <tspan fill="#cc7832">val</tspan> <tspan fill="#a9b7c6">footerLayout = koshian(context) {</tspan>
+            <tspan fill="#9876aa">view</tspan><tspan fill="#a9b7c6"> = koshian(context) {</tspan>
         </text>
         <text x="30" y="40">
             <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
         </text>
         <text x="55" y="60">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">orientation</tspan> = <tspan fill="#9876aa" font-weight="bold">HORIZONTAL</tspan></tspan>
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">orientation</tspan> = <tspan fill="#9876aa" font-weight="bold">VERTICAL</tspan></tspan>
         </text>
         <text x="55" y="100">
-            <tspan fill="#ffc66d">Button</tspan><tspan fill="#a9b7c6">(</tspan><tspan fill="#6a8759">"FooterButton"</tspan><tspan fill="#a9b7c6">) {</tspan>
+            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
         </text>
         <text x="80" y="120">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">text</tspan> = <tspan fill="#6a8759">"Reply"</tspan></tspan>
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">orientation</tspan> = <tspan fill="#9876aa" font-weight="bold">VERTICAL</tspan></tspan>
         </text>
-        <text x="55" y="140">
-            <tspan fill="#a9b7c6">}</tspan>
+        <text x="80" y="160">
+            <tspan fill="#a9b7c6"><tspan fill="#cc7832">val</tspan> user = status.<tspan fill="#9876aa">user</tspan></tspan>
         </text>
-        <text x="55" y="160">
-            <tspan fill="#ffc66d">Button</tspan><tspan fill="#a9b7c6">(</tspan><tspan fill="#6a8759">"FooterButton"</tspan><tspan fill="#a9b7c6">) {</tspan>
+        <text x="80" y="200">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">userIconView</tspan> = <tspan fill="#ffc66d">ImageView</tspan> {</tspan>
         </text>
-        <text x="80" y="180">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">text</tspan> = <tspan fill="#6a8759">"Like"</tspan></tspan>
-        </text>
-        <text x="55" y="200">
-            <tspan fill="#a9b7c6">}</tspan>
-        </text>
-        <text x="55" y="220">
-            <tspan fill="#ffc66d">Button</tspan><tspan fill="#a9b7c6">(</tspan><tspan fill="#6a8759">"FooterButton"</tspan><tspan fill="#a9b7c6">) {</tspan>
+        <text x="105" y="220">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">bitmap</tspan> = user.<tspan fill="#9876aa">icon</tspan></tspan>
         </text>
         <text x="80" y="240">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">text</tspan> = <tspan fill="#6a8759">"Share"</tspan></tspan>
-        </text>
-        <text x="55" y="260">
             <tspan fill="#a9b7c6">}</tspan>
         </text>
-        <text x="30" y="280">
+        <text x="80" y="280">
+            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
+        </text>
+        <text x="105" y="300">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">orientation</tspan> = <tspan fill="#9876aa" font-weight="bold">VERTICAL</tspan></tspan>
+        </text>
+        <text x="105" y="340">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">usernameView</tspan> = <tspan fill="#ffc66d">TextView</tspan> {</tspan>
+        </text>
+        <text x="130" y="360">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">text</tspan> = user.<tspan fill="#9876aa">name</tspan></tspan>
+        </text>
+        <text x="105" y="380">
             <tspan fill="#a9b7c6">}</tspan>
         </text>
-        <text x="5" y="300">
+        <text x="105" y="420">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">userScreenNameView</tspan> = <tspan fill="#ffc66d">TextView</tspan> {</tspan>
+        </text>
+        <text x="130" y="440">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">text</tspan> = user.<tspan fill="#9876aa">screenName</tspan></tspan>
+        </text>
+        <text x="105" y="460">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="80" y="480">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="500">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="540">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">contentView</tspan> = <tspan fill="#ffc66d">TextView</tspan> {</tspan>
+        </text>
+        <text x="80" y="560">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">text</tspan> = status.<tspan fill="#9876aa">content</tspan></tspan>
+        </text>
+        <text x="55" y="580">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="600">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="5" y="620">
             <tspan fill="#a9b7c6">}</tspan>
         </text>
     </g>
 
-    <rect x="312" width="10" height="320" fill="#313131" />
+    <rect x="355" width="10" height="640" fill="#313131"/>
 
-    <g font-family="monospace" font-size="13px" transform="translate(322 0)">
-        <rect width="312" height="320" fill="#2b2b2b" />
+    <g font-family="monospace" font-size="13px" transform="translate(365 0)">
+        <rect width="405" height="640" fill="#2b2b2b"/>
 
         <text x="5" y="40">
-            <tspan fill="#a9b7c6">footerLayout.<tspan fill="#ffc66d">applyKoshian</tspan> {</tspan>
-        </text>
-        <text x="30" y="60">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">height</tspan> = <tspan fill="#6897bb">48</tspan>.<tspan fill="#9876aa">dip</tspan></tspan>
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#ffc66d">applyKoshian</tspan>(LightStyle()) {</tspan>
         </text>
         <text x="30" y="100">
-            <tspan fill="#ffc66d">Button</tspan><tspan fill="#a9b7c6">(</tspan><tspan fill="#6a8759">"FooterButton"</tspan><tspan fill="#a9b7c6">) {</tspan>
-        </text>
-        <text x="55" y="120">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">height</tspan> = <tspan fill="#9876aa" font-weight="bold">MATCH_PARENT</tspan></tspan>
+            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
         </text>
         <text x="55" y="140">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">weight</tspan> = <tspan fill="#6897bb">1.0f</tspan></tspan>
+            <tspan fill="#9876aa">userIconView</tspan><tspan fill="#a9b7c6"> {</tspan>
         </text>
-        <text x="55" y="160">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">gravity</tspan> = <tspan fill="#9876aa" font-weight="bold">CENTER</tspan></tspan>
+        <text x="80" y="160">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">width</tspan> = <tspan fill="#6897bb">48</tspan>.<tspan fill="#9876aa">dip</tspan></tspan>
         </text>
-        <text x="55" y="180">
-            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">textColor</tspan> = <tspan fill="#6897bb">0x212121</tspan>.<tspan fill="#9876aa">opaque</tspan></tspan>
+        <text x="80" y="180">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">height</tspan> = <tspan fill="#6897bb">48</tspan>.<tspan fill="#9876aa">dip</tspan></tspan>
         </text>
-        <text x="30" y="200">
+        <text x="80" y="200">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">margin</tspan> = <tspan fill="#6897bb">12</tspan>.<tspan fill="#9876aa">dip</tspan></tspan>
+        </text>
+        <text x="55" y="220">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="260">
+            <tspan fill="#ffc66d">LinearLayout</tspan> <tspan fill="#a9b7c6">{</tspan>
+        </text>
+        <text x="80" y="280">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">margin</tspan> = <tspan fill="#6897bb">12</tspan>.<tspan fill="#9876aa">dip</tspan></tspan>
+        </text>
+        <text x="80" y="320">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">usernameView</tspan>(<tspan fill="#9876aa">style</tspan>.<tspan fill="#9876aa">primaryText</tspan>) {</tspan>
+        </text>
+        <text x="80" y="340">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="80" y="380">
+            <tspan fill="#ffc66d">Space</tspan> <tspan fill="#a9b7c6">{</tspan>
+        </text>
+        <text x="105" y="400">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">width</tspan> = <tspan fill="#6897bb">0</tspan></tspan>
+        </text>
+        <text x="105" y="420">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">layout</tspan>.<tspan fill="#9876aa">height</tspan> = <tspan fill="#6897bb">4</tspan>.<tspan fill="#9876aa">dip</tspan></tspan>
+        </text>
+        <text x="80" y="440">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="80" y="480">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">userScreenNameView</tspan>(<tspan fill="#9876aa">style</tspan>.<tspan fill="#9876aa">secondaryText</tspan>) {</tspan>
+        </text>
+        <text x="80" y="500">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="55" y="520">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="540">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="580">
+            <tspan fill="#9876aa">contentView</tspan><tspan fill="#a9b7c6"> {</tspan>
+        </text>
+        <text x="30" y="600">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="5" y="620">
             <tspan fill="#a9b7c6">}</tspan>
         </text>
     </g>
 
-    <g stroke="#6897bb" stroke-width="1px">
-        <path marker-end="url(#arrow)" d="M 340,95 270,95"/>
-        <path marker-end="url(#arrow)" d="M 340,95 270,150"/>
-        <path marker-end="url(#arrow)" d="M 340,95 270,205"/>
+    <rect x="770" width="10" height="640" fill="#313131"/>
+
+    <g font-family="monospace" font-size="13px" transform="translate(780 0)">
+        <rect width="380" height="1080" fill="#2b2b2b"/>
+
+        <text x="5" y="160">
+            <tspan fill="#cc7832">class</tspan><tspan fill="#a9b7c6"> LightStyle : KoshianStyle() {</tspan>
+        </text>
+        <text x="30" y="180">
+            <tspan fill="#cc7832">override fun </tspan><tspan fill="#ffc66d">defaultStyle</tspan><tspan fill="#a9b7c6">() {</tspan>
+        </text>
+        <text x="55" y="200">
+            <tspan fill="#ffc66d">TextView</tspan> <tspan fill="#a9b7c6">{</tspan>
+        </text>
+        <text x="80" y="220">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">textColor</tspan> = <tspan fill="#6897bb">0x000000</tspan> <tspan fill="#ffc66d">opacity</tspan> <tspan fill="#6897bb">0.87</tspan></tspan>
+        </text>
+        <text x="80" y="240">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">textSizeSp</tspan> = <tspan fill="#6897bb">12</tspan></tspan>
+        </text>
+        <text x="80" y="260">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">lineSpace</tspan> = <tspan fill="#6897bb">4</tspan>.<tspan fill="#9876aa">dip</tspan></tspan>
+        </text>
+        <text x="55" y="280">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="300">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="340">
+            <tspan fill="#a9b7c6"><tspan fill="#cc7832">val</tspan> <tspan fill="#9876aa">primaryText</tspan> = <tspan fill="#ffc66d">TextView</tspan> {</tspan>
+        </text>
+        <text x="55" y="360">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">textColor</tspan> = <tspan fill="#6897bb">0x2196f3</tspan>.<tspan fill="#9876aa">opaque</tspan></tspan>
+        </text>
+        <text x="55" y="380">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">typeface</tspan> = <tspan fill="#9876aa" font-weight="bold">BOLD</tspan></tspan>
+        </text>
+        <text x="30" y="400">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="30" y="440">
+            <tspan fill="#a9b7c6"><tspan fill="#cc7832">val</tspan> <tspan fill="#9876aa">secondaryText</tspan> = <tspan fill="#ffc66d">TextView</tspan> {</tspan>
+        </text>
+        <text x="55" y="460">
+            <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#9876aa">textColor</tspan> = <tspan fill="#6897bb">0x000000</tspan> <tspan fill="#ffc66d">opacity</tspan> <tspan fill="#6897bb">0.54</tspan></tspan>
+        </text>
+        <text x="30" y="480">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+        <text x="5" y="500">
+            <tspan fill="#a9b7c6">}</tspan>
+        </text>
+    </g>
+
+    <g stroke="#6897bb" stroke-width="1px" fill="none">
+        <path marker-end="url(#arrow)" d="M 385,95 200,95"/>
+        <path marker-end="url(#arrow)" d="M 410,138 240,185"/>
+        <path marker-end="url(#arrow)" d="M 410,255 200,275"/>
+        <path marker-end="url(#arrow)" d="M 435,315 290,335"/>
+
+        <line x1="428" x2="438" y1="375" y2="375"/>
+        <line x1="433" x2="433" y1="370" y2="380"/>
+        <path marker-end="url(#arrow)" d="M 423,375 c -30,0 -30,20 -60,20 L 200,395"/>
+
+        <path marker-end="url(#arrow)" d="M 435,473 320,422"/>
+        <path marker-end="url(#arrow)" d="M 385,575 240,535"/>
+
+        <path marker-end="url(#arrow)" d="M 825,195 H 775 q -10,0 -10,-10 V 145 q 0,-10 -10,-10 H 600"/>
+        <path marker-end="url(#arrow)" d="M 775,195 q -10,0 -10,10 V 303 q 0,10 -10,10 H 695"/>
+        <path marker-end="url(#arrow)" d="M 765,303 V 467 q 0,10 -10,10 H 735"/>
+        <path marker-end="url(#arrow)" d="M 765,467 V 565 q 0,10 -10,10 H 550"/>
+        <path marker-end="url(#arrow)" d="M 800,335 695,319"/>
+        <path marker-end="url(#arrow)" d="M 800,437 735,473"/>
     </g>
 
 </svg>
