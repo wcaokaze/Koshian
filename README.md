@@ -121,6 +121,15 @@ Also, naming View is a good way.
 ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
 
 
+Style
+--------------------------------------------------------------------------------
+
+We can define styles.
+
+Enjoy the powerful DSL.
+
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+
 
 Install
 --------------------------------------------------------------------------------
