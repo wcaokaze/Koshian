@@ -142,7 +142,7 @@ repositories {
 }
 
 dependencies {
-   implementation 'com.wcaokaze.koshian:koshian-core:0.1.0'
+   implementation 'com.wcaokaze.koshian:koshian-core:0.2.0'
 }
 ```
 
@@ -154,7 +154,7 @@ repositories {
 }
 
 dependencies {
-   implementation("com.wcaokaze.koshian:koshian-core:0.1.0")
+   implementation("com.wcaokaze.koshian:koshian-core:0.2.0")
 }
 ```
 
