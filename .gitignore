@@ -4,3 +4,8 @@ koshian-core/.idea
 koshian-core/build
 koshian-core/koshian-core.iml
 koshian-core/local.properties
+koshian-recyclerview/.gradle
+koshian-recyclerview/.idea
+koshian-recyclerview/build
+koshian-recyclerview/koshian-recyclerview.iml
+koshian-recyclerview/local.properties
