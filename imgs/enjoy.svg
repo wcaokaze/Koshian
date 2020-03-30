@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg"
-     width="1160" height="640" viewBox="0 0 1160 640">
+     width="1280" height="640" viewBox="0 0 1280 640">
 
     <defs>
         <marker id="arrow" orient="auto" overflow="visible">
@@ -8,8 +8,10 @@
         </marker>
     </defs>
 
+    <rect width="1230" height="640" fill="#313131"/>
+
     <g font-family="monospace" font-size="13px">
-        <rect width="355" height="640" fill="#2b2b2b"/>
+        <rect width="385" height="640" fill="#2b2b2b"/>
 
         <text x="5" y="20">
             <tspan fill="#9876aa">view</tspan><tspan fill="#a9b7c6"> = koshian(context) {</tspan>
@@ -85,10 +87,8 @@
         </text>
     </g>
 
-    <rect x="355" width="10" height="640" fill="#313131"/>
-
-    <g font-family="monospace" font-size="13px" transform="translate(365 0)">
-        <rect width="405" height="640" fill="#2b2b2b"/>
+    <g font-family="monospace" font-size="13px" transform="translate(395 0)">
+        <rect width="475" height="640" fill="#2b2b2b"/>
 
         <text x="5" y="40">
             <tspan fill="#a9b7c6"><tspan fill="#9876aa">view</tspan>.<tspan fill="#ffc66d">applyKoshian</tspan>(LightStyle()) {</tspan>
@@ -158,10 +158,8 @@
         </text>
     </g>
 
-    <rect x="770" width="10" height="640" fill="#313131"/>
-
-    <g font-family="monospace" font-size="13px" transform="translate(780 0)">
-        <rect width="380" height="1080" fill="#2b2b2b"/>
+    <g font-family="monospace" font-size="13px" transform="translate(880 0)">
+        <rect width="400" height="1080" fill="#2b2b2b"/>
 
         <text x="5" y="160">
             <tspan fill="#cc7832">class</tspan><tspan fill="#a9b7c6"> LightStyle : KoshianStyle() {</tspan>
@@ -214,24 +212,24 @@
     </g>
 
     <g stroke="#6897bb" stroke-width="1px" fill="none">
-        <path marker-end="url(#arrow)" d="M 385,95 200,95"/>
-        <path marker-end="url(#arrow)" d="M 410,138 240,185"/>
-        <path marker-end="url(#arrow)" d="M 410,255 200,275"/>
-        <path marker-end="url(#arrow)" d="M 435,315 290,335"/>
+        <path marker-end="url(#arrow)" d="M 415,95 230,95"/>
+        <path marker-end="url(#arrow)" d="M 440,138 270,185"/>
+        <path marker-end="url(#arrow)" d="M 440,255 230,275"/>
+        <path marker-end="url(#arrow)" d="M 465,315 320,335"/>
 
-        <line x1="428" x2="438" y1="375" y2="375"/>
-        <line x1="433" x2="433" y1="370" y2="380"/>
-        <path marker-end="url(#arrow)" d="M 423,375 c -30,0 -30,20 -60,20 L 200,395"/>
+        <line x1="458" x2="468" y1="375" y2="375"/>
+        <line x1="463" x2="463" y1="370" y2="380"/>
+        <path marker-end="url(#arrow)" d="M 453,375 c -30,0 -30,20 -60,20 L 230,395"/>
 
-        <path marker-end="url(#arrow)" d="M 435,473 320,422"/>
-        <path marker-end="url(#arrow)" d="M 385,575 240,535"/>
+        <path marker-end="url(#arrow)" d="M 465,473 350,425"/>
+        <path marker-end="url(#arrow)" d="M 415,575 270,538"/>
 
-        <path marker-end="url(#arrow)" d="M 825,195 H 775 q -10,0 -10,-10 V 145 q 0,-10 -10,-10 H 600"/>
-        <path marker-end="url(#arrow)" d="M 775,195 q -10,0 -10,10 V 303 q 0,10 -10,10 H 695"/>
-        <path marker-end="url(#arrow)" d="M 765,303 V 467 q 0,10 -10,10 H 735"/>
-        <path marker-end="url(#arrow)" d="M 765,467 V 565 q 0,10 -10,10 H 550"/>
-        <path marker-end="url(#arrow)" d="M 800,335 695,319"/>
-        <path marker-end="url(#arrow)" d="M 800,437 735,473"/>
+        <path marker-end="url(#arrow)" d="M 925,195 H 860 q -10,0 -10,-10 V 145 q 0,-10 -10,-10 H 585"/>
+        <path marker-end="url(#arrow)" d="M 860,195 q -10,0 -10,10 V 303 q 0,10 -10,10 H 760"/>
+        <path marker-end="url(#arrow)" d="M 850,303 V 467 q 0,10 -10,10 H 820"/>
+        <path marker-end="url(#arrow)" d="M 850,467 V 565 q 0,10 -10,10 H 555"/>
+        <path marker-end="url(#arrow)" d="M 900,335 760,319"/>
+        <path marker-end="url(#arrow)" d="M 900,437 820,473"/>
     </g>
 
 </svg>
