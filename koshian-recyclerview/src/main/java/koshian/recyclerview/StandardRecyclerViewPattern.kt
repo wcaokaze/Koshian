@@ -20,16 +20,28 @@ import android.content.*
 import android.view.*
 import androidx.recyclerview.widget.*
 import koshian.*
+import kotlinx.coroutines.*
 import kotlin.contracts.*
 
 abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
    private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
+   private var diffUtilJob: Job = Job().apply { complete() }
 
    var items: List<I> = emptyList()
+      @Synchronized
       set(value) {
+         val oldItems = field
          field = value
-         notifyDataSetChanged()
+         dispatchUpdateWithDiffUtil(oldItems, value)
       }
+
+   protected open val shouldDetectMovesWithDiffUtil: Boolean = false
+
+   protected open fun createDiffUtilCallback
+         (oldItems: List<I>, newItems: List<I>): DiffUtil.Callback?
+   {
+      return null
+   }
 
    abstract fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
 
@@ -60,6 +72,31 @@ abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView
    private fun <I> bind(holder: RecyclerView.ViewHolder, position: Int) {
       @Suppress("UNCHECKED_CAST")
       (holder as AndroidxViewHolderImpl<I>).bind(items[position] as I)
+   }
+
+   private fun dispatchUpdateWithDiffUtil(oldItems: List<I>, newItems: List<I>) {
+      val oldJob = diffUtilJob
+
+      diffUtilJob = GlobalScope.launch(Dispatchers.Default) {
+         oldJob.join()
+
+         val diffUtil = createDiffUtilCallback(oldItems, newItems)
+
+         if (diffUtil == null) {
+            withContext(Dispatchers.Main) {
+               notifyDataSetChanged()
+            }
+
+            throw CancellationException()
+         }
+
+         val diffUtilResult = DiffUtil
+               .calculateDiff(diffUtil, shouldDetectMovesWithDiffUtil)
+
+         withContext(Dispatchers.Main) {
+            diffUtilResult.dispatchUpdatesTo(this@KoshianRecyclerViewAdapter)
+         }
+      }
    }
 }
 
