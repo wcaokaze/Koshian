@@ -22,10 +22,8 @@ import androidx.recyclerview.widget.*
 import koshian.*
 import kotlin.contracts.*
 
-typealias ViewHolderProvider<I> = (Context) -> KoshianViewHolder<I>
-
 abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-   private var viewTypeMap = emptyArray<ViewHolderProvider<I>>()
+   private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
 
    var items: List<I> = emptyList()
       set(value) {
@@ -33,7 +31,7 @@ abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView
          notifyDataSetChanged()
       }
 
-   abstract fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<I>
+   abstract fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
 
    final override fun getItemCount() = items.size
 
@@ -51,13 +49,17 @@ abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView
    }
 
    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-      val koshianViewHolder = viewTypeMap[viewType].invoke(parent.context)
+      val koshianViewHolder = viewTypeMap[viewType].provide(parent.context)
       return AndroidxViewHolderImpl(koshianViewHolder)
    }
 
    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+      bind<I>(holder, position)
+   }
+
+   private fun <I> bind(holder: RecyclerView.ViewHolder, position: Int) {
       @Suppress("UNCHECKED_CAST")
-      (holder as AndroidxViewHolderImpl<I>).bind(items[position])
+      (holder as AndroidxViewHolderImpl<I>).bind(items[position] as I)
    }
 }
 
@@ -69,7 +71,7 @@ class AndroidxViewHolderImpl<I>(
    }
 }
 
-abstract class KoshianViewHolder<I> {
+abstract class KoshianViewHolder<in I> {
    abstract val itemView: View
 
    abstract fun bind(item: I)
@@ -83,19 +85,19 @@ class ItemB : Item()
 class ItemC : Item()
 
 class RecyclerViewAdapter : KoshianRecyclerViewAdapter<Item>() {
-   override fun getViewHolderProvider(position: Int, item: Item): ViewHolderProvider<Item> {
+   override fun getViewHolderProvider(position: Int, item: Item): ViewHolderProvider<*> {
       return when (item) {
-         is ItemA -> ::ItemAViewHolder
-         is ItemB -> ::ItemBViewHolder
-         is ItemC -> ::ItemCViewHolder
+         is ItemA -> ViewHolderProvider(item, ::ItemAViewHolder)
+         is ItemB -> ViewHolderProvider(item, ::ItemBViewHolder)
+         is ItemC -> ViewHolderProvider(item, ::ItemCViewHolder)
       }
    }
 }
 
-class ItemAViewHolder(context: Context) : KoshianViewHolder<Item>() {
+class ItemAViewHolder(context: Context) : KoshianViewHolder<ItemA>() {
    override val itemView: View
 
-   override fun bind(item: Item) {
+   override fun bind(item: ItemA) {
    }
 
    init {
@@ -107,10 +109,10 @@ class ItemAViewHolder(context: Context) : KoshianViewHolder<Item>() {
    }
 }
 
-class ItemBViewHolder(context: Context) : KoshianViewHolder<Item>() {
+class ItemBViewHolder(context: Context) : KoshianViewHolder<ItemB>() {
    override val itemView: View
 
-   override fun bind(item: Item) {
+   override fun bind(item: ItemB) {
    }
 
    init {
