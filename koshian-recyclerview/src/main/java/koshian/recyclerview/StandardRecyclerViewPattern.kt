@@ -16,12 +16,9 @@
 
 package koshian.recyclerview
 
-import android.content.*
 import android.view.*
 import androidx.recyclerview.widget.*
-import koshian.*
 import kotlinx.coroutines.*
-import kotlin.contracts.*
 
 abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
    private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
@@ -112,66 +109,4 @@ abstract class KoshianViewHolder<in I> {
    abstract val itemView: View
 
    abstract fun bind(item: I)
-}
-
-// =============================================================================
-
-sealed class Item
-class ItemA : Item()
-class ItemB : Item()
-class ItemC : Item()
-
-class RecyclerViewAdapter : KoshianRecyclerViewAdapter<Item>() {
-   override fun getViewHolderProvider(position: Int, item: Item): ViewHolderProvider<*> {
-      return when (item) {
-         is ItemA -> ViewHolderProvider(item, ::ItemAViewHolder)
-         is ItemB -> ViewHolderProvider(item, ::ItemBViewHolder)
-         is ItemC -> ViewHolderProvider(item, ::ItemCViewHolder)
-      }
-   }
-}
-
-class ItemAViewHolder(context: Context) : KoshianViewHolder<ItemA>() {
-   override val itemView: View
-
-   override fun bind(item: ItemA) {
-   }
-
-   init {
-      @OptIn(ExperimentalContracts::class)
-      itemView = koshian(context) {
-         FrameLayout {
-         }
-      }
-   }
-}
-
-class ItemBViewHolder(context: Context) : KoshianViewHolder<ItemB>() {
-   override val itemView: View
-
-   override fun bind(item: ItemB) {
-   }
-
-   init {
-      @OptIn(ExperimentalContracts::class)
-      itemView = koshian(context) {
-         FrameLayout {
-         }
-      }
-   }
-}
-
-class ItemCViewHolder(context: Context) : KoshianViewHolder<Item>() {
-   override val itemView: View
-
-   override fun bind(item: Item) {
-   }
-
-   init {
-      @OptIn(ExperimentalContracts::class)
-      itemView = koshian(context) {
-         FrameLayout {
-         }
-      }
-   }
 }
