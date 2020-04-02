@@ -48,12 +48,12 @@ abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView
       return viewType
    }
 
-   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+   final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
       val koshianViewHolder = viewTypeMap[viewType].provide(parent.context)
       return AndroidxViewHolderImpl(koshianViewHolder)
    }
 
-   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+   final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
       bind<I>(holder, position)
    }
 
