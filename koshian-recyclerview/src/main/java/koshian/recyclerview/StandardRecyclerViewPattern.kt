@@ -22,75 +22,117 @@ import androidx.recyclerview.widget.*
 import koshian.*
 import kotlin.contracts.*
 
-sealed class Item
-class ItemA : Item()
-class ItemB : Item()
-class ItemC : Item()
+typealias ViewHolderProvider<I> = (Context) -> KoshianViewHolder<I>
 
-class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-   var items: List<Item> = emptyList()
+abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+   private var viewTypeMap = emptyArray<ViewHolderProvider<I>>()
+
+   var items: List<I> = emptyList()
       set(value) {
          field = value
          notifyDataSetChanged()
       }
 
-   override fun getItemCount() = items.size
+   abstract fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<I>
 
-   override fun getItemViewType(position: Int): Int {
-      return when (items[position]) {
-         is ItemA -> 0
-         is ItemB -> 1
-         is ItemC -> 2
+   final override fun getItemCount() = items.size
+
+   final override fun getItemViewType(position: Int): Int {
+      val viewHolderProvider = getViewHolderProvider(position, items[position])
+
+      var viewType = viewTypeMap.indexOfFirst { it::class == viewHolderProvider::class }
+
+      if (viewType == -1) {
+         viewTypeMap += viewHolderProvider
+         viewType = viewTypeMap.lastIndex
       }
+
+      return viewType
    }
 
    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-      return when (viewType) {
-         0 -> ItemAViewHolder(parent.context)
-         1 -> ItemBViewHolder(parent.context)
-         2 -> ItemCViewHolder(parent.context)
-         else -> throw NoWhenBranchMatchedException()
-      }
+      val koshianViewHolder = viewTypeMap[viewType].invoke(parent.context)
+      return AndroidxViewHolderImpl(koshianViewHolder)
    }
 
    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-      when (holder) {
-         is ItemAViewHolder -> holder.bind(items[position] as ItemA)
-         is ItemBViewHolder -> holder.bind(items[position] as ItemB)
-         is ItemCViewHolder -> holder.bind(items[position] as ItemC)
+      @Suppress("UNCHECKED_CAST")
+      (holder as AndroidxViewHolderImpl<I>).bind(items[position])
+   }
+}
+
+class AndroidxViewHolderImpl<I>(
+      private val koshianViewHolder: KoshianViewHolder<I>
+) : RecyclerView.ViewHolder(koshianViewHolder.itemView) {
+   fun bind(item: I) {
+      koshianViewHolder.bind(item)
+   }
+}
+
+abstract class KoshianViewHolder<I> {
+   abstract val itemView: View
+
+   abstract fun bind(item: I)
+}
+
+// =============================================================================
+
+sealed class Item
+class ItemA : Item()
+class ItemB : Item()
+class ItemC : Item()
+
+class RecyclerViewAdapter : KoshianRecyclerViewAdapter<Item>() {
+   override fun getViewHolderProvider(position: Int, item: Item): ViewHolderProvider<Item> {
+      return when (item) {
+         is ItemA -> ::ItemAViewHolder
+         is ItemB -> ::ItemBViewHolder
+         is ItemC -> ::ItemCViewHolder
       }
    }
 }
 
-@OptIn(ExperimentalContracts::class)
-fun createItemAView(context: Context) = koshian(context) {
-   FrameLayout {
+class ItemAViewHolder(context: Context) : KoshianViewHolder<Item>() {
+   override val itemView: View
+
+   override fun bind(item: Item) {
+   }
+
+   init {
+      @OptIn(ExperimentalContracts::class)
+      itemView = koshian(context) {
+         FrameLayout {
+         }
+      }
    }
 }
 
-class ItemAViewHolder(context: Context) : RecyclerView.ViewHolder(createItemAView(context)) {
-   fun bind(itemA: ItemA) {
+class ItemBViewHolder(context: Context) : KoshianViewHolder<Item>() {
+   override val itemView: View
+
+   override fun bind(item: Item) {
+   }
+
+   init {
+      @OptIn(ExperimentalContracts::class)
+      itemView = koshian(context) {
+         FrameLayout {
+         }
+      }
    }
 }
 
-@OptIn(ExperimentalContracts::class)
-fun createItemBView(context: Context) = koshian(context) {
-   FrameLayout {
-   }
-}
+class ItemCViewHolder(context: Context) : KoshianViewHolder<Item>() {
+   override val itemView: View
 
-class ItemBViewHolder(context: Context) : RecyclerView.ViewHolder(createItemBView(context)) {
-   fun bind(itemB: ItemB) {
+   override fun bind(item: Item) {
    }
-}
 
-@OptIn(ExperimentalContracts::class)
-fun createItemCView(context: Context) = koshian(context) {
-   FrameLayout {
-   }
-}
-
-class ItemCViewHolder(context: Context) : RecyclerView.ViewHolder(createItemCView(context)) {
-   fun bind(itemC: ItemC) {
+   init {
+      @OptIn(ExperimentalContracts::class)
+      itemView = koshian(context) {
+         FrameLayout {
+         }
+      }
    }
 }
