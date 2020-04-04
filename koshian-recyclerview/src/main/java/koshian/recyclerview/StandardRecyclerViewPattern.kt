@@ -104,9 +104,3 @@ class AndroidxViewHolderImpl<I>(
       koshianViewHolder.bind(item)
    }
 }
-
-abstract class KoshianViewHolder<in I> {
-   abstract val itemView: View
-
-   abstract fun bind(item: I)
-}
