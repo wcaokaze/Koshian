@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-final VERSION = '0.2.0'
+final VERSION = '0.3.0'
 
 buildscript {
     ext.kotlin_version = '1.3.70'
@@ -27,6 +27,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.10.1'
 
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
@@ -34,12 +35,16 @@ buildscript {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka'
+
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 1
+        minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
         versionName VERSION
@@ -82,3 +87,125 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/docs"
+
+    configuration {
+        moduleName = 'Koshian-RecyclerView'
+
+        includes = []
+        jdkVersion = 6
+
+        skipEmptyPackages = true
+        reportUndocumented = false
+
+        sourceLink {
+            path = "src/main/java"
+            url = 'https://github.com/wcaokaze/Koshian/blob/master/koshian-recyclerview/src/main/java'
+            lineSuffix = '#L'
+        }
+
+        externalDocumentationLink {
+            url = new URL("https://developer.android.com/reference/")
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadocJar(type: Jar) {
+    archiveClassifier.set('javadoc')
+    from dokka.outputDirectory
+}
+
+javadocJar.dependsOn(dokka)
+
+final pomConfig = {
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+        }
+    }
+
+    developers {
+        developer {
+            id 'wcaokaze'
+            name 'wcaokaze'
+            email 'wcaokaze@gmail.com'
+        }
+    }
+
+    scm {
+        url 'https://github.com/wcaokaze/Koshian.git'
+        connection 'scm:git:https://github.com/wcaokaze/Koshian.git'
+        developerConnection 'scm:git:https://github.com/wcaokaze/Koshian.git'
+    }
+}
+
+publishing {
+    publications {
+        Koshian_RecyclerView(MavenPublication) {
+            groupId 'com.wcaokaze.koshian'
+            artifactId 'koshian-recyclerview'
+            version VERSION
+
+            artifact sourcesJar
+            artifact javadocJar
+            artifact "$buildDir/outputs/aar/koshian-recyclerview-release.aar"
+
+            pom.withXml {
+                final rootNode = asNode()
+
+                final dependenciesNode = rootNode['dependencies'][0]
+                        ?: rootNode.appendNode('dependencies')
+
+                rootNode.appendNode('name', 'Koshian-RecyclerView')
+
+                for (dependency in configurations.implementation.allDependencies) {
+                    if (dependency.name == 'unspecified') { continue }
+
+                    final dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId',    dependency.group)
+                    dependencyNode.appendNode('artifactId', dependency.name)
+                    dependencyNode.appendNode('version',    dependency.version)
+                }
+
+                rootNode.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+publish.dependsOn(sourcesJar, javadocJar)
+
+bintray {
+    final props = new Properties()
+    props.load(project.file('local.properties').newDataInputStream())
+
+    user = props.getProperty('bintray.user')
+    key = props.getProperty('bintray.apiKey')
+
+    publications = ['Koshian_RecyclerView']
+
+    pkg {
+        repo = 'maven'
+        name = 'Koshian-RecyclerView'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/wcaokaze/Koshian'
+
+        version {
+            name = VERSION
+            released = new Date()
+            vcsTag = "v$VERSION"
+        }
+    }
+}
+
+bintrayUpload.dependsOn(publish)
