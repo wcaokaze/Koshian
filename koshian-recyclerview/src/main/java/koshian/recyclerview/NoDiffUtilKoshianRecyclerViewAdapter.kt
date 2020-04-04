@@ -16,15 +16,12 @@
 
 package koshian.recyclerview
 
-import androidx.recyclerview.widget.*
-
-abstract class DiffUtilKoshianRecyclerViewAdapter<I>(
-      diffUtilItemCallback: DiffUtil.ItemCallback<I>
-) : KoshianRecyclerViewAdapter<I>() {
-   @Suppress("LeakingThis")
-   private val differ = AsyncListDiffer(this, diffUtilItemCallback)
-
-   override var items: List<I>
-      get() = differ.currentList
-      set(value) { differ.submitList(value) }
+abstract class NoDiffUtilKoshianRecyclerViewAdapter<I>
+      : KoshianRecyclerViewAdapter<I>()
+{
+   override var items: List<I> = emptyList()
+      set(value) {
+         field = value
+         notifyDataSetChanged()
+      }
 }
