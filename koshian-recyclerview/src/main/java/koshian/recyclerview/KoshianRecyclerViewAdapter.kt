@@ -26,12 +26,12 @@ abstract class KoshianRecyclerViewAdapter<I>
 
    abstract var items: List<I>
 
-   protected abstract fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
+   protected abstract fun selectViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
 
    final override fun getItemCount() = items.size
 
    final override fun getItemViewType(position: Int): Int {
-      val viewHolderProvider = getViewHolderProvider(
+      val viewHolderProvider = selectViewHolderProvider(
             position, items[position])
 
       var viewType = viewTypeMap.indexOfFirst { it::class == viewHolderProvider::class }
