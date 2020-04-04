@@ -80,12 +80,18 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
 
-    implementation project(':koshian-core')
+    implementation "com.wcaokaze.koshian:koshian-core:$VERSION"
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit-ktx:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("com.wcaokaze.koshian:koshian-core:$VERSION") with project(':koshian-core')
+    }
 }
 
 dokka {
