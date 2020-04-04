@@ -18,11 +18,31 @@ package koshian.recyclerview
 
 import androidx.recyclerview.widget.*
 
-abstract class DiffUtilKoshianRecyclerViewAdapter<I>(
-      diffUtilItemCallback: DiffUtil.ItemCallback<I>
-) : KoshianRecyclerViewAdapter<I>() {
+abstract class DiffUtilKoshianRecyclerViewAdapter<I> : KoshianRecyclerViewAdapter<I>() {
+   private val diffUtilCallback = object : DiffUtil.ItemCallback<I>() {
+      override fun areContentsTheSame(oldItem: I, newItem: I): Boolean {
+         return this@DiffUtilKoshianRecyclerViewAdapter
+               .areContentsTheSame(oldItem, newItem)
+      }
+
+      override fun areItemsTheSame(oldItem: I, newItem: I): Boolean {
+         return this@DiffUtilKoshianRecyclerViewAdapter
+               .areItemTheSame(oldItem, newItem)
+      }
+
+      override fun getChangePayload(oldItem: I, newItem: I): Any? {
+         return this@DiffUtilKoshianRecyclerViewAdapter
+               .getChangePayload(oldItem, newItem)
+      }
+   }
+
    @Suppress("LeakingThis")
-   private val differ = AsyncListDiffer(this, diffUtilItemCallback)
+   private val differ = AsyncListDiffer(this, diffUtilCallback)
+
+   abstract fun areContentsTheSame(oldItem: I, newItem: I): Boolean
+   abstract fun areItemTheSame(oldItem: I, newItem: I): Boolean
+
+   open fun getChangePayload(oldItem: I, newItem: I): Any? = null
 
    override var items: List<I>
       get() = differ.currentList
