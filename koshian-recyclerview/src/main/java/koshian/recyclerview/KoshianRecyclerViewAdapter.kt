@@ -18,34 +18,26 @@ package koshian.recyclerview
 
 import android.view.*
 import androidx.recyclerview.widget.*
-import kotlinx.coroutines.*
 
-abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class KoshianRecyclerViewAdapter<I>(
+      diffUtilItemCallback: DiffUtil.ItemCallback<I>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
    private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
-   private var diffUtilJob: Job = Job().apply { complete() }
 
-   var items: List<I> = emptyList()
-      @Synchronized
-      set(value) {
-         val oldItems = field
-         field = value
-         dispatchUpdateWithDiffUtil(oldItems, value)
-      }
+   @Suppress("LeakingThis")
+   private val differ = AsyncListDiffer(this, diffUtilItemCallback)
 
-   protected open val shouldDetectMovesWithDiffUtil: Boolean = false
+   var items: List<I>
+      get() = differ.currentList
+      set(value) { differ.submitList(value) }
 
-   protected open fun createDiffUtilCallback
-         (oldItems: List<I>, newItems: List<I>): DiffUtil.Callback?
-   {
-      return null
-   }
+   protected abstract fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
 
-   abstract fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
-
-   final override fun getItemCount() = items.size
+   final override fun getItemCount() = differ.currentList.size
 
    final override fun getItemViewType(position: Int): Int {
-      val viewHolderProvider = getViewHolderProvider(position, items[position])
+      val viewHolderProvider = getViewHolderProvider(
+            position, differ.currentList[position])
 
       var viewType = viewTypeMap.indexOfFirst { it::class == viewHolderProvider::class }
 
@@ -68,31 +60,6 @@ abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView
 
    private fun <I> bind(holder: RecyclerView.ViewHolder, position: Int) {
       @Suppress("UNCHECKED_CAST")
-      (holder as AndroidxViewHolderImpl<I>).bind(items[position] as I)
-   }
-
-   private fun dispatchUpdateWithDiffUtil(oldItems: List<I>, newItems: List<I>) {
-      val oldJob = diffUtilJob
-
-      diffUtilJob = GlobalScope.launch(Dispatchers.Default) {
-         oldJob.join()
-
-         val diffUtil = createDiffUtilCallback(oldItems, newItems)
-
-         if (diffUtil == null) {
-            withContext(Dispatchers.Main) {
-               notifyDataSetChanged()
-            }
-
-            throw CancellationException()
-         }
-
-         val diffUtilResult = DiffUtil
-               .calculateDiff(diffUtil, shouldDetectMovesWithDiffUtil)
-
-         withContext(Dispatchers.Main) {
-            diffUtilResult.dispatchUpdatesTo(this@KoshianRecyclerViewAdapter)
-         }
-      }
+      (holder as AndroidxViewHolderImpl<I>).bind(differ.currentList[position] as I)
    }
 }
