@@ -19,30 +19,32 @@ package koshian.recyclerview
 import android.view.*
 import androidx.recyclerview.widget.*
 
-abstract class DiffUtilKoshianRecyclerViewAdapter<I>
+abstract class KoshianRecyclerViewAdapter<I>
       : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
    private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
 
    private val diffUtilCallback = object : DiffUtil.ItemCallback<I>() {
       override fun areContentsTheSame(oldItem: I, newItem: I): Boolean {
-         return this@DiffUtilKoshianRecyclerViewAdapter
+         return this@KoshianRecyclerViewAdapter
                .areContentsTheSame(oldItem, newItem)
       }
 
       override fun areItemsTheSame(oldItem: I, newItem: I): Boolean {
-         return this@DiffUtilKoshianRecyclerViewAdapter
+         return this@KoshianRecyclerViewAdapter
                .areItemTheSame(oldItem, newItem)
       }
 
       override fun getChangePayload(oldItem: I, newItem: I): Any? {
-         return this@DiffUtilKoshianRecyclerViewAdapter
+         return this@KoshianRecyclerViewAdapter
                .getChangePayload(oldItem, newItem)
       }
    }
 
    @Suppress("LeakingThis")
    private val differ = AsyncListDiffer(this, diffUtilCallback)
+
+   protected abstract fun selectViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
 
    abstract fun areContentsTheSame(oldItem: I, newItem: I): Boolean
    abstract fun areItemTheSame(oldItem: I, newItem: I): Boolean
@@ -52,8 +54,6 @@ abstract class DiffUtilKoshianRecyclerViewAdapter<I>
    var items: List<I>
       get() = differ.currentList
       set(value) { differ.submitList(value) }
-
-   protected abstract fun selectViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
 
    final override fun getItemCount() = differ.currentList.size
 
