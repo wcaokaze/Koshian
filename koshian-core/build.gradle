@@ -185,7 +185,7 @@ publish.dependsOn(sourcesJar, javadocJar)
 
 bintray {
     final props = new Properties()
-    props.load(project.rootProject.file('local.properties').newDataInputStream())
+    props.load(project.file('local.properties').newDataInputStream())
 
     user = props.getProperty('bintray.user')
     key = props.getProperty('bintray.apiKey')
