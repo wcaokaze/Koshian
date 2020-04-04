@@ -16,9 +16,14 @@
 
 package koshian.recyclerview
 
+import android.view.*
 import androidx.recyclerview.widget.*
 
-abstract class DiffUtilKoshianRecyclerViewAdapter<I> : KoshianRecyclerViewAdapter<I>() {
+abstract class DiffUtilKoshianRecyclerViewAdapter<I>
+      : RecyclerView.Adapter<RecyclerView.ViewHolder>()
+{
+   private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
+
    private val diffUtilCallback = object : DiffUtil.ItemCallback<I>() {
       override fun areContentsTheSame(oldItem: I, newItem: I): Boolean {
          return this@DiffUtilKoshianRecyclerViewAdapter
@@ -44,7 +49,39 @@ abstract class DiffUtilKoshianRecyclerViewAdapter<I> : KoshianRecyclerViewAdapte
 
    open fun getChangePayload(oldItem: I, newItem: I): Any? = null
 
-   override var items: List<I>
+   var items: List<I>
       get() = differ.currentList
       set(value) { differ.submitList(value) }
+
+   protected abstract fun selectViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
+
+   final override fun getItemCount() = differ.currentList.size
+
+   final override fun getItemViewType(position: Int): Int {
+      val viewHolderProvider = selectViewHolderProvider(
+            position, differ.currentList[position])
+
+      var viewType = viewTypeMap.indexOfFirst { it::class == viewHolderProvider::class }
+
+      if (viewType == -1) {
+         viewTypeMap += viewHolderProvider
+         viewType = viewTypeMap.lastIndex
+      }
+
+      return viewType
+   }
+
+   final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+      val koshianViewHolder = viewTypeMap[viewType].provide(parent.context)
+      return AndroidxViewHolderImpl(koshianViewHolder)
+   }
+
+   final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+      bind<I>(holder, position)
+   }
+
+   private fun <I> bind(holder: RecyclerView.ViewHolder, position: Int) {
+      @Suppress("UNCHECKED_CAST")
+      (holder as AndroidxViewHolderImpl<I>).bind(differ.currentList[position] as I)
+   }
 }

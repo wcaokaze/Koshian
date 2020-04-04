@@ -16,6 +16,9 @@
 
 package koshian.recyclerview
 
+import android.view.*
+import androidx.recyclerview.widget.*
+
 @Suppress("FunctionName")
 inline fun <I> KoshianRecyclerViewAdapter(
       crossinline viewHolderProviderSelector: (position: Int, item: I) -> ViewHolderProvider<*>
@@ -28,11 +31,45 @@ inline fun <I> KoshianRecyclerViewAdapter(
 }
 
 abstract class NoDiffUtilKoshianRecyclerViewAdapter<I>
-      : KoshianRecyclerViewAdapter<I>()
+      : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
-   override var items: List<I> = emptyList()
+   private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
+
+   var items: List<I> = emptyList()
       set(value) {
          field = value
          notifyDataSetChanged()
       }
+
+   protected abstract fun selectViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
+
+   final override fun getItemCount() = items.size
+
+   final override fun getItemViewType(position: Int): Int {
+      val viewHolderProvider = selectViewHolderProvider(
+            position, items[position])
+
+      var viewType = viewTypeMap.indexOfFirst { it::class == viewHolderProvider::class }
+
+      if (viewType == -1) {
+         viewTypeMap += viewHolderProvider
+         viewType = viewTypeMap.lastIndex
+      }
+
+      return viewType
+   }
+
+   final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+      val koshianViewHolder = viewTypeMap[viewType].provide(parent.context)
+      return AndroidxViewHolderImpl(koshianViewHolder)
+   }
+
+   final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+      bind<I>(holder, position)
+   }
+
+   private fun <I> bind(holder: RecyclerView.ViewHolder, position: Int) {
+      @Suppress("UNCHECKED_CAST")
+      (holder as AndroidxViewHolderImpl<I>).bind(items[position] as I)
+   }
 }
