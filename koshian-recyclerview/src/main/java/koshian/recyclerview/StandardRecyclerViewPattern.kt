@@ -96,11 +96,3 @@ abstract class KoshianRecyclerViewAdapter<I> : RecyclerView.Adapter<RecyclerView
       }
    }
 }
-
-class AndroidxViewHolderImpl<I>(
-      private val koshianViewHolder: KoshianViewHolder<I>
-) : RecyclerView.ViewHolder(koshianViewHolder.itemView) {
-   fun bind(item: I) {
-      koshianViewHolder.bind(item)
-   }
-}
