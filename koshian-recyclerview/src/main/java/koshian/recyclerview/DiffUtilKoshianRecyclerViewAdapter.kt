@@ -19,7 +19,7 @@ package koshian.recyclerview
 import android.view.*
 import androidx.recyclerview.widget.*
 
-abstract class KoshianRecyclerViewAdapter<I>(
+abstract class DiffUtilKoshianRecyclerViewAdapter<I>(
       diffUtilItemCallback: DiffUtil.ItemCallback<I>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
    private var viewTypeMap = emptyArray<ViewHolderProvider<*>>()
