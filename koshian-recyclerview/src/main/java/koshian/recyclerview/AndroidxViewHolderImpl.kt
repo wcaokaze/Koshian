@@ -18,7 +18,7 @@ package koshian.recyclerview
 
 import androidx.recyclerview.widget.*
 
-class AndroidxViewHolderImpl<I>(
+internal class AndroidxViewHolderImpl<I>(
       private val koshianViewHolder: KoshianViewHolder<I>
 ) : RecyclerView.ViewHolder(koshianViewHolder.itemView) {
    fun bind(item: I) {
