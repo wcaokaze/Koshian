@@ -16,6 +16,17 @@
 
 package koshian.recyclerview
 
+@Suppress("FunctionName")
+inline fun <I> KoshianRecyclerViewAdapter(
+      crossinline viewHolderProviderSelector: (position: Int, item: I) -> ViewHolderProvider<*>
+): NoDiffUtilKoshianRecyclerViewAdapter<I> {
+   return object : NoDiffUtilKoshianRecyclerViewAdapter<I>() {
+      override fun getViewHolderProvider(position: Int, item: I): ViewHolderProvider<*> {
+         return viewHolderProviderSelector(position, item)
+      }
+   }
+}
+
 abstract class NoDiffUtilKoshianRecyclerViewAdapter<I>
       : KoshianRecyclerViewAdapter<I>()
 {
