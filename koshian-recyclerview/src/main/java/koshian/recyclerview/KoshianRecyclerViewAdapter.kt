@@ -19,6 +19,73 @@ package koshian.recyclerview
 import android.view.*
 import androidx.recyclerview.widget.*
 
+/**
+ * ```kotlin
+ * sealed class TimelineItem
+ * class StatusItem(val status: Status)
+ * object LoadingIndicatorItem
+ *
+ * class StatusViewHolder(context: Context) : KoshianViewHolder<StatusItem>() {
+ *    override val itemView: View
+ *
+ *    private val contentView: TextView
+ *
+ *    override fun bind(item: StatusItem) {
+ *       contentView.text = item.status.content
+ *    }
+ *
+ *    init {
+ *       itemView = koshian(context) {
+ *          LinearLayout {
+ *             view.orientation = VERTICAL
+ *
+ *             contentView = TextView {
+ *             }
+ *          }
+ *       }
+ *    }
+ * }
+ *
+ * class TimelineRecyclerViewAdapter : KoshianRecyclerViewAdapter<TimelineItem>() {
+ *    override fun selectViewHolderProvider
+ *          (position: Int, item: TimelineItem): ViewHolderProvider<*>
+ *    {
+ *       return when (item) {
+ *          is StatusItem -> ViewHolderProvider(::StatusViewHolder)
+ *          is LoadingIndicatorItem -> ViewHolderProvider(::LoadingIndicatorViewHolder)
+ *       }
+ *    }
+ *
+ *    override fun areItemTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
+ *       when (oldItem) {
+ *          is StatusItem -> {
+ *             if (newItem !is StatusItem) { return false }
+ *
+ *             return oldItem.status.id == newItem.status.id
+ *          }
+ *
+ *          is LoadingIndicatorItem -> {
+ *             return newItem is LoadingIndicatorItem
+ *          }
+ *       }
+ *    }
+ *
+ *    override fun areContentsTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
+ *       when (oldItem) {
+ *          is StatusItem -> {
+ *             if (newItem !is StatusItem) { return false }
+ *
+ *             return oldItem.status == newItem.status
+ *          }
+ *
+ *          is LoadingIndicatorItem -> {
+ *             return newItem is LoadingIndicatorItem
+ *          }
+ *       }
+ *    }
+ * }
+ * ```
+ */
 abstract class KoshianRecyclerViewAdapter<I>
       : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {

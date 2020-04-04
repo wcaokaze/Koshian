@@ -19,6 +19,46 @@ package koshian.recyclerview
 import android.view.*
 import androidx.recyclerview.widget.*
 
+/**
+ * ```kotlin
+ * sealed class TimelineItem
+ * class StatusItem(val status: Status)
+ * object LoadingIndicatorItem
+ *
+ * class StatusViewHolder(context: Context) : KoshianViewHolder<StatusItem>() {
+ *    override val itemView: View
+ *
+ *    private val contentView: TextView
+ *
+ *    override fun bind(item: StatusItem) {
+ *       contentView.text = item.status.content
+ *    }
+ *
+ *    init {
+ *       itemView = koshian(context) {
+ *          LinearLayout {
+ *             view.orientation = VERTICAL
+ *
+ *             contentView = TextView {
+ *             }
+ *          }
+ *       }
+ *    }
+ * }
+ * ```
+ * ```kotlin
+ * koshian(context) {
+ *    RecyclerView {
+ *       view.adapter = KoshianRecyclerViewAdapter<TimelineItem> { _, item ->
+ *          when (item) {
+ *             is StatusItem -> ViewHolderProvider(::StatusViewHolder)
+ *             is LoadingIndicatorItem -> ViewHolderProvider(::LoadingIndicatorViewHolder)
+ *          }
+ *       }
+ *    }
+ * }
+ * ```
+ */
 @Suppress("FunctionName")
 inline fun <I> KoshianRecyclerViewAdapter(
       crossinline viewHolderProviderSelector: (position: Int, item: I) -> ViewHolderProvider<*>
@@ -30,6 +70,48 @@ inline fun <I> KoshianRecyclerViewAdapter(
    }
 }
 
+/**
+ * ```kotlin
+ * sealed class TimelineItem
+ * class StatusItem(val status: Status)
+ * object LoadingIndicatorItem
+ *
+ * class StatusViewHolder(context: Context) : KoshianViewHolder<StatusItem>() {
+ *    override val itemView: View
+ *
+ *    private val contentView: TextView
+ *
+ *    override fun bind(item: StatusItem) {
+ *       contentView.text = item.status.content
+ *    }
+ *
+ *    init {
+ *       itemView = koshian(context) {
+ *          LinearLayout {
+ *             view.orientation = VERTICAL
+ *
+ *             contentView = TextView {
+ *             }
+ *          }
+ *       }
+ *    }
+ * }
+ * ```
+ * ```kotlin
+ * koshian(context) {
+ *    RecyclerView {
+ *       view.adapter = KoshianRecyclerViewAdapter<TimelineItem> { _, item ->
+ *          when (item) {
+ *             is StatusItem -> ViewHolderProvider(::StatusViewHolder)
+ *             is LoadingIndicatorItem -> ViewHolderProvider(::LoadingIndicatorViewHolder)
+ *          }
+ *       }
+ *    }
+ * }
+ * ```
+ *
+ * To use [DiffUtil], see [KoshianRecyclerViewAdapter]
+ */
 abstract class NoDiffUtilKoshianRecyclerViewAdapter<I>
       : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
