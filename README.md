@@ -131,6 +131,19 @@ Enjoy the powerful DSL.
 ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/enjoy.svg?sanitize=true)
 
 
+Submodules
+--------------------------------------------------------------------------------
+
+#### [Koshian-Generator](koshian-generator)
+
+A helper to ready Koshian for external Views.
+
+
+#### [Koshian-RecyclerView](koshian-recyclerview)
+
+Makes RecyclerView easier.
+
+
 Install
 --------------------------------------------------------------------------------
 Gradle
@@ -138,11 +151,11 @@ Gradle
 repositories {
    // jcenter()  // Not yet available
 
-   maven { url 'https://dl.bintray.com/wcaokaze/Koshian' }
+   maven { url 'https://dl.bintray.com/wcaokaze/maven' }
 }
 
 dependencies {
-   implementation 'com.wcaokaze.koshian:koshian-core:0.2.0'
+   implementation 'com.wcaokaze.koshian:koshian-core:0.3.1'
 }
 ```
 
@@ -150,11 +163,11 @@ Gradle (Kotlin)
 ```kotlin
 repositories {
    // jcenter()
-   maven(url = "https://dl.bintray.com/wcaokaze/Koshian")
+   maven(url = "https://dl.bintray.com/wcaokaze/maven")
 }
 
 dependencies {
-   implementation("com.wcaokaze.koshian:koshian-core:0.2.0")
+   implementation("com.wcaokaze.koshian:koshian-core:0.3.1")
 }
 ```
 
