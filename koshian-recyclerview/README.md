@@ -138,3 +138,31 @@ recyclerView.adapter = KoshianRecyclerViewAdapter<TimelineItem>() {
 }
 ```
 
+
+Install
+--------------------------------------------------------------------------------
+Gradle
+```groovy
+repositories {
+   // jcenter()  // Not yet available
+
+   maven { url 'https://dl.bintray.com/wcaokaze/maven' }
+}
+
+dependencies {
+   implementation 'com.wcaokaze.koshian:koshian-recyclerview:0.3.1'
+}
+```
+
+Gradle (Kotlin)
+```kotlin
+repositories {
+   // jcenter()
+   maven(url = "https://dl.bintray.com/wcaokaze/maven")
+}
+
+dependencies {
+   implementation("com.wcaokaze.koshian:koshian-recyclerview:0.3.1")
+}
+```
+

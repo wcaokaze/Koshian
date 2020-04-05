@@ -138,7 +138,7 @@ Gradle
 repositories {
    // jcenter()  // Not yet available
 
-   maven { url 'https://dl.bintray.com/wcaokaze/Koshian' }
+   maven { url 'https://dl.bintray.com/wcaokaze/maven' }
 }
 
 dependencies {
@@ -150,7 +150,7 @@ Gradle (Kotlin)
 ```kotlin
 repositories {
    // jcenter()
-   maven(url = "https://dl.bintray.com/wcaokaze/Koshian")
+   maven(url = "https://dl.bintray.com/wcaokaze/maven")
 }
 
 dependencies {
