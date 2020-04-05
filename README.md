@@ -131,6 +131,19 @@ Enjoy the powerful DSL.
 ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/enjoy.svg?sanitize=true)
 
 
+Submodules
+--------------------------------------------------------------------------------
+
+#### [Koshian-Generator](koshian-generator)
+
+A helper to ready Koshian for external Views.
+
+
+#### [Koshian-RecyclerView](koshian-recyclerview)
+
+Makes RecyclerView easier.
+
+
 Install
 --------------------------------------------------------------------------------
 Gradle
