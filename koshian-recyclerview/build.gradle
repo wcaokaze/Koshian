@@ -65,8 +65,7 @@ android {
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
-        jvmTarget = '1.8'
-        freeCompilerArgs = ["-Xinline-classes", "-Xuse-experimental=kotlin.Experimental"]
+        freeCompilerArgs = ["-Xuse-experimental=kotlin.Experimental"]
     }
 }
 
@@ -78,7 +77,10 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
+
+    implementation "com.wcaokaze.koshian:koshian-core:$VERSION"
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -86,12 +88,18 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("com.wcaokaze.koshian:koshian-core:$VERSION") with project(':koshian-core')
+    }
+}
+
 dokka {
     outputFormat = 'html'
     outputDirectory = "$buildDir/docs"
 
     configuration {
-        moduleName = 'Koshian'
+        moduleName = 'Koshian-RecyclerView'
 
         includes = []
         jdkVersion = 6
@@ -101,7 +109,7 @@ dokka {
 
         sourceLink {
             path = "src/main/java"
-            url = 'https://github.com/wcaokaze/Koshian/blob/master/koshian-core/src/main/java'
+            url = 'https://github.com/wcaokaze/Koshian/blob/master/koshian-recyclerview/src/main/java'
             lineSuffix = '#L'
         }
 
@@ -149,14 +157,14 @@ final pomConfig = {
 
 publishing {
     publications {
-        Koshian(MavenPublication) {
+        Koshian_RecyclerView(MavenPublication) {
             groupId 'com.wcaokaze.koshian'
-            artifactId 'koshian-core'
+            artifactId 'koshian-recyclerview'
             version VERSION
 
             artifact sourcesJar
             artifact javadocJar
-            artifact "$buildDir/outputs/aar/koshian-core-release.aar"
+            artifact "$buildDir/outputs/aar/koshian-recyclerview-release.aar"
 
             pom.withXml {
                 final rootNode = asNode()
@@ -164,7 +172,7 @@ publishing {
                 final dependenciesNode = rootNode['dependencies'][0]
                         ?: rootNode.appendNode('dependencies')
 
-                rootNode.appendNode('name', 'Koshian')
+                rootNode.appendNode('name', 'Koshian-RecyclerView')
 
                 for (dependency in configurations.implementation.allDependencies) {
                     if (dependency.name == 'unspecified') { continue }
@@ -190,11 +198,11 @@ bintray {
     user = props.getProperty('bintray.user')
     key = props.getProperty('bintray.apiKey')
 
-    publications = ['Koshian']
+    publications = ['Koshian_RecyclerView']
 
     pkg {
         repo = 'maven'
-        name = 'Koshian'
+        name = 'Koshian-RecyclerView'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/wcaokaze/Koshian'
 
