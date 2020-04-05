@@ -188,7 +188,7 @@ publishing {
     }
 }
 
-publish.dependsOn(sourcesJar, javadocJar)
+publish.dependsOn(sourcesJar, javadocJar, 'assembleRelease')
 
 bintray {
     final props = new Properties()
