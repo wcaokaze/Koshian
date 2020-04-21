@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.*
 /**
  * ```kotlin
  * sealed class TimelineItem
- * class StatusItem(val status: Status)
- * object LoadingIndicatorItem
+ * class StatusItem(val status: Status) : TimelineItem()
+ * object LoadingIndicatorItem : TimelineItem()
  *
  * class StatusViewHolder(context: Context) : KoshianViewHolder<StatusItem>() {
  *    override val itemView: View
@@ -51,40 +51,13 @@ import androidx.recyclerview.widget.*
  *          (position: Int, item: TimelineItem): ViewHolderProvider<*>
  *    {
  *       return when (item) {
- *          is StatusItem -> ViewHolderProvider(::StatusViewHolder)
- *          is LoadingIndicatorItem -> ViewHolderProvider(::LoadingIndicatorViewHolder)
- *       }
- *    }
- *
- *    override fun areItemTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
- *       when (oldItem) {
- *          is StatusItem -> {
- *             if (newItem !is StatusItem) { return false }
- *
- *             return oldItem.status.id == newItem.status.id
- *          }
- *
- *          is LoadingIndicatorItem -> {
- *             return newItem is LoadingIndicatorItem
- *          }
- *       }
- *    }
- *
- *    override fun areContentsTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
- *       when (oldItem) {
- *          is StatusItem -> {
- *             if (newItem !is StatusItem) { return false }
- *
- *             return oldItem.status == newItem.status
- *          }
- *
- *          is LoadingIndicatorItem -> {
- *             return newItem is LoadingIndicatorItem
- *          }
+ *          is StatusItem -> ViewHolderProvider(item, ::StatusViewHolder)
+ *          is LoadingIndicatorItem -> ViewHolderProvider(item, ::LoadingIndicatorViewHolder)
  *       }
  *    }
  * }
  * ```
+ * When the Items implement [DiffUtilItem], this adapter uses [DiffUtil].
  */
 abstract class KoshianRecyclerViewAdapter<I>
       : RecyclerView.Adapter<RecyclerView.ViewHolder>()
