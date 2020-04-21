@@ -24,7 +24,7 @@ import kotlin.contracts.*
 @ExperimentalContracts
 inline fun <R> koshian(
       context: Context,
-      creatorAction: Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>.() -> R
+      creatorAction: Koshian<ViewManager, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>.() -> R
 ): R {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 

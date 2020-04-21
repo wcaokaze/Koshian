@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package koshian
+package koshian.recyclerview
 
-@DslMarker
-@Retention(AnnotationRetention.BINARY)
-@Target(AnnotationTarget.CLASS)
-annotation class KoshianMarker
+interface DiffUtilItem {
+   fun isContentsTheSameWith(item: Any): Boolean
+   fun isItemsTheSameWith   (item: Any): Boolean
+
+   fun getChangePayload(newItem: Any): Any? = null
+}
