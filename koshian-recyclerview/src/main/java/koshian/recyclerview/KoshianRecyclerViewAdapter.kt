@@ -93,18 +93,27 @@ abstract class KoshianRecyclerViewAdapter<I>
 
    private val diffUtilCallback = object : DiffUtil.ItemCallback<I>() {
       override fun areContentsTheSame(oldItem: I, newItem: I): Boolean {
-         return this@KoshianRecyclerViewAdapter
-               .areContentsTheSame(oldItem, newItem)
+         if (oldItem !is DiffUtilItem || newItem !is DiffUtilItem) {
+            return false
+         }
+
+         return oldItem.isContentsTheSameWith(newItem)
       }
 
       override fun areItemsTheSame(oldItem: I, newItem: I): Boolean {
-         return this@KoshianRecyclerViewAdapter
-               .areItemTheSame(oldItem, newItem)
+         if (oldItem !is DiffUtilItem || newItem !is DiffUtilItem) {
+            return false
+         }
+
+         return oldItem.isItemsTheSameWith(newItem)
       }
 
       override fun getChangePayload(oldItem: I, newItem: I): Any? {
-         return this@KoshianRecyclerViewAdapter
-               .getChangePayload(oldItem, newItem)
+         if (oldItem !is DiffUtilItem || newItem !is DiffUtilItem) {
+            return null
+         }
+
+         return oldItem.getChangePayload(newItem)
       }
    }
 
@@ -112,11 +121,6 @@ abstract class KoshianRecyclerViewAdapter<I>
    private val differ = AsyncListDiffer(this, diffUtilCallback)
 
    protected abstract fun selectViewHolderProvider(position: Int, item: I): ViewHolderProvider<*>
-
-   abstract fun areContentsTheSame(oldItem: I, newItem: I): Boolean
-   abstract fun areItemTheSame(oldItem: I, newItem: I): Boolean
-
-   open fun getChangePayload(oldItem: I, newItem: I): Any? = null
 
    var items: List<I>
       get() = differ.currentList
