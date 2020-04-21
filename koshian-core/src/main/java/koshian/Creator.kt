@@ -21,6 +21,9 @@ import android.view.*
 
 import kotlin.contracts.*
 
+val (@Suppress("UNUSED") Koshian<*, *, *, KoshianMode.Creator>).context: Context
+   inline get() = `$$KoshianInternal`.context
+
 @ExperimentalContracts
 inline fun <R> koshian(
       context: Context,

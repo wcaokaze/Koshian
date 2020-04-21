@@ -19,6 +19,9 @@ package koshian
 import android.content.*
 import android.view.*
 
+val (@Suppress("UNUSED") Koshian<*, *, *, KoshianMode.Applier<*>>).context: Context
+   inline get() = `$$KoshianInternal`.context
+
 object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing> {
    override fun instantiate(context: Context?) = throw UnsupportedOperationException()
    override fun instantiateLayoutParams()      = throw UnsupportedOperationException()
