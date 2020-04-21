@@ -1,2 +1,9 @@
 rootProject.name='Koshian example'
+
 include ':app'
+
+include 'koshian-core'
+project(':koshian-core').projectDir = file('../koshian-core')
+
+include 'koshian-recyclerview'
+project(':koshian-recyclerview').projectDir = file('../koshian-recyclerview')
