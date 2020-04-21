@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-final VERSION = '0.4.0'
+final VERSION = '0.4.1'
 
 buildscript {
     ext.kotlin_version = '1.3.70'
@@ -76,8 +76,8 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.annotation:annotation:1.1.0'
+    api 'androidx.recyclerview:recyclerview:1.1.0'
+    api 'androidx.annotation:annotation:1.1.0'
 
     api "com.wcaokaze.koshian:koshian-core:$VERSION"
 

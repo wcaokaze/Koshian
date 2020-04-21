@@ -18,6 +18,7 @@
 package koshian
 
 import android.content.Context
+import android.os.Build
 import android.view.View
 import androidx.annotation.RequiresApi
 import kotlin.contracts.*
@@ -135,6 +136,25 @@ var View.backgroundColor: Int
    @Deprecated(message = "The getter always throws an Exception", level = DeprecationLevel.ERROR)
    get() = throw UnsupportedOperationException()
    inline set(value) = setBackgroundColor(value)
+
+var View.padding: Int
+   @Deprecated(message = "The getter always throws an Exception", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   set(value) {
+      if (Build.VERSION.SDK_INT >= 17) {
+         setPaddingRelative(value, value, value, value)
+      } else {
+         setPadding(value, value, value, value)
+      }
+   }
+
+fun View.setPadding(horizontal: Int, vertical: Int) {
+   if (Build.VERSION.SDK_INT >= 17) {
+      setPaddingRelative(horizontal, vertical, horizontal, vertical)
+   } else {
+      setPadding(horizontal, vertical, horizontal, vertical)
+   }
+}
 
 val KoshianExt<View, *>.LAYOUT_DIRECTION_LTR: Int @RequiresApi(17) inline get() = View.LAYOUT_DIRECTION_LTR
 val KoshianExt<View, *>.LAYOUT_DIRECTION_RTL: Int @RequiresApi(17) inline get() = View.LAYOUT_DIRECTION_RTL

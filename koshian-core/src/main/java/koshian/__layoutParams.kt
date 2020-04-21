@@ -43,6 +43,23 @@ val KoshianExt<*, ViewGroup.LayoutParams>.CENTER_TOP    inline get() = Gravity.C
 val KoshianExt<*, ViewGroup.LayoutParams>.CENTER_BOTTOM inline get() = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
 val KoshianExt<*, ViewGroup.LayoutParams>.CENTER        inline get() = Gravity.CENTER
 
+var ViewGroup.MarginLayoutParams.margins: Int
+   @Deprecated(message = "The getter always throws an Exception", level = DeprecationLevel.ERROR)
+   get() = throw UnsupportedOperationException()
+   set(value) {
+      if (Build.VERSION.SDK_INT >= 17) {
+         marginStart = value
+         topMargin = value
+         marginEnd = value
+         bottomMargin = value
+      } else {
+         leftMargin = value
+         topMargin = value
+         rightMargin = value
+         bottomMargin = value
+      }
+   }
+
 var ViewGroup.MarginLayoutParams.horizontalMargin: Int
    @Deprecated(message = "The getter always throws an Exception", level = DeprecationLevel.ERROR)
    get() = throw UnsupportedOperationException()
