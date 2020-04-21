@@ -20,18 +20,30 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import koshian.*
+import koshian.recyclerview.*
 import kotlin.contracts.ExperimentalContracts
 
 class MainActivity : Activity() {
+   private lateinit var recyclerViewAdapter: FizzBuzzRecyclerViewAdapter
+
    private fun showKoshianGitHubRepository() {
       val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/wcaokaze/Koshian"))
       startActivity(intent)
    }
 
+   private fun prepareFizzBuzzItems() {
+      recyclerViewAdapter.items = FizzBuzzItemSequence().take(100).toList()
+   }
+
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
+      buildLayout()
+      prepareFizzBuzzItems()
+   }
 
+   private fun buildLayout() {
       @OptIn(ExperimentalContracts::class)
       val contentView = koshian(this) {
          LinearLayout {
@@ -45,6 +57,12 @@ class MainActivity : Activity() {
                view.text = "https://github.com/wcaokaze/Koshian"
                view.setOnClickListener { showKoshianGitHubRepository() }
             }
+
+            RecyclerView {
+               recyclerViewAdapter = FizzBuzzRecyclerViewAdapter()
+               view.adapter = recyclerViewAdapter
+               view.layoutManager = LinearLayoutManager(context)
+            }
          }
       }
 
@@ -56,6 +74,16 @@ class MainActivity : Activity() {
 
          TextView {
             view.textColor = 0x03a9f4.opaque
+         }
+
+         Space {
+            layout.height = 24.dip
+         }
+
+         RecyclerView {
+            layout.width = MATCH_PARENT
+            layout.height = 0
+            layout.weight = 1.0f
          }
       }
 
