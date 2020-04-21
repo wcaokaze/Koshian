@@ -67,7 +67,7 @@ class MainActivity : Activity() {
       }
 
       contentView.applyKoshian(MainActivityStyle()) {
-         view.setPaddingRelative(16.dip, 16.dip, 16.dip, 16.dip)
+         view.padding = 16.dip
 
          TextView {
          }
@@ -93,7 +93,7 @@ class MainActivity : Activity() {
    class MainActivityStyle : KoshianStyle() {
       override fun defaultStyle() {
          TextView {
-            view.setPaddingRelative(8.dip, 8.dip, 8.dip, 8.dip)
+            view.padding = 8.dip
             view.textSizeSp = 16
          }
       }
