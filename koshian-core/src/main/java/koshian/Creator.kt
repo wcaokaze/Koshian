@@ -24,6 +24,7 @@ import kotlin.contracts.*
 val (@Suppress("UNUSED") Koshian<*, *, *, KoshianMode.Creator>).context: Context
    inline get() = `$$KoshianInternal`.context
 
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> koshian(
       context: Context,
@@ -53,6 +54,7 @@ inline fun <R> koshian(
    }
 }
 
+@KoshianMarker
 @ExperimentalContracts
 inline fun <P, L, R>
       P.addView(

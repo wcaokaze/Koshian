@@ -27,6 +27,7 @@ object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing> {
    override fun instantiateLayoutParams()      = throw UnsupportedOperationException()
 }
 
+@KoshianMarker
 inline fun <V : View> V.applyKoshian(
       applierAction: ViewApplier<V, ViewGroup.LayoutParams, Nothing>.() -> Unit
 ) {
