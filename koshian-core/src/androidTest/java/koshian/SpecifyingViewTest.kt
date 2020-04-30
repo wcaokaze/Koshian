@@ -43,7 +43,7 @@ class SpecifyingViewTest {
                }
 
                koshianTextView = TextView {
-                  view.text = "Koshian"
+                  view.text = "Koshian Text"
                }
 
                View {
@@ -58,12 +58,17 @@ class SpecifyingViewTest {
             koshianTextView {
                layout.width  = WRAP_CONTENT
                layout.height = MATCH_PARENT
-               view.textSize = 4.0f
+               view.hint = "Koshian Hint"
             }
 
             View {
             }
          }
+
+         assertEquals("Koshian Text", koshianTextView.text)
+         assertEquals(WRAP_CONTENT, koshianTextView.layoutParams.width)
+         assertEquals(MATCH_PARENT, koshianTextView.layoutParams.height)
+         assertEquals("Koshian Hint", koshianTextView.hint)
       }
    }
 
