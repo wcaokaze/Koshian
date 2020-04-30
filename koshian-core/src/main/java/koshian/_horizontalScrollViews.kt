@@ -31,6 +31,7 @@ object HorizontalScrollViewConstructor : KoshianViewGroupConstructor<HorizontalS
 /**
  * adds Views into this HorizontalScrollView.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> HorizontalScrollView.addView(
       creatorAction: ViewGroupCreator<HorizontalScrollView, Nothing, FrameLayout.LayoutParams>.() -> R
@@ -122,6 +123,7 @@ inline fun <L> CreatorParent<L>.HorizontalScrollView(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun HorizontalScrollView.applyKoshian(
       applierAction: ViewGroupApplier<HorizontalScrollView, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -184,6 +186,7 @@ inline fun HorizontalScrollView.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> HorizontalScrollView.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<HorizontalScrollView, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit

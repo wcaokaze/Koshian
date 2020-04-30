@@ -54,7 +54,6 @@ inline fun <R> koshian(
    }
 }
 
-@KoshianMarker
 @ExperimentalContracts
 inline fun <P, L, R>
       P.addView(

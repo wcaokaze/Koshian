@@ -32,6 +32,7 @@ object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, R
 /**
  * adds Views into this RelativeLayout.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> RelativeLayout.addView(
       creatorAction: ViewGroupCreator<RelativeLayout, Nothing, RelativeLayout.LayoutParams>.() -> R
@@ -123,6 +124,7 @@ inline fun <L> CreatorParent<L>.RelativeLayout(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun RelativeLayout.applyKoshian(
       applierAction: ViewGroupApplier<RelativeLayout, ViewGroup.LayoutParams, RelativeLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -185,6 +187,7 @@ inline fun RelativeLayout.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> RelativeLayout.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<RelativeLayout, ViewGroup.LayoutParams, RelativeLayout.LayoutParams, S>.() -> Unit

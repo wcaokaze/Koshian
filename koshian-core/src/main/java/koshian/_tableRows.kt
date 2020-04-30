@@ -30,6 +30,7 @@ object TableRowConstructor : KoshianViewGroupConstructor<TableRow, TableRow.Layo
 /**
  * adds Views into this TableRow.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> TableRow.addView(
       creatorAction: ViewGroupCreator<TableRow, Nothing, TableRow.LayoutParams>.() -> R
@@ -121,6 +122,7 @@ inline fun <L> CreatorParent<L>.TableRow(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun TableRow.applyKoshian(
       applierAction: ViewGroupApplier<TableRow, ViewGroup.LayoutParams, TableRow.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -183,6 +185,7 @@ inline fun TableRow.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> TableRow.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<TableRow, ViewGroup.LayoutParams, TableRow.LayoutParams, S>.() -> Unit

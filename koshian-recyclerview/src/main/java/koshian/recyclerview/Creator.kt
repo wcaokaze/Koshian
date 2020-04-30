@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import koshian.*
 import kotlin.contracts.*
 
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> (@Suppress("UNUSED") KoshianViewHolder<*>).koshian(
    context: Context,

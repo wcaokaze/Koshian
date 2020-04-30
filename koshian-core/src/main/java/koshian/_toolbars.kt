@@ -29,10 +29,10 @@ object ToolbarConstructor : KoshianViewGroupConstructor<Toolbar, Toolbar.LayoutP
    override fun instantiateLayoutParams() = Toolbar.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
 
-
 /**
  * adds Views into this Toolbar.
  */
+@KoshianMarker
 @ExperimentalContracts
 @RequiresApi(21)
 inline fun <R> Toolbar.addView(
@@ -127,6 +127,7 @@ inline fun <L> CreatorParent<L>.Toolbar(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 @RequiresApi(21)
 inline fun Toolbar.applyKoshian(
       applierAction: ViewGroupApplier<Toolbar, ViewGroup.LayoutParams, Toolbar.LayoutParams, Nothing>.() -> Unit
@@ -190,6 +191,7 @@ inline fun Toolbar.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 @RequiresApi(21)
 inline fun <S : KoshianStyle> Toolbar.applyKoshian(
       style: S,

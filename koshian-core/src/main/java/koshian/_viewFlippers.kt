@@ -31,6 +31,7 @@ object ViewFlipperConstructor : KoshianViewGroupConstructor<ViewFlipper, FrameLa
 /**
  * adds Views into this ViewFlipper.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> ViewFlipper.addView(
       creatorAction: ViewGroupCreator<ViewFlipper, Nothing, FrameLayout.LayoutParams>.() -> R
@@ -122,6 +123,7 @@ inline fun <L> CreatorParent<L>.ViewFlipper(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun ViewFlipper.applyKoshian(
       applierAction: ViewGroupApplier<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -184,6 +186,7 @@ inline fun ViewFlipper.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> ViewFlipper.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<ViewFlipper, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit

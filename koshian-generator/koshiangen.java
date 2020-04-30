@@ -287,6 +287,7 @@ public final class koshiangen {
          "/**\n" +
          " * adds Views into this "+view+".\n" +
          " */\n" +
+         "@KoshianMarker\n" +
          "@ExperimentalContracts\n" +
          "inline fun <R> "+view+".addView(\n" +
          "      creatorAction: ViewGroupCreator<"+view+", Nothing, "+layoutParams+">.() -> R\n" +
@@ -378,6 +379,7 @@ public final class koshiangen {
          " *\n" +
          " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)\n" +
          " */\n" +
+         "@KoshianMarker\n" +
          "inline fun "+view+".applyKoshian(\n" +
          "      applierAction: ViewGroupApplier<"+view+", ViewGroup.LayoutParams, "+layoutParams+", Nothing>.() -> Unit\n" +
          ") {\n" +
@@ -440,6 +442,7 @@ public final class koshiangen {
          " *\n" +
          " * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)\n" +
          " */\n" +
+         "@KoshianMarker\n" +
          "inline fun <S : KoshianStyle> "+view+".applyKoshian(\n" +
          "      style: S,\n" +
          "      applierAction: ViewGroupApplier<"+view+", ViewGroup.LayoutParams, "+layoutParams+", S>.() -> Unit\n" +
