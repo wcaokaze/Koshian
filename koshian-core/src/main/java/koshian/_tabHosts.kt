@@ -31,6 +31,7 @@ object TabHostConstructor : KoshianViewGroupConstructor<TabHost, FrameLayout.Lay
 /**
  * adds Views into this TabHost.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> TabHost.addView(
       creatorAction: ViewGroupCreator<TabHost, Nothing, FrameLayout.LayoutParams>.() -> R
@@ -122,6 +123,7 @@ inline fun <L> CreatorParent<L>.TabHost(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun TabHost.applyKoshian(
       applierAction: ViewGroupApplier<TabHost, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -184,6 +186,7 @@ inline fun TabHost.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> TabHost.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<TabHost, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit

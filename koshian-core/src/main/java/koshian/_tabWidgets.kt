@@ -31,6 +31,7 @@ object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayou
 /**
  * adds Views into this TabWidget.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> TabWidget.addView(
       creatorAction: ViewGroupCreator<TabWidget, Nothing, LinearLayout.LayoutParams>.() -> R
@@ -122,6 +123,7 @@ inline fun <L> CreatorParent<L>.TabWidget(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun TabWidget.applyKoshian(
       applierAction: ViewGroupApplier<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -184,6 +186,7 @@ inline fun TabWidget.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> TabWidget.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<TabWidget, ViewGroup.LayoutParams, LinearLayout.LayoutParams, S>.() -> Unit

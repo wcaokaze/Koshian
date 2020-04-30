@@ -31,6 +31,7 @@ object ImageSwitcherConstructor : KoshianViewGroupConstructor<ImageSwitcher, Fra
 /**
  * adds Views into this ImageSwitcher.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> ImageSwitcher.addView(
       creatorAction: ViewGroupCreator<ImageSwitcher, Nothing, FrameLayout.LayoutParams>.() -> R
@@ -122,6 +123,7 @@ inline fun <L> CreatorParent<L>.ImageSwitcher(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun ImageSwitcher.applyKoshian(
       applierAction: ViewGroupApplier<ImageSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -184,6 +186,7 @@ inline fun ImageSwitcher.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> ImageSwitcher.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<ImageSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit

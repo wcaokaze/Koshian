@@ -30,6 +30,7 @@ object LinearLayoutConstructor : KoshianViewGroupConstructor<LinearLayout, Linea
 /**
  * adds Views into this LinearLayout.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> LinearLayout.addView(
       creatorAction: ViewGroupCreator<LinearLayout, Nothing, LinearLayout.LayoutParams>.() -> R
@@ -121,6 +122,7 @@ inline fun <L> CreatorParent<L>.LinearLayout(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun LinearLayout.applyKoshian(
       applierAction: ViewGroupApplier<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -183,6 +185,7 @@ inline fun LinearLayout.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> LinearLayout.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<LinearLayout, ViewGroup.LayoutParams, LinearLayout.LayoutParams, S>.() -> Unit

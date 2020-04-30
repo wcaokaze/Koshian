@@ -30,6 +30,7 @@ object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLa
 /**
  * adds Views into this FrameLayout.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> FrameLayout.addView(
       creatorAction: ViewGroupCreator<FrameLayout, Nothing, FrameLayout.LayoutParams>.() -> R
@@ -121,6 +122,7 @@ inline fun <L> CreatorParent<L>.FrameLayout(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun FrameLayout.applyKoshian(
       applierAction: ViewGroupApplier<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -183,6 +185,7 @@ inline fun FrameLayout.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<FrameLayout, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit

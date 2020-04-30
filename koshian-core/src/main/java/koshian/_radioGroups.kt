@@ -30,6 +30,7 @@ object RadioGroupConstructor : KoshianViewGroupConstructor<RadioGroup, RadioGrou
 /**
  * adds Views into this RadioGroup.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> RadioGroup.addView(
       creatorAction: ViewGroupCreator<RadioGroup, Nothing, RadioGroup.LayoutParams>.() -> R
@@ -121,6 +122,7 @@ inline fun <L> CreatorParent<L>.RadioGroup(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun RadioGroup.applyKoshian(
       applierAction: ViewGroupApplier<RadioGroup, ViewGroup.LayoutParams, RadioGroup.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -183,6 +185,7 @@ inline fun RadioGroup.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> RadioGroup.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<RadioGroup, ViewGroup.LayoutParams, RadioGroup.LayoutParams, S>.() -> Unit

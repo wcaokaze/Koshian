@@ -18,5 +18,5 @@ package koshian
 
 @DslMarker
 @Retention(AnnotationRetention.BINARY)
-@Target(AnnotationTarget.CLASS)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 annotation class KoshianMarker

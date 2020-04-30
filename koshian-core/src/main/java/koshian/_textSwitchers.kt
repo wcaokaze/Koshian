@@ -31,6 +31,7 @@ object TextSwitcherConstructor : KoshianViewGroupConstructor<TextSwitcher, Frame
 /**
  * adds Views into this TextSwitcher.
  */
+@KoshianMarker
 @ExperimentalContracts
 inline fun <R> TextSwitcher.addView(
       creatorAction: ViewGroupCreator<TextSwitcher, Nothing, FrameLayout.LayoutParams>.() -> R
@@ -122,6 +123,7 @@ inline fun <L> CreatorParent<L>.TextSwitcher(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun TextSwitcher.applyKoshian(
       applierAction: ViewGroupApplier<TextSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, Nothing>.() -> Unit
 ) {
@@ -184,6 +186,7 @@ inline fun TextSwitcher.applyKoshian(
  *
  * ![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_readable_mixing.svg?sanitize=true)
  */
+@KoshianMarker
 inline fun <S : KoshianStyle> TextSwitcher.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<TextSwitcher, ViewGroup.LayoutParams, FrameLayout.LayoutParams, S>.() -> Unit

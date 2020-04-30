@@ -160,6 +160,8 @@ public final class $$ApplierInternal {
                "but it does not match with the next View. " +
                "(Information: the next View was " + nextView + ")");
       }
+
+      $$ApplierInternal.applyingIndex++;
    }
 
    private static void assertNextApplicable(final Object parent,
@@ -189,6 +191,8 @@ public final class $$ApplierInternal {
                "but it does not match with the next View. " +
                "(Information: the next View was " + nextView + ")");
       }
+
+      $$ApplierInternal.applyingIndex++;
    }
 
    // ==========================================================================
