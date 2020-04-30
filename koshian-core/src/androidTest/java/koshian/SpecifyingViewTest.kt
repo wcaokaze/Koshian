@@ -72,6 +72,46 @@ class SpecifyingViewTest {
       }
    }
 
+   @Test fun cursor() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val creatorView1: View
+         val creatorView2: View
+         lateinit var applierView1: View
+         lateinit var applierView2: View
+         val textView: TextView
+
+         @OptIn(ExperimentalContracts::class)
+         val v = koshian(activity) {
+            LinearLayout {
+               creatorView1 = View {
+               }
+
+               textView = TextView {
+               }
+
+               creatorView2 = View {
+               }
+            }
+         }
+
+         v.applyKoshian {
+            View {
+               applierView1 = view
+            }
+
+            textView {
+            }
+
+            View {
+               applierView2 = view
+            }
+         }
+
+         assertSame(applierView1, creatorView1)
+         assertSame(applierView2, creatorView2)
+      }
+   }
+
    @Test fun inNotViewGroupBuilder() {
       activityScenarioRule.scenario.onActivity { activity ->
          val koshianTextView: TextView
