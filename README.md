@@ -149,25 +149,22 @@ Install
 Gradle
 ```groovy
 repositories {
-   // jcenter()  // Not yet available
-
-   maven { url 'https://dl.bintray.com/wcaokaze/maven' }
+   jcenter()
 }
 
 dependencies {
-   implementation 'com.wcaokaze.koshian:koshian-core:0.3.1'
+   implementation 'com.wcaokaze.koshian:koshian-core:0.4.3'
 }
 ```
 
 Gradle (Kotlin)
 ```kotlin
 repositories {
-   // jcenter()
-   maven(url = "https://dl.bintray.com/wcaokaze/maven")
+   jcenter()
 }
 
 dependencies {
-   implementation("com.wcaokaze.koshian:koshian-core:0.3.1")
+   implementation("com.wcaokaze.koshian:koshian-core:0.4.3")
 }
 ```
 

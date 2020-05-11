@@ -19,7 +19,25 @@ package koshian.recyclerview
 import android.view.*
 
 abstract class KoshianViewHolder<in I> {
+   internal var androidxViewHolderImpl: AndroidxViewHolderImpl<@UnsafeVariance I>? = null
+
    abstract val itemView: View
 
    abstract fun bind(item: I)
+
+   private fun getAndroidxViewHolderOrThrow(): AndroidxViewHolderImpl<I> {
+      return androidxViewHolderImpl
+            ?: throw IllegalStateException(
+                  "This ViewHolder has not initialized yet. " +
+                  "Maybe you attempt to get some property in the constructor?"
+            )
+   }
+
+   val adapterPosition: Int get() = getAndroidxViewHolderOrThrow().adapterPosition
+   val layoutPosition:  Int get() = getAndroidxViewHolderOrThrow().layoutPosition
+   val oldPosition:     Int get() = getAndroidxViewHolderOrThrow().oldPosition
+
+   var isRecyclable
+      get() = getAndroidxViewHolderOrThrow().isRecyclable
+      set(value) { getAndroidxViewHolderOrThrow().setIsRecyclable(value) }
 }

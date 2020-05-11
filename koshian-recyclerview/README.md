@@ -90,51 +90,33 @@ class StatusViewHolder(context: Context) : KoshianViewHolder<StatusItem>() {
    }
 }
 
-recyclerView.adapter = object : KoshianRecyclerViewAdapter<TimelineItem> { _, item ->
-   when (item) {
-      is StatusItem           -> ViewHolderProvider(::StatusViewHolder)
-      is LoadingIndicatorItem -> ViewHolderProvider(::LoadingIndicatorViewHolder)
+class TimelineRecyclerViewAdapter : KoshianRecyclerViewAdapter<TimelineItem>() {
+   override fun selectViewHolderProvider
+         (position: Int, item: TimelineItem): ViewHolderProvider<*>
+   {
+      return when (item) {
+         is StatusItem -> ViewHolderProvider(item, ::StatusViewHolder)
+         is LoadingIndicatorItem -> ViewHolderProvider(item, ::LoadingIndicatorViewHolder)
+      }
    }
 }
 ```
 
 If you want DiffUtil:
 ```kotlin
-recyclerView.adapter = KoshianRecyclerViewAdapter<TimelineItem>() {
-   override fun selectViewHolderProvider(position: Int, item: TimelineItem): ViewHolderProvider<*> {
-      return when (item) {
-         is StatusItem           -> ViewHolderProvider(::StatusViewHolder)
-         is LoadingIndicatorItem -> ViewHolderProvider(::LoadingIndicatorViewHolder)
-      }
-   }
+sealed class TimelineItem : DiffUtilItem
 
-   override fun areItemTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
-      when (oldItem) {
-         is StatusItem -> {
-            if (newItem !is StatusItem) { return false }
+class StatusItem(val status: Status) : TimelineItem() {
+   override fun isContentsTheSameWith(item: Any): Boolean
+      = item is StatusItem && item.status.id == status.id
 
-            return oldItem.status.id == newItem.status.id
-         }
+   override fun isItemsTheSameWith(item: Any): Boolean
+      = item is StatusItem && item.status == status
+}
 
-         is LoadingIndicatorItem -> {
-            return newItem is LoadingIndicatorItem
-         }
-      }
-   }
-
-   override fun areContentsTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
-      when (oldItem) {
-         is StatusItem -> {
-            if (newItem !is StatusItem) { return false }
-
-            return oldItem.status == newItem.status
-         }
-
-         is LoadingIndicatorItem -> {
-            return newItem is LoadingIndicatorItem
-         }
-      }
-   }
+object LoadingIndicatorItem : TimelineItem() {
+   override fun isContentsTheSameWith(item: Any) = item is LoadingIndicatorItem
+   override fun isItemsTheSameWith   (item: Any) = item is LoadingIndicatorItem
 }
 ```
 
@@ -144,25 +126,22 @@ Install
 Gradle
 ```groovy
 repositories {
-   // jcenter()  // Not yet available
-
-   maven { url 'https://dl.bintray.com/wcaokaze/maven' }
+   jcenter()
 }
 
 dependencies {
-   implementation 'com.wcaokaze.koshian:koshian-recyclerview:0.3.1'
+   implementation 'com.wcaokaze.koshian:koshian-recyclerview:0.4.3'
 }
 ```
 
 Gradle (Kotlin)
 ```kotlin
 repositories {
-   // jcenter()
-   maven(url = "https://dl.bintray.com/wcaokaze/maven")
+   jcenter()
 }
 
 dependencies {
-   implementation("com.wcaokaze.koshian:koshian-recyclerview:0.3.1")
+   implementation("com.wcaokaze.koshian:koshian-recyclerview:0.4.3")
 }
 ```
 
