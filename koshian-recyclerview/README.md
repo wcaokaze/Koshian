@@ -130,7 +130,7 @@ repositories {
 }
 
 dependencies {
-   implementation 'com.wcaokaze.koshian:koshian-recyclerview:0.3.1'
+   implementation 'com.wcaokaze.koshian:koshian-recyclerview:0.4.3'
 }
 ```
 
@@ -141,7 +141,7 @@ repositories {
 }
 
 dependencies {
-   implementation("com.wcaokaze.koshian:koshian-recyclerview:0.3.1")
+   implementation("com.wcaokaze.koshian:koshian-recyclerview:0.4.3")
 }
 ```
 
