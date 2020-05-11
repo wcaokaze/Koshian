@@ -149,9 +149,7 @@ Install
 Gradle
 ```groovy
 repositories {
-   // jcenter()  // Not yet available
-
-   maven { url 'https://dl.bintray.com/wcaokaze/maven' }
+   jcenter()
 }
 
 dependencies {
@@ -162,8 +160,7 @@ dependencies {
 Gradle (Kotlin)
 ```kotlin
 repositories {
-   // jcenter()
-   maven(url = "https://dl.bintray.com/wcaokaze/maven")
+   jcenter()
 }
 
 dependencies {
