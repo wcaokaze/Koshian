@@ -21,6 +21,10 @@ import androidx.recyclerview.widget.*
 internal class AndroidxViewHolderImpl<I>(
       private val koshianViewHolder: KoshianViewHolder<I>
 ) : RecyclerView.ViewHolder(koshianViewHolder.itemView) {
+   init {
+      koshianViewHolder.androidxViewHolderImpl = this
+   }
+
    fun bind(item: I) {
       koshianViewHolder.bind(item)
    }
