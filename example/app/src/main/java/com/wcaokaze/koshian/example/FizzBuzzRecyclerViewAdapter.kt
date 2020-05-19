@@ -54,8 +54,8 @@ class FizzItemViewHolder(context: Context) : KoshianViewHolder<FizzItem>() {
       @OptIn(ExperimentalContracts::class)
       itemView = koshian(context) {
          TextView {
-            layout.margins = 16.dip
-            view.minHeight = 24.dip
+            layout.margins = 16.dp
+            view.minHeight = 24.dp
             view.text = "Fizz"
          }
       }
@@ -73,8 +73,8 @@ class BuzzItemViewHolder(context: Context) : KoshianViewHolder<BuzzItem>() {
       @OptIn(ExperimentalContracts::class)
       itemView = koshian(context) {
          TextView {
-            layout.margins = 16.dip
-            view.minHeight = 24.dip
+            layout.margins = 16.dp
+            view.minHeight = 24.dp
             view.text = "Buzz"
          }
       }
@@ -92,8 +92,8 @@ class FizzBuzzItemViewHolder(context: Context) : KoshianViewHolder<FizzBuzzItem>
       @OptIn(ExperimentalContracts::class)
       itemView = koshian(context) {
          TextView {
-            layout.margins = 16.dip
-            view.minHeight = 24.dip
+            layout.margins = 16.dp
+            view.minHeight = 24.dp
             view.text = "FizzBuzz"
          }
       }
@@ -114,8 +114,8 @@ class NormalItemViewHolder(context: Context) : KoshianViewHolder<NormalItem>() {
       @OptIn(ExperimentalContracts::class)
       itemView = koshian(context) {
          TextView {
-            layout.margins = 16.dip
-            view.minHeight = 24.dip
+            layout.margins = 16.dp
+            view.minHeight = 24.dp
          }
       }
    }

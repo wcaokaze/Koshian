@@ -54,8 +54,9 @@ public final class $$ApplierInternal {
     * Implementation for Applier
     * {@code applicable {} }
     */
-   public static void invokeViewInKoshian(final Object parent,
-                                          final KoshianApplicable applicable)
+   public static KoshianApplicable.ApplicableMode
+         invokeViewInKoshian(final Object parent,
+                             final KoshianApplicable<?> applicable)
    {
       final View view = applicable.getView();
 
@@ -67,11 +68,14 @@ public final class $$ApplierInternal {
          }
 
          addApplicable(parent, applicable);
+         return KoshianApplicable.ApplicableMode.CREATION;
       } else {
          if (view.getParent() == null) {
             insertApplicable(parent, applicable);
+            return KoshianApplicable.ApplicableMode.INSERTION;
          } else {
             assertNextApplicable(parent, applicable);
+            return KoshianApplicable.ApplicableMode.ASSERTION;
          }
       }
    }
@@ -90,7 +94,7 @@ public final class $$ApplierInternal {
    }
 
    private static void addApplicable(final Object parent,
-                                     final KoshianApplicable applicable)
+                                     final KoshianApplicable<?> applicable)
    {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(
@@ -120,7 +124,7 @@ public final class $$ApplierInternal {
    }
 
    private static void insertApplicable(final Object parent,
-                                        final KoshianApplicable applicable)
+                                        final KoshianApplicable<?> applicable)
    {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(
@@ -165,7 +169,7 @@ public final class $$ApplierInternal {
    }
 
    private static void assertNextApplicable(final Object parent,
-                                            final KoshianApplicable applicable)
+                                            final KoshianApplicable<?> applicable)
    {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(

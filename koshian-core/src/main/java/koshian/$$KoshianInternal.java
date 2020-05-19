@@ -36,36 +36,36 @@ public final class $$KoshianInternal {
       scaledDensity  = displayMetrics.scaledDensity;
    }
 
-   public static int dipToPx(final int dipValue) {
-      final int pxValue = (int) (dipValue * displayDensity);
+   public static int dpToPx(final int dpValue) {
+      final int pxValue = (int) (dpValue * displayDensity);
 
       if (pxValue != 0) {
          return pxValue;
-      } else if (dipValue > 0) {
+      } else if (dpValue > 0) {
          return 1;
       } else {
          return -1;
       }
    }
 
-   public static int dipToPx(final float dipValue) {
-      final int pxValue = (int) (dipValue * displayDensity);
+   public static int dpToPx(final float dpValue) {
+      final int pxValue = (int) (dpValue * displayDensity);
 
       if (pxValue != 0) {
          return pxValue;
-      } else if (dipValue > 0) {
+      } else if (dpValue > 0) {
          return 1;
       } else {
          return -1;
       }
    }
 
-   public static int dipToPx(final double dipValue) {
-      final int pxValue = (int) (dipValue * displayDensity);
+   public static int dpToPx(final double dpValue) {
+      final int pxValue = (int) (dpValue * displayDensity);
 
       if (pxValue != 0) {
          return pxValue;
-      } else if (dipValue > 0) {
+      } else if (dpValue > 0) {
          return 1;
       } else {
          return -1;

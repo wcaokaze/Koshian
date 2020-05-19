@@ -32,8 +32,12 @@ class ApplicableTest {
    @get:Rule
    val activityScenarioRule = activityScenarioRule<EmptyTestActivity>()
 
-   class ApplicableImpl(context: Context) : KoshianApplicable {
+   class ApplicableImpl(context: Context)
+         : KoshianApplicable<KoshianApplicable.ApplicableMode>
+   {
       override val view = View(context)
+
+      override fun getResult(mode: KoshianApplicable.ApplicableMode) = mode
    }
 
    inline val <L> Koshian<ApplicableImpl, L, *, *>.layout: L get() {
@@ -281,6 +285,65 @@ class ApplicableTest {
          assertEquals(2, v.childCount)
          assertEquals(View::class, v.getChildAt(0)::class)
          assertSame(applicable.view, v.getChildAt(1))
+      }
+   }
+
+   @Test fun returnValue_creation() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val applicable = ApplicableImpl(activity)
+         val returnValue: KoshianApplicable.ApplicableMode
+
+         @OptIn(ExperimentalContracts::class)
+         koshian(activity) {
+            LinearLayout {
+               returnValue = applicable {
+               }
+            }
+         }
+
+         assertEquals(KoshianApplicable.ApplicableMode.CREATION, returnValue)
+      }
+   }
+
+   @Test fun returnValue_assertion() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val applicable = ApplicableImpl(activity)
+         lateinit var returnValue: KoshianApplicable.ApplicableMode
+
+         @OptIn(ExperimentalContracts::class)
+         val layout = koshian(activity) {
+            LinearLayout {
+               applicable {
+               }
+            }
+         }
+
+         layout.applyKoshian {
+            returnValue = applicable {
+            }
+         }
+
+         assertEquals(KoshianApplicable.ApplicableMode.ASSERTION, returnValue)
+      }
+   }
+
+   @Test fun returnValue_insertion() {
+      activityScenarioRule.scenario.onActivity { activity ->
+         val applicable = ApplicableImpl(activity)
+         lateinit var returnValue: KoshianApplicable.ApplicableMode
+
+         @OptIn(ExperimentalContracts::class)
+         val layout = koshian(activity) {
+            LinearLayout {
+            }
+         }
+
+         layout.applyKoshian {
+            returnValue = applicable {
+            }
+         }
+
+         assertEquals(KoshianApplicable.ApplicableMode.INSERTION, returnValue)
       }
    }
 }

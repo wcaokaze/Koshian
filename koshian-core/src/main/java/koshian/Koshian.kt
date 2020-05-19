@@ -30,9 +30,13 @@ import android.view.*
 inline class Koshian<out V, out L, out CL, M : KoshianMode>
       (val `$$koshianInternal$view`: Any?)
 {
-   val Int   .dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
-   val Float .dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
-   val Double.dip: Int inline get() = `$$KoshianInternal`.dipToPx(this)
+   @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp
+   @Deprecated("Use dp instead", ReplaceWith("dp")) val Float .dip: Int inline get() = dp
+   @Deprecated("Use dp instead", ReplaceWith("dp")) val Double.dip: Int inline get() = dp
+
+   val Int   .dp: Int inline get() = `$$KoshianInternal`.dpToPx(this)
+   val Float .dp: Int inline get() = `$$KoshianInternal`.dpToPx(this)
+   val Double.dp: Int inline get() = `$$KoshianInternal`.dpToPx(this)
 
    val Int   .sp: Float inline get() = `$$KoshianInternal`.spToPx(this)
    val Float .sp: Float inline get() = `$$KoshianInternal`.spToPx(this)
@@ -142,18 +146,22 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
     * }
     * ```
     */
-   inline operator fun <A>
+   inline operator fun <A, R>
          A.invoke(
                applierAction: ViewApplier<A, CL, Nothing>.() -> Unit
-         ): A
-         where A : KoshianApplicable
+         ): R
+         where A : KoshianApplicable<R>
    {
-      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      val mode = `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+
+      beforeApply(mode)
 
       val koshian = ViewApplier<A, CL, Nothing>(this)
       koshian.applierAction()
 
-      return this
+      afterApply(mode)
+
+      return getResult(mode)
    }
 }
 
