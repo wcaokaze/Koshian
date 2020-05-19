@@ -16,7 +16,7 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <dimen name="four_dip">4dip</dimen>
+    <dimen name="four_dp">4dp</dimen>
     <dimen name="four_sp">4sp</dimen>
     <dimen name="four_px" tools:ignore="PxUsage">4px</dimen>
 </resources>

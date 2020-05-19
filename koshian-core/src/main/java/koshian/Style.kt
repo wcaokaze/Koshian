@@ -42,9 +42,9 @@ import android.view.*
  * class LightStyle : KoshianStyle() {
  *    override fun defaultStyle() {
  *       TextView {
- *          view.setPadding(8.dip)
+ *          view.setPadding(8.dp)
  *          view.textSizeSp = 12
- *          view.lineSpace = 4.dip
+ *          view.lineSpace = 4.dp
  *       }
  *    }
  *

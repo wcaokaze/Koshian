@@ -32,37 +32,37 @@ class DimensionTest {
    @get:Rule
    val activityScenarioRule = activityScenarioRule<EmptyTestActivity>()
 
-   @Test fun dip_int() {
+   @Test fun dp_int() {
       activityScenarioRule.scenario.onActivity { activity ->
          @OptIn(ExperimentalContracts::class)
-         val size = koshian(activity) { 4.dip }
+         val size = koshian(activity) { 4.dp }
 
          assertClose(
-               activity.resources.getDimension(R.dimen.four_dip),
+               activity.resources.getDimension(R.dimen.four_dp),
                size.toFloat(),
                0.001f)
       }
    }
 
-   @Test fun dip_float() {
+   @Test fun dp_float() {
       activityScenarioRule.scenario.onActivity { activity ->
          @OptIn(ExperimentalContracts::class)
-         val size = koshian(activity) { 4.0f.dip }
+         val size = koshian(activity) { 4.0f.dp }
 
          assertClose(
-               activity.resources.getDimension(R.dimen.four_dip),
+               activity.resources.getDimension(R.dimen.four_dp),
                size.toFloat(),
                0.001f)
       }
    }
 
-   @Test fun dip_double() {
+   @Test fun dp_double() {
       activityScenarioRule.scenario.onActivity { activity ->
          @OptIn(ExperimentalContracts::class)
-         val size = koshian(activity) { 4.0.dip }
+         val size = koshian(activity) { 4.0.dp }
 
          assertClose(
-               activity.resources.getDimension(R.dimen.four_dip),
+               activity.resources.getDimension(R.dimen.four_dp),
                size.toFloat(),
                0.001f)
       }

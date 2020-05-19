@@ -67,7 +67,7 @@ class MainActivity : Activity() {
       }
 
       contentView.applyKoshian(MainActivityStyle()) {
-         view.padding = 16.dip
+         view.padding = 16.dp
 
          TextView {
          }
@@ -77,7 +77,7 @@ class MainActivity : Activity() {
          }
 
          Space {
-            layout.height = 24.dip
+            layout.height = 24.dp
          }
 
          RecyclerView {
@@ -93,7 +93,7 @@ class MainActivity : Activity() {
    class MainActivityStyle : KoshianStyle() {
       override fun defaultStyle() {
          TextView {
-            view.padding = 8.dip
+            view.padding = 8.dp
             view.textSizeSp = 16
          }
       }
