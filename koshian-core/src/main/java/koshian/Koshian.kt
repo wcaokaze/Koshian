@@ -146,18 +146,22 @@ inline class Koshian<out V, out L, out CL, M : KoshianMode>
     * }
     * ```
     */
-   inline operator fun <A>
+   inline operator fun <A, R>
          A.invoke(
                applierAction: ViewApplier<A, CL, Nothing>.() -> Unit
-         ): A
-         where A : KoshianApplicable
+         ): R
+         where A : KoshianApplicable<R>
    {
-      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      val mode = `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+
+      beforeApply(mode)
 
       val koshian = ViewApplier<A, CL, Nothing>(this)
       koshian.applierAction()
 
-      return this
+      afterApply(mode)
+
+      return getResult(mode)
    }
 }
 

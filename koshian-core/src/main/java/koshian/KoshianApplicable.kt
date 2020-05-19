@@ -18,6 +18,71 @@ package koshian
 
 import android.view.*
 
-interface KoshianApplicable {
+interface KoshianApplicable<out R> {
+   enum class ApplicableMode {
+      /**
+       * Applicable was added.
+       *
+       * e.g.
+       * ```kotlin
+       * val applicable = Applicable()
+       *
+       * koshian(context) {
+       *    FrameLayout {
+       *       applicable {
+       *       }
+       *    }
+       * }
+       * ```
+       */
+      CREATION,
+
+      /**
+       * Applicable was matched to some View.
+       *
+       * e.g.
+       * ```kotlin
+       * val applicable = Applicable()
+       *
+       * view = koshian(context) {
+       *    FrameLayout {
+       *       applicable {
+       *       }
+       *    }
+       * }
+       *
+       * view.applyKoshian {
+       *    FrameLayout {
+       *       applicable {
+       *       }
+       *    }
+       * }
+       * ```
+       */
+      ASSERTION,
+
+      /**
+       * Applicable was inserted.
+       *
+       * e.g.
+       * ```kotlin
+       * val applicable = Applicable()
+       *
+       * view.applyKoshian {
+       *    FrameLayout {
+       *       applicable {
+       *       }
+       *    }
+       * }
+       * ```
+       */
+      INSERTION,
+   }
+
    val view: View
+
+   fun beforeApply(mode: ApplicableMode) {}
+   fun afterApply(mode: ApplicableMode) {}
+
+   fun getResult(mode: ApplicableMode): R
 }
