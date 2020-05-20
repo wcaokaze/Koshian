@@ -64,7 +64,7 @@ android {
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions {
-        freeCompilerArgs = ["-Xinline-classes", "-Xuse-experimental=kotlin.Experimental"]
+        freeCompilerArgs = ["-Xuse-experimental=kotlin.Experimental"]
     }
 }
 
@@ -76,7 +76,15 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-    implementation 'androidx.annotation:annotation:1.1.0'
+    api 'androidx.annotation:annotation:1.1.0'
+
+    compileOnly 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+    compileOnly 'androidx.drawerlayout:drawerlayout:1.0.0'
+    compileOnly 'androidx.slidingpanelayout:slidingpanelayout:1.0.0'
+    compileOnly 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    compileOnly 'androidx.viewpager:viewpager:1.0.0'
+
+    api "com.wcaokaze.koshian:koshian-core:$VERSION"
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -84,12 +92,18 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
 
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module("com.wcaokaze.koshian:koshian-core:$VERSION") with project(':koshian-core')
+    }
+}
+
 dokka {
     outputFormat = 'html'
     outputDirectory = "$buildDir/docs"
 
     configuration {
-        moduleName = 'Koshian'
+        moduleName = 'Koshian-AndroidX'
 
         includes = []
         jdkVersion = 6
@@ -99,7 +113,7 @@ dokka {
 
         sourceLink {
             path = "src/main/java"
-            url = 'https://github.com/wcaokaze/Koshian/blob/master/koshian-core/src/main/java'
+            url = 'https://github.com/wcaokaze/Koshian/blob/master/koshian-androidx/src/main/java'
             lineSuffix = '#L'
         }
 
@@ -147,14 +161,14 @@ final pomConfig = {
 
 publishing {
     publications {
-        Koshian(MavenPublication) {
+        Koshian_AndroidX(MavenPublication) {
             groupId 'com.wcaokaze.koshian'
-            artifactId 'koshian-core'
+            artifactId 'koshian-androidx'
             version VERSION
 
             artifact sourcesJar
             artifact javadocJar
-            artifact "$buildDir/outputs/aar/koshian-core-release.aar"
+            artifact "$buildDir/outputs/aar/koshian-androidx-release.aar"
 
             pom.withXml {
                 final rootNode = asNode()
@@ -162,7 +176,7 @@ publishing {
                 final dependenciesNode = rootNode['dependencies'][0]
                         ?: rootNode.appendNode('dependencies')
 
-                rootNode.appendNode('name', 'Koshian')
+                rootNode.appendNode('name', 'Koshian-AndroidX')
 
                 for (dependency in configurations.implementation.allDependencies) {
                     if (dependency.name == 'unspecified') { continue }
@@ -188,11 +202,11 @@ bintray {
     user = props.getProperty('bintray.user')
     key = props.getProperty('bintray.apiKey')
 
-    publications = ['Koshian']
+    publications = ['Koshian_AndroidX']
 
     pkg {
         repo = 'maven'
-        name = 'Koshian'
+        name = 'Koshian-AndroidX'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/wcaokaze/Koshian'
 
