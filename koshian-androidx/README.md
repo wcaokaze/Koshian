@@ -28,7 +28,7 @@ repositories {
 }
 
 dependencies {
-   implementation("com.wcaokaze.koshian:koshian-androidx:0.5.0")
+   implementation("com.wcaokaze.koshian:koshian-androidx:0.5.1")
 
    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
    // or/and other AndroidX dependencies
