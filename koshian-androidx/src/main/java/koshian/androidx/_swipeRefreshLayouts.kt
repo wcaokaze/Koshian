@@ -21,7 +21,6 @@ import android.content.Context
 import android.view.ViewGroup
 import androidx.swiperefreshlayout.widget.*
 import koshian.*
-import koshian.androidx.SwipeRefreshLayout
 import kotlin.contracts.*
 
 object SwipeRefreshLayoutConstructor : KoshianViewGroupConstructor<SwipeRefreshLayout, ViewGroup.LayoutParams> {
@@ -128,7 +127,10 @@ inline fun <L> CreatorParent<L>.SwipeRefreshLayout(
 inline fun SwipeRefreshLayout.applyKoshian(
       applierAction: ViewGroupApplier<SwipeRefreshLayout, ViewGroup.LayoutParams, ViewGroup.LayoutParams, Nothing>.() -> Unit
 ) {
-   applyKoshian(SwipeRefreshLayoutConstructor, applierAction)
+   applyKoshian(SwipeRefreshLayoutConstructor) {
+      `$$ApplierInternal`.applyingIndex++
+      applierAction()
+   }
 }
 
 /**
@@ -192,7 +194,10 @@ inline fun <S : KoshianStyle> SwipeRefreshLayout.applyKoshian(
       style: S,
       applierAction: ViewGroupApplier<SwipeRefreshLayout, ViewGroup.LayoutParams, ViewGroup.LayoutParams, S>.() -> Unit
 ) {
-   applyKoshian(style, SwipeRefreshLayoutConstructor, applierAction)
+   applyKoshian(style, SwipeRefreshLayoutConstructor) {
+      `$$ApplierInternal`.applyingIndex++
+      applierAction()
+   }
 }
 
 /**
@@ -208,7 +213,10 @@ inline fun <L, S : KoshianStyle>
             applierAction: ViewGroupApplier<SwipeRefreshLayout, L, ViewGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(SwipeRefreshLayoutConstructor, applierAction)
+   apply(SwipeRefreshLayoutConstructor) {
+      `$$ApplierInternal`.applyingIndex++
+      applierAction()
+   }
 }
 
 /**
@@ -225,7 +233,10 @@ inline fun <L, S : KoshianStyle>
             applierAction: ViewGroupApplier<SwipeRefreshLayout, L, ViewGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(SwipeRefreshLayoutConstructor, styleElement, applierAction)
+   apply(SwipeRefreshLayoutConstructor, styleElement) {
+      `$$ApplierInternal`.applyingIndex++
+      applierAction()
+   }
 }
 
 /**
@@ -241,7 +252,10 @@ inline fun <L, S : KoshianStyle>
             applierAction: ViewGroupApplier<SwipeRefreshLayout, L, ViewGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(name, SwipeRefreshLayoutConstructor, applierAction)
+   apply(name, SwipeRefreshLayoutConstructor) {
+      `$$ApplierInternal`.applyingIndex++
+      applierAction()
+   }
 }
 
 /**
@@ -258,7 +272,10 @@ inline fun <L, S : KoshianStyle>
             applierAction: ViewGroupApplier<SwipeRefreshLayout, L, ViewGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(name, SwipeRefreshLayoutConstructor, styleElement, applierAction)
+   apply(name, SwipeRefreshLayoutConstructor, styleElement) {
+      `$$ApplierInternal`.applyingIndex++
+      applierAction()
+   }
 }
 
 /**
