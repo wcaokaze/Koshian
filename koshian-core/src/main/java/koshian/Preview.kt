@@ -22,6 +22,7 @@ import android.view.*
 import android.widget.*
 import com.wcaokaze.koshian.*
 import kotlin.reflect.*
+import kotlin.reflect.full.IllegalCallableAccessException
 
 class Preview
       @JvmOverloads constructor(
@@ -54,8 +55,6 @@ class Preview
       addView(view)
    }
 
-   // We can ignore the warning about kotlin-reflect.jar not found.
-   // Since this function is called on Android Studio, not on Android runtime.
    private fun instantiateContainer(containerClass: KClass<*>, context: Context): Any {
       var lastFailCause: Exception? = null
 
@@ -82,12 +81,17 @@ class Preview
          }
       }
 
-      if (lastFailCause != null) {
-         throw lastFailCause
-      } else {
-         throw Exception("cannot instantiate $containerClass. " +
-               "It must have either of constructor(Context), " +
-               "or all parameters expect Context must have a default argument.")
+      when {
+         lastFailCause is IllegalCallableAccessException -> throw Exception(
+            "An IllegalCallableAccessException was thrown. Maybe the constructor is private?",
+            lastFailCause)
+
+         lastFailCause != null -> throw Exception(lastFailCause)
+
+         else -> throw Exception(
+            "cannot instantiate $containerClass. " +
+            "It must have either of constructor(Context), " +
+            "or all parameters expect Context must have a default argument.")
       }
    }
 
@@ -135,12 +139,16 @@ class Preview
          return callResult
       }
 
-      if (lastFailCause != null) {
-         throw lastFailCause
-      } else {
-         throw Exception("cannot get a View from $viewGetterName. " +
-               "It must be a property or a function(Context), or all parameters " +
-               "expect Context must have a default argument.")
+      when {
+         lastFailCause is IllegalCallableAccessException -> throw Exception(
+            "An IllegalCallableAccessException was thrown. Maybe $viewGetterName is private?")
+
+         lastFailCause != null -> throw Exception(lastFailCause)
+
+         else -> throw Exception(
+            "cannot get a View from $viewGetterName. " +
+            "It must be a property or a function(Context), or all parameters " +
+            "expect Context must have a default argument.")
       }
    }
 }
