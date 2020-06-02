@@ -17,6 +17,7 @@
 package com.wcaokaze.koshian.example
 
 import android.content.*
+import android.view.View
 import androidx.recyclerview.widget.*
 import koshian.*
 import koshian.recyclerview.*
@@ -42,6 +43,52 @@ class PreviewTestContainer(context: Context) {
             view.layoutManager = LinearLayoutManager(context)
          }
       }
+   }
+
+   fun build(context: Context): View {
+      @OptIn(ExperimentalContracts::class)
+      val contentView = koshian(context) {
+         LinearLayout {
+            view.orientation = VERTICAL
+
+            TextView {
+               view.text = "This is an example app for Koshian."
+            }
+
+            TextView {
+               view.text = "https://github.com/wcaokaze/Koshian"
+            }
+
+            RecyclerView {
+               val recyclerViewAdapter = FizzBuzzRecyclerViewAdapter()
+               view.adapter = recyclerViewAdapter
+               view.layoutManager = LinearLayoutManager(context)
+            }
+         }
+      }
+
+      contentView.applyKoshian(MainActivity.MainActivityStyle()) {
+         view.padding = 16.dp
+
+         TextView {
+         }
+
+         TextView {
+            view.textColor = 0x03a9f4.opaque
+         }
+
+         Space {
+            layout.height = 24.dp
+         }
+
+         RecyclerView {
+            layout.width = MATCH_PARENT
+            layout.height = 0
+            layout.weight = 1.0f
+         }
+      }
+
+      return contentView
    }
 
    init {

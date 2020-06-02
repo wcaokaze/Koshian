@@ -33,7 +33,7 @@ class Preview
 {
    init {
       val containerClassName: String
-      val viewPropertyName: String
+      val viewGetterName: String
 
       run {
          val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.Preview, defStyleAttr, 0)
@@ -41,7 +41,7 @@ class Preview
          containerClassName = styledAttrs.getString(R.styleable.Preview_container_class)
             ?: throw Exception("container_class is not specified")
 
-         viewPropertyName = styledAttrs.getString(R.styleable.Preview_view_property)
+         viewGetterName = styledAttrs.getString(R.styleable.Preview_view_property)
             ?: throw Exception("view_property is not specified")
 
          styledAttrs.recycle()
@@ -49,7 +49,7 @@ class Preview
 
       val clazz = Class.forName(containerClassName).kotlin
       val container = instantiateContainer(clazz, context)
-      val view = getView(clazz, container, viewPropertyName)
+      val view = getView(clazz, container, context, viewGetterName)
 
       addView(view)
    }
@@ -86,33 +86,47 @@ class Preview
 
    private fun getView(containerClass: KClass<*>,
                        container: Any?,
-                       viewPropertyName: String): View
+                       context: Context,
+                       viewGetterName: String): View
    {
-      val callable = containerClass.members.firstOrNull { it.name == viewPropertyName }
-         ?: throw Exception("No property named `$viewPropertyName` was found")
+      val getters = containerClass.members.filter { it.name == viewGetterName }
 
-      if (callable.parameters.isEmpty() || callable.parameters.all { it.isOptional }) {
-         return callable.callBy(emptyMap()) as? View
-            ?: throw Exception("$viewPropertyName did not return a View")
+      if (getters.isEmpty()) {
+         throw Exception("No member named `$viewGetterName` was found in $containerClass")
       }
 
-      if (callable.parameters.first().type.classifier == containerClass
-            && callable.parameters.drop(1).all { it.isOptional })
-      {
-         val parameter = callable.parameters.first()
+      callGetter@for (getter in getters) {
+         val args = HashMap<KParameter, Any?>()
 
-         val view = callable.callBy(
-            mapOf(
-               parameter to container
-            )
-         )
+         buildArgs@for (param in getter.parameters) {
+            when {
+               param.isOptional -> continue@buildArgs
 
-         if (view !is View) { throw Exception("$viewPropertyName did not return a View") }
+               param.type.classifier == Context::class -> {
+                  args[param] = context
+               }
 
-         return view
+               param.type.classifier == containerClass -> {
+                  args[param] = container
+               }
+
+               else -> continue@callGetter
+            }
+         }
+
+         val callResult = try {
+            getter.callBy(args)
+         } catch (e: Exception) {
+            continue@callGetter
+         }
+
+         if (callResult !is View) { continue@callGetter }
+
+         return callResult
       }
 
-      throw Exception("cannot get a View from $viewPropertyName. " +
-            "It must be a property or a function without any parameters.")
+      throw Exception("cannot get a View from $viewGetterName. " +
+            "It must be a property or a function(Context), or all parameters " +
+            "expect Context must have a default argument.")
    }
 }

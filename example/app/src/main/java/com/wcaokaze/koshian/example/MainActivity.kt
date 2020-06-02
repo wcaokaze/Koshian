@@ -17,9 +17,11 @@
 package com.wcaokaze.koshian.example
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import koshian.*
 import koshian.recyclerview.*
@@ -39,13 +41,13 @@ class MainActivity : Activity() {
 
    override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
-      buildLayout()
+      setContentView(buildLayout(this))
       prepareFizzBuzzItems()
    }
 
-   private fun buildLayout() {
+   fun buildLayout(context: Context): View {
       @OptIn(ExperimentalContracts::class)
-      val contentView = koshian(this) {
+      val contentView = koshian(context) {
          LinearLayout {
             view.orientation = VERTICAL
 
@@ -87,7 +89,7 @@ class MainActivity : Activity() {
          }
       }
 
-      setContentView(contentView)
+      return contentView
    }
 
    class MainActivityStyle : KoshianStyle() {
