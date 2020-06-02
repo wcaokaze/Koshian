@@ -54,30 +54,34 @@ class Preview
       addView(view)
    }
 
+   // We can ignore the warning about kotlin-reflect.jar not found.
+   // Since this function is called on Android Studio, not on Android runtime.
    private fun instantiateContainer(containerClass: KClass<*>, context: Context): Any {
-      val defaultConstructor = containerClass.constructors
-         .firstOrNull { it.parameters.isEmpty() }
+      callConstructor@for (constructor in containerClass.constructors) {
+         val args = HashMap<KParameter, Any?>()
 
-      if (defaultConstructor != null) {
-         return defaultConstructor.call()
-      }
+         buildArgs@for (param in constructor.parameters) {
+            when {
+               param.isOptional -> continue@buildArgs
 
-      val constructor = containerClass.constructors
-         .filter { c -> c.parameters.first().type.classifier == Context::class }
-         .firstOrNull { c -> c.parameters.drop(1).all { it.isOptional } }
+               param.type.classifier == Context::class -> {
+                  args[param] = context
+               }
 
-      if (constructor != null) {
-         val parameter = constructor.parameters.first()
+               else -> continue@callConstructor
+            }
+         }
 
-         return constructor.callBy(
-            mapOf(
-               parameter to context
-            )
-         )
+         try {
+            return constructor.callBy(args)
+         } catch (e: Exception) {
+            continue@callConstructor
+         }
       }
 
       throw Exception("cannot instantiate $containerClass. " +
-            "It must have either of constructor(), constructor(Context).")
+            "It must have either of constructor(Context), " +
+            "or all parameters expect Context must have a default argument.")
    }
 
    private fun getView(containerClass: KClass<*>,
