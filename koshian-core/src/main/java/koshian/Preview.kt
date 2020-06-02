@@ -57,6 +57,8 @@ class Preview
    // We can ignore the warning about kotlin-reflect.jar not found.
    // Since this function is called on Android Studio, not on Android runtime.
    private fun instantiateContainer(containerClass: KClass<*>, context: Context): Any {
+      var lastFailCause: Exception? = null
+
       callConstructor@for (constructor in containerClass.constructors) {
          val args = HashMap<KParameter, Any?>()
 
@@ -75,13 +77,18 @@ class Preview
          try {
             return constructor.callBy(args)
          } catch (e: Exception) {
+            lastFailCause = e
             continue@callConstructor
          }
       }
 
-      throw Exception("cannot instantiate $containerClass. " +
-            "It must have either of constructor(Context), " +
-            "or all parameters expect Context must have a default argument.")
+      if (lastFailCause != null) {
+         throw lastFailCause
+      } else {
+         throw Exception("cannot instantiate $containerClass. " +
+               "It must have either of constructor(Context), " +
+               "or all parameters expect Context must have a default argument.")
+      }
    }
 
    private fun getView(containerClass: KClass<*>,
@@ -94,6 +101,8 @@ class Preview
       if (getters.isEmpty()) {
          throw Exception("No member named `$viewGetterName` was found in $containerClass")
       }
+
+      var lastFailCause: Exception? = null
 
       callGetter@for (getter in getters) {
          val args = HashMap<KParameter, Any?>()
@@ -117,6 +126,7 @@ class Preview
          val callResult = try {
             getter.callBy(args)
          } catch (e: Exception) {
+            lastFailCause = e
             continue@callGetter
          }
 
@@ -125,8 +135,12 @@ class Preview
          return callResult
       }
 
-      throw Exception("cannot get a View from $viewGetterName. " +
-            "It must be a property or a function(Context), or all parameters " +
-            "expect Context must have a default argument.")
+      if (lastFailCause != null) {
+         throw lastFailCause
+      } else {
+         throw Exception("cannot get a View from $viewGetterName. " +
+               "It must be a property or a function(Context), or all parameters " +
+               "expect Context must have a default argument.")
+      }
    }
 }
