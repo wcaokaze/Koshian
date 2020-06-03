@@ -69,7 +69,16 @@ class Preview
                   args[param] = context
                }
 
-               else -> continue@callConstructor
+               param.type.isMarkedNullable -> {
+                  args[param] = null
+               }
+
+               else -> {
+                  val arg = param.type.instantiateViaDefaultConstructor()
+                     ?: continue@callConstructor
+
+                  args[param] = arg
+               }
             }
          }
 
@@ -150,5 +159,25 @@ class Preview
             "It must be a property or a function(Context), or all parameters " +
             "expect Context must have a default argument.")
       }
+   }
+
+   private fun KType.instantiateViaDefaultConstructor(): Any? {
+      val classifier = classifier
+
+      if (classifier !is KClass<*>) { return null }
+
+      val defaultConstructor = classifier
+         .constructors.firstOrNull { it.parameters.isEmpty() }
+
+      if (defaultConstructor != null) { return defaultConstructor.call() }
+
+      val optionalParameterConstructor = classifier
+         .constructors.firstOrNull { c -> c.parameters.all { it.isOptional } }
+
+      if (optionalParameterConstructor != null) {
+         return optionalParameterConstructor.callBy(emptyMap())
+      }
+
+      return null
    }
 }
