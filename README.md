@@ -70,6 +70,70 @@ init {
 ```
 
 
+Preview
+--------------------------------------------------------------------------------
+
+```kotlin
+class Container(context: Context) {
+   val view = koshian(context) {
+      LinearLayout {
+         view.orientation = VERTICAL
+      }
+   }
+}
+```
+```xml
+<koshian.Preview
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:container="com.wcaokaze.example.Container"
+    app:property="view" />
+```
+
+- `app:container`  
+    The name of a class which has a View.
+- `app:property`  
+    The name of a property which has a View. Or, a function which returns a View.
+
+Usage of preview for function
+```kotlin
+class Container {
+   fun build(context: Context) = koshian(context) {
+      LinearLayout {
+         view.orientation = VERTICAL
+      }
+   }
+}
+```
+```xml
+<koshian.Preview
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:container="com.wcaokaze.example.Container"
+    app:property="build" />
+```
+We can preview even an Activity. Check it in the example app.
+[MainActivity.kt](https://github.com/wcaokaze/Koshian/blob/master/example/app/src/main/java/com/wcaokaze/koshian/example/MainActivity.kt#L48)
+[preview_test_container.xml](https://github.com/wcaokaze/Koshian/blob/master/example/app/src/main/res/layout/preview_test_container.xml)
+
+But please note that we cannot use Activity (or Fragment) in preview.
+```kotlin
+fun buildLayout(context: Context): View {
+   //           ^~~~~~~~~~~~~~~~
+   //           Receive a Context since we cannot use the Activity
+
+   // ...
+
+   return contentView
+   // return the View since we cannot call `setContentView(View)`
+}
+```
+
+
 applyKoshian
 --------------------------------------------------------------------------------
 
