@@ -58,6 +58,9 @@ class Preview
    private fun instantiateContainer(containerClass: KClass<*>, context: Context): Any {
       var lastFailCause: Exception? = null
 
+      val obj = containerClass.objectInstance
+      if (obj != null) { return obj }
+
       callConstructor@for (constructor in containerClass.constructors) {
          val args = HashMap<KParameter, Any?>()
 
@@ -165,6 +168,9 @@ class Preview
       val classifier = classifier
 
       if (classifier !is KClass<*>) { return null }
+
+      val obj = classifier.objectInstance
+      if (obj != null) { return obj }
 
       val defaultConstructor = classifier
          .constructors.firstOrNull { it.parameters.isEmpty() }
