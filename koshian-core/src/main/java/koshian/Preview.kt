@@ -39,11 +39,11 @@ class Preview
       run {
          val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.Preview, defStyleAttr, 0)
 
-         containerClassName = styledAttrs.getString(R.styleable.Preview_container_class)
-            ?: throw Exception("container_class is not specified")
+         containerClassName = styledAttrs.getString(R.styleable.Preview_container)
+            ?: throw Exception("container is not specified")
 
-         viewGetterName = styledAttrs.getString(R.styleable.Preview_view_property)
-            ?: throw Exception("view_property is not specified")
+         viewGetterName = styledAttrs.getString(R.styleable.Preview_property)
+            ?: throw Exception("property is not specified")
 
          styledAttrs.recycle()
       }

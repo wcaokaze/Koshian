@@ -17,7 +17,7 @@
 
 <resources>
     <declare-styleable name="Preview">
-        <attr name="container_class" format="string"/>
-        <attr name="view_property" format="string"/>
+        <attr name="container" format="string"/>
+        <attr name="property" format="string"/>
     </declare-styleable>
 </resources>
