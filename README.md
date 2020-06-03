@@ -94,6 +94,9 @@ class Container(context: Context) {
     app:property="view" />
 ```
 
+Note that Previews are not updated until you build your project,
+since Koshian generates Preview Views from the compiled binary dynamically.
+
 - `app:container`  
     The name of a class which has a View.
 - `app:property`  
