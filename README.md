@@ -114,10 +114,6 @@ Install
 --------------------------------------------------------------------------------
 Gradle
 ```groovy
-repositories {
-   jcenter()
-}
-
 dependencies {
    implementation 'com.wcaokaze.koshian:koshian-core:0.5.2'
 }
@@ -125,10 +121,6 @@ dependencies {
 
 Gradle (Kotlin)
 ```kotlin
-repositories {
-   jcenter()
-}
-
 dependencies {
    implementation("com.wcaokaze.koshian:koshian-core:0.5.2")
 }
