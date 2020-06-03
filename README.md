@@ -73,6 +73,8 @@ init {
 Preview
 --------------------------------------------------------------------------------
 
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/preview.png)
+
 ```kotlin
 class Container(context: Context) {
    val view = koshian(context) {
