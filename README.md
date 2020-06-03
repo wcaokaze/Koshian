@@ -5,11 +5,6 @@ Koshian
 DSL to layout Android Views.
 
 ```kotlin
-private val userIconView: ImageView
-private val usernameView: TextView
-
-private val followButton: Button
-
 init {
    val layout = koshian(context) {
       LinearLayout {
@@ -70,69 +65,23 @@ init {
 ```
 
 
-applyKoshian
+Preview
 --------------------------------------------------------------------------------
 
-finds Views that are already added in a ViewGroup, and applies Koshian DSL to them.
+![](https://raw.github.com/wcaokaze/Koshian/master/imgs/preview.png)
 
-![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier.svg?sanitize=true)
+We can preview Koshian layouts.
 
-The following 2 snippets are equivalent.
-
-1.
-    ```kotlin
-    val contentView = koshian(context) {
-       LinearLayout {
-          TextView {
-             view.text = "hello"
-             view.textColor = 0xffffff opacity 0.8
-          }
-       }
-    }
-    ```
-
-2.
-    ```kotlin
-    val contentView = koshian(context) {
-       LinearLayout {
-          TextView {
-             view.text = "hello"
-          }
-       }
-    }
-
-    contentView.applyKoshian {
-       TextView {
-          view.textColor = 0xffffff opacity 0.8
-       }
-    }
-    ```
-
-When mismatched View is specified, Koshian creates a new View and inserts it.
-
-![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_insertion.svg?sanitize=true)
+See [Koshian-core](koshian-core/README.md) for more informations.
 
 
-Naming
+Modules
 --------------------------------------------------------------------------------
 
-Also, naming View is a good way.
+#### [Koshian-core](koshian-core)
 
-![](https://raw.github.com/wcaokaze/Koshian/master/imgs/applier_named.svg?sanitize=true)
+Koshian's main functions.
 
-
-Style
---------------------------------------------------------------------------------
-
-We can define styles.
-
-Enjoy the powerful DSL.
-
-![](https://raw.github.com/wcaokaze/Koshian/master/imgs/enjoy.svg?sanitize=true)
-
-
-Submodules
---------------------------------------------------------------------------------
 
 #### [Koshian-Generator](koshian-generator)
 
@@ -144,27 +93,36 @@ A helper to ready Koshian for external Views.
 Makes RecyclerView easier.
 
 
+Code Style Recommendation
+--------------------------------------------------------------------------------
+
+Koshian has too many top level functions.
+So it is recommended to import them with `*`.
+
+```kotlin
+import koshian.*
+```
+
+### IntelliJ IDEA, Android Studio Settings
+
+Settings > Editor > Code Style > Kotlin > Imports > Packages to Use Import with `*`
+
+Add `koshian` and check `With Subpackages`
+
+
 Install
 --------------------------------------------------------------------------------
 Gradle
 ```groovy
-repositories {
-   jcenter()
-}
-
 dependencies {
-   implementation 'com.wcaokaze.koshian:koshian-core:0.5.2'
+   implementation 'com.wcaokaze.koshian:koshian-core:0.6.0'
 }
 ```
 
 Gradle (Kotlin)
 ```kotlin
-repositories {
-   jcenter()
-}
-
 dependencies {
-   implementation("com.wcaokaze.koshian:koshian-core:0.5.2")
+   implementation("com.wcaokaze.koshian:koshian-core:0.6.0")
 }
 ```
 
