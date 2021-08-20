@@ -76,7 +76,6 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib'
-    compileOnly "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation 'androidx.annotation:annotation:1.1.0'
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
