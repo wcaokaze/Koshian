@@ -180,28 +180,3 @@ publishing {
 }
 
 publish.dependsOn(sourcesJar, javadocJar, 'assembleRelease')
-
-bintray {
-    final props = new Properties()
-    props.load(project.file('local.properties').newDataInputStream())
-
-    user = props.getProperty('bintray.user')
-    key = props.getProperty('bintray.apiKey')
-
-    publications = ['Koshian']
-
-    pkg {
-        repo = 'maven'
-        name = 'Koshian'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/wcaokaze/Koshian'
-
-        version {
-            name = VERSION
-            released = new Date()
-            vcsTag = "v$VERSION"
-        }
-    }
-}
-
-bintrayUpload.dependsOn(publish)
