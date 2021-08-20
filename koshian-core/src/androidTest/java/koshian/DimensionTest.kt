@@ -37,10 +37,9 @@ class DimensionTest {
          @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.dp }
 
-         assertClose(
-               activity.resources.getDimension(R.dimen.four_dp),
-               size.toFloat(),
-               0.001f)
+         assertEquals(
+               activity.resources.getDimension(R.dimen.four_dp).toInt(),
+               size)
       }
    }
 
@@ -49,10 +48,9 @@ class DimensionTest {
          @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0f.dp }
 
-         assertClose(
-               activity.resources.getDimension(R.dimen.four_dp),
-               size.toFloat(),
-               0.001f)
+         assertEquals(
+               activity.resources.getDimension(R.dimen.four_dp).toInt(),
+               size)
       }
    }
 
@@ -61,10 +59,9 @@ class DimensionTest {
          @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0.dp }
 
-         assertClose(
-               activity.resources.getDimension(R.dimen.four_dp),
-               size.toFloat(),
-               0.001f)
+         assertEquals(
+               activity.resources.getDimension(R.dimen.four_dp).toInt(),
+               size)
       }
    }
 
@@ -73,10 +70,9 @@ class DimensionTest {
          @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.px }
 
-         assertClose(
-               activity.resources.getDimension(R.dimen.four_px),
-               size.toFloat(),
-               0.001f)
+         assertEquals(
+               activity.resources.getDimension(R.dimen.four_px).toInt(),
+               size)
       }
    }
 
@@ -85,10 +81,9 @@ class DimensionTest {
          @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0f.px }
 
-         assertClose(
-               activity.resources.getDimension(R.dimen.four_px),
-               size.toFloat(),
-               0.001f)
+         assertEquals(
+               activity.resources.getDimension(R.dimen.four_px).toInt(),
+               size)
       }
    }
 
@@ -97,10 +92,9 @@ class DimensionTest {
          @OptIn(ExperimentalContracts::class)
          val size = koshian(activity) { 4.0.px }
 
-         assertClose(
-               activity.resources.getDimension(R.dimen.four_px),
-               size.toFloat(),
-               0.001f)
+         assertEquals(
+               activity.resources.getDimension(R.dimen.four_px).toInt(),
+               size)
       }
    }
 
@@ -141,6 +135,8 @@ class DimensionTest {
    }
 
    private fun assertClose(expected: Float, actual: Float, offset: Float) {
-      assertTrue(abs(expected - actual) < offset)
+      if (abs(expected - actual) > offset) {
+         throw AssertionError("Assertion failed. expected: $expected, but actual: $actual")
+      }
    }
 }
