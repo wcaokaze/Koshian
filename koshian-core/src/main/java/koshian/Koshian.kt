@@ -27,7 +27,8 @@ import android.view.*
  *   e.g. When V is FrameLayout, CL is FrameLayout.LayoutParams
  */
 @KoshianMarker
-inline class Koshian<out V, out L, out CL, M : KoshianMode>
+@JvmInline
+value class Koshian<out V, out L, out CL, M : KoshianMode>
       (val `$$koshianInternal$view`: Any?)
 {
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp

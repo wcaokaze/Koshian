@@ -17,18 +17,27 @@
 @file:Suppress("UNUSED")
 package koshian
 
+import android.content.res.*
 import android.graphics.*
 import android.graphics.drawable.*
+import android.os.*
 import android.view.*
 import androidx.annotation.*
 
-@Suppress("nothing_to_inline")
-inline fun KoshianExt<View, *>.drawable(@DrawableRes resId: Int): Drawable
-      = (`$$koshianInternal$view` as View).context.resources.getDrawable(resId)!!
+fun KoshianExt<View, *>.drawable(@DrawableRes resId: Int): Drawable {
+   val context = (`$$koshianInternal$view` as View).context
+
+   return if (Build.VERSION.SDK_INT >= 21) {
+      context.getDrawable(resId) ?: throw Resources.NotFoundException()
+   } else {
+      @Suppress("DEPRECATION")
+      context.resources.getDrawable(resId)
+   }
+}
 
 fun KoshianExt<View, *>.drawable(@DrawableRes resId: Int, @ColorInt color: Int): Drawable {
-   val drawable = (`$$koshianInternal$view` as View).context.resources.getDrawable(resId)!!.mutate()
-   drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+   val drawable = drawable(resId).mutate()
+   drawable.colorFilter = PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN)
 
    return drawable
 }

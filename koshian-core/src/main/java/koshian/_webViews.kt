@@ -22,7 +22,7 @@ import android.webkit.WebView
 import kotlin.contracts.*
 
 object WebViewConstructor : KoshianViewConstructor<WebView> {
-   override fun instantiate(context: Context?) = WebView(context)
+   override fun instantiate(context: Context) = WebView(context)
 }
 
 /**
