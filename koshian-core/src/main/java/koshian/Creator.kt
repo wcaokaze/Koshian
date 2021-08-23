@@ -21,9 +21,6 @@ import android.view.*
 
 import kotlin.contracts.*
 
-val (@Suppress("UNUSED") Koshian<*, *, *, KoshianMode.Creator>).context: Context
-   inline get() = `$$KoshianInternal`.context
-
 @KoshianMarker
 @ExperimentalContracts
 inline fun <R> koshian(
@@ -32,11 +29,9 @@ inline fun <R> koshian(
 ): R {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
-   val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = KoshianRoot.CONSTRUCTOR
    `$$ApplierInternal`.applyingIndex = -1
    `$$StyleInternal`.style = null
@@ -44,10 +39,9 @@ inline fun <R> koshian(
    `$$KoshianInternal`.init(context)
 
    try {
-      val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(KoshianRoot.INSTANCE)
+      val koshian = Koshian<Nothing, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(KoshianRoot.INSTANCE, context)
       return koshian.creatorAction()
    } finally {
-      `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
       `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle
@@ -65,20 +59,17 @@ inline fun <P, L, R>
 {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
-   val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = parentConstructor
    `$$ApplierInternal`.applyingIndex = -1
    `$$StyleInternal`.style = null
 
    try {
-      val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this)
+      val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this, context)
       return koshian.creatorAction()
    } finally {
-      `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
       `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle
@@ -92,9 +83,9 @@ inline fun <V, L>
       ): V
       where V : View
 {
-   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, constructor)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, context, constructor)
 
-   val koshian = ViewCreator<V, L>(view)
+   val koshian = ViewCreator<V, L>(view, context)
    koshian.creatorAction()
    return view
 }
@@ -107,9 +98,9 @@ inline fun <V, L>
       ): V
       where V : View
 {
-   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, name, constructor)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, context, name, constructor)
 
-   val koshian = ViewCreator<V, L>(view)
+   val koshian = ViewCreator<V, L>(view, context)
    koshian.creatorAction()
    return view
 }
@@ -123,12 +114,12 @@ inline fun <V, L, CL>
             L : ViewGroup.LayoutParams,
             CL : ViewGroup.LayoutParams
 {
-   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, constructor)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, context, constructor)
 
    val oldParentViewConstructor = `$$KoshianInternal`.parentViewConstructor
    `$$KoshianInternal`.parentViewConstructor = constructor
 
-   val koshian = ViewGroupCreator<V, L, CL>(view)
+   val koshian = ViewGroupCreator<V, L, CL>(view, context)
    koshian.creatorAction()
 
    `$$KoshianInternal`.parentViewConstructor = oldParentViewConstructor
@@ -146,12 +137,12 @@ inline fun <V, L, CL>
             L : ViewGroup.LayoutParams,
             CL : ViewGroup.LayoutParams
 {
-   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, name, constructor)
+   val view = `$$CreatorInternal`.addNewView(`$$koshianInternal$view`, context, name, constructor)
 
    val oldParentViewConstructor = `$$KoshianInternal`.parentViewConstructor
    `$$KoshianInternal`.parentViewConstructor = constructor
 
-   val koshian = ViewGroupCreator<V, L, CL>(view)
+   val koshian = ViewGroupCreator<V, L, CL>(view, context)
    koshian.creatorAction()
 
    `$$KoshianInternal`.parentViewConstructor = oldParentViewConstructor

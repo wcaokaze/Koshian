@@ -16,6 +16,7 @@
 
 package koshian;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
@@ -29,9 +30,10 @@ public class $$CreatorInternal {
     */
    public static <V extends View> V addNewView(
          final Object parent,
+         final Context context,
          final KoshianViewConstructor<V> constructor
    ) {
-      final V view = constructor.instantiate($$KoshianInternal.context);
+      final V view = constructor.instantiate(context);
 
       @SuppressWarnings("rawtypes")
       final KoshianViewGroupConstructor parentViewConstructor
@@ -51,10 +53,11 @@ public class $$CreatorInternal {
     */
    public static <V extends View> V addNewView(
          final Object parent,
+         final Context context,
          final String name,
          final KoshianViewConstructor<V> constructor
    ) {
-      final V view = constructor.instantiate($$KoshianInternal.context);
+      final V view = constructor.instantiate(context);
       view.setTag(R.id.view_tag_name, name);
 
       @SuppressWarnings("rawtypes")

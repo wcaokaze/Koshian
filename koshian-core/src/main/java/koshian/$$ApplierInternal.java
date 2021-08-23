@@ -16,6 +16,7 @@
 
 package koshian;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewManager;
@@ -31,7 +32,7 @@ public final class $$ApplierInternal {
     * Implementation for Applier
     * {@code view {} }
     */
-   public static void invokeViewInKoshian(final Object parent, final View view) {
+   public static void invokeViewInKoshian(final Object parent, final View view, final Context context) {
       if (applyingIndex == -1) {
          if (view.getParent() != null) {
             throw new IllegalStateException("A View(" + view + ") was specified in a Creator, " +
@@ -46,7 +47,7 @@ public final class $$ApplierInternal {
             assertNextView(parent, view);
          }
 
-         $$StyleInternal.applyCurrentStyleTo(view);
+         $$StyleInternal.applyCurrentStyleTo(view, context);
       }
    }
 
@@ -207,6 +208,7 @@ public final class $$ApplierInternal {
     */
    public static <V extends View> V findViewOrInsertNew(
          final Object parent,
+         final Context context,
          final KoshianViewConstructor<V> constructor,
          final Class<V> viewClass
    ) {
@@ -215,10 +217,10 @@ public final class $$ApplierInternal {
       V foundView = findView(parentViewGroup, viewClass);
 
       if (foundView == null) {
-         foundView = insertNewView(parentViewGroup, constructor);
+         foundView = insertNewView(parentViewGroup, context, constructor);
       }
 
-      $$StyleInternal.applyCurrentStyleTo(foundView);
+      $$StyleInternal.applyCurrentStyleTo(foundView, context);
 
       return foundView;
    }
@@ -229,6 +231,7 @@ public final class $$ApplierInternal {
     */
    public static <V extends View> V findViewOrInsertNewAndApplyStyle(
          final Object parent,
+         final Context context,
          final KoshianViewConstructor<V> constructor,
          final KoshianStyle.StyleElement<V> styleElement,
          final Class<V> viewClass
@@ -238,20 +241,21 @@ public final class $$ApplierInternal {
       V foundView = findView(parentViewGroup, viewClass);
 
       if (foundView == null) {
-         foundView = insertNewView(parentViewGroup, constructor);
+         foundView = insertNewView(parentViewGroup, context, constructor);
       }
 
-      $$StyleInternal.applyCurrentStyleTo(foundView);
-      styleElement.applyStyleTo(foundView);
+      $$StyleInternal.applyCurrentStyleTo(foundView, context);
+      styleElement.applyStyleTo(foundView, context);
 
       return foundView;
    }
 
    private static <V extends View>
          V insertNewView(final ViewManager parentView,
+                         final Context context,
                          final KoshianViewConstructor<V> childConstructor)
    {
-      final V child = childConstructor.instantiate($$KoshianInternal.context);
+      final V child = childConstructor.instantiate(context);
 
       if (parentView instanceof ViewGroup) {
          final ViewGroup parentViewGroup = (ViewGroup) parentView;

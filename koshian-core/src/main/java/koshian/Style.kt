@@ -16,6 +16,7 @@
 
 package koshian
 
+import android.content.*
 import android.view.*
 
 /**
@@ -84,15 +85,15 @@ abstract class KoshianStyle {
    }
 
    interface StyleElement<V : View> {
-      fun applyStyleTo(view: V)
+      fun applyStyleTo(view: V, context: Context)
    }
 
    inline fun <reified V : View> createStyleElement(
          crossinline styleAction: ViewStyle<V>.() -> Unit
    ): StyleElement<V> {
       val styleElement = object : StyleElement<V> {
-         override fun applyStyleTo(view: V) {
-            val viewBuilder = ViewStyle<V>(view)
+         override fun applyStyleTo(view: V, context: Context) {
+            val viewBuilder = ViewStyle<V>(view, context)
             viewBuilder.styleAction()
          }
       }
@@ -126,11 +127,9 @@ inline fun <V, S>
       )
       where V : View, S : KoshianStyle
 {
-   val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = NothingConstructor
    `$$ApplierInternal`.applyingIndex = 0
    `$$StyleInternal`.style = style
@@ -138,11 +137,10 @@ inline fun <V, S>
    style.initializeDefaultStyle()
 
    try {
-      val koshian = ViewApplier<V, ViewGroup.LayoutParams, S>(this)
-      `$$StyleInternal`.applyCurrentStyleRecursive(this)
+      val koshian = ViewApplier<V, ViewGroup.LayoutParams, S>(this, context)
+      `$$StyleInternal`.applyCurrentStyleRecursive(this, context)
       koshian.applierAction()
    } finally {
-      `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
       `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle
@@ -157,11 +155,9 @@ inline fun <V, L, S>
       )
       where V : View, L : ViewGroup.LayoutParams, S : KoshianStyle
 {
-   val oldContext = `$$KoshianInternal`.context
    val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
    val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$KoshianInternal`.context = context
    `$$KoshianInternal`.parentViewConstructor = constructor
    `$$ApplierInternal`.applyingIndex = 0
    `$$StyleInternal`.style = style
@@ -169,11 +165,10 @@ inline fun <V, L, S>
    style.initializeDefaultStyle()
 
    try {
-      val koshian = ViewGroupApplier<V, ViewGroup.LayoutParams, L, S>(this)
-      `$$StyleInternal`.applyCurrentStyleRecursive(this)
+      val koshian = ViewGroupApplier<V, ViewGroup.LayoutParams, L, S>(this, context)
+      `$$StyleInternal`.applyCurrentStyleRecursive(this, context)
       koshian.applierAction()
    } finally {
-      `$$KoshianInternal`.context = oldContext
       `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
       `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle

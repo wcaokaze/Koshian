@@ -16,6 +16,7 @@
 
 package koshian
 
+import android.content.*
 import android.view.*
 
 /**
@@ -27,10 +28,10 @@ import android.view.*
  *   e.g. When V is FrameLayout, CL is FrameLayout.LayoutParams
  */
 @KoshianMarker
-@JvmInline
-value class Koshian<out V, out L, out CL, M : KoshianMode>
-      (val `$$koshianInternal$view`: Any?)
-{
+class Koshian<out V, out L, out CL, M : KoshianMode>(
+      val `$$koshianInternal$view`: Any?,
+      val context: Context
+) {
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Float .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Double.dip: Int inline get() = dp
@@ -97,9 +98,9 @@ value class Koshian<out V, out L, out CL, M : KoshianMode>
          )
          where V : View
    {
-      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this, context)
 
-      val koshian = ViewApplier<V, CL, Nothing>(this)
+      val koshian = ViewApplier<V, CL, Nothing>(this, context)
       koshian.applierAction()
    }
 
@@ -157,7 +158,7 @@ value class Koshian<out V, out L, out CL, M : KoshianMode>
 
       beforeApply(mode)
 
-      val koshian = ViewApplier<A, CL, Nothing>(this)
+      val koshian = ViewApplier<A, CL, Nothing>(this, context)
       koshian.applierAction()
 
       afterApply(mode)

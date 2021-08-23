@@ -16,16 +16,12 @@
 
 package koshian;
 
-import android.annotation.*;
 import android.content.*;
 import android.util.DisplayMetrics;
 
 public final class $$KoshianInternal {
    private static float displayDensity = 0.0f;
    private static float scaledDensity  = 0.0f;
-
-   @SuppressLint("StaticFieldLeak")
-   public static Context context = null;
 
    @SuppressWarnings("rawtypes")
    public static KoshianViewGroupConstructor parentViewConstructor = null;
