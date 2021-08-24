@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import kotlin.contracts.*
 
-object RadioGroupConstructor : KoshianViewGroupConstructor<RadioGroup, RadioGroup.LayoutParams> {
+object RadioGroupConstructor : KoshianViewConstructor<RadioGroup, RadioGroup.LayoutParams> {
    override fun instantiate(context: Context?) = RadioGroup(context)
    override fun instantiateLayoutParams() = RadioGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -44,7 +44,7 @@ inline fun <R> RadioGroup.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RadioGroup(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RadioGroup(
       creatorAction: ViewGroupCreator<RadioGroup, L, RadioGroup.LayoutParams>.() -> Unit
 ): RadioGroup {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -58,7 +58,7 @@ inline fun <L> CreatorParent<L>.RadioGroup(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RadioGroup(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RadioGroup(
       name: String,
       creatorAction: ViewGroupCreator<RadioGroup, L, RadioGroup.LayoutParams>.() -> Unit
 ): RadioGroup {
@@ -201,12 +201,12 @@ inline fun <S : KoshianStyle> RadioGroup.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RadioGroup(
             applierAction: ViewGroupApplier<RadioGroup, L, RadioGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(RadioGroupConstructor, applierAction)
+   applyViewGroup(RadioGroupConstructor, applierAction)
 }
 
 /**
@@ -217,13 +217,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RadioGroup(
             styleElement: KoshianStyle.StyleElement<RadioGroup>,
             applierAction: ViewGroupApplier<RadioGroup, L, RadioGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(RadioGroupConstructor, styleElement, applierAction)
+   applyViewGroup(RadioGroupConstructor, styleElement, applierAction)
 }
 
 /**
@@ -233,7 +233,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RadioGroup(
             name: String,
             applierAction: ViewGroupApplier<RadioGroup, L, RadioGroup.LayoutParams, S>.() -> Unit
@@ -249,7 +249,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RadioGroup(
             name: String,
             styleElement: KoshianStyle.StyleElement<RadioGroup>,

@@ -28,19 +28,14 @@ public class $$CreatorInternal {
     * Implementation for Creator
     * {@code View {} }
     */
-   public static <V extends View> V addNewView(
+   public static <V extends View, L extends ViewGroup.LayoutParams> V addNewView(
          final Object parent,
          final Context context,
-         final KoshianViewConstructor<V> constructor
+         final KoshianViewConstructor<?, L> parentViewConstructor,
+         final KoshianViewConstructor<V, ?> constructor
    ) {
       final V view = constructor.instantiate(context);
-
-      @SuppressWarnings("rawtypes")
-      final KoshianViewGroupConstructor parentViewConstructor
-            = $$KoshianInternal.parentViewConstructor;
-
-      final ViewGroup.LayoutParams layoutParams
-            = parentViewConstructor.instantiateLayoutParams();
+      final L layoutParams = parentViewConstructor.instantiateLayoutParams();
 
       ((ViewManager) parent).addView(view, layoutParams);
 
@@ -51,21 +46,17 @@ public class $$CreatorInternal {
     * Implementation for Creator
     * {@code View("name") {} }
     */
-   public static <V extends View> V addNewView(
+   public static <V extends View, L extends ViewGroup.LayoutParams> V addNewView(
          final Object parent,
          final Context context,
          final String name,
-         final KoshianViewConstructor<V> constructor
+         final KoshianViewConstructor<?, L> parentViewConstructor,
+         final KoshianViewConstructor<V, ?> constructor
    ) {
       final V view = constructor.instantiate(context);
       view.setTag(R.id.view_tag_name, name);
 
-      @SuppressWarnings("rawtypes")
-      final KoshianViewGroupConstructor parentViewConstructor
-            = $$KoshianInternal.parentViewConstructor;
-
-      final ViewGroup.LayoutParams layoutParams
-            = parentViewConstructor.instantiateLayoutParams();
+      final L layoutParams = parentViewConstructor.instantiateLayoutParams();
 
       ((ViewManager) parent).addView(view, layoutParams);
 

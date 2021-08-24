@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ViewSwitcher
 import kotlin.contracts.*
 
-object ViewSwitcherConstructor : KoshianViewGroupConstructor<ViewSwitcher, FrameLayout.LayoutParams> {
+object ViewSwitcherConstructor : KoshianViewConstructor<ViewSwitcher, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context?) = ViewSwitcher(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> ViewSwitcher.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ViewSwitcher(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ViewSwitcher(
       creatorAction: ViewGroupCreator<ViewSwitcher, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewSwitcher {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.ViewSwitcher(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ViewSwitcher(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ViewSwitcher(
       name: String,
       creatorAction: ViewGroupCreator<ViewSwitcher, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewSwitcher {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> ViewSwitcher.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewSwitcher(
             applierAction: ViewGroupApplier<ViewSwitcher, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ViewSwitcherConstructor, applierAction)
+   applyViewGroup(ViewSwitcherConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewSwitcher(
             styleElement: KoshianStyle.StyleElement<ViewSwitcher>,
             applierAction: ViewGroupApplier<ViewSwitcher, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ViewSwitcherConstructor, styleElement, applierAction)
+   applyViewGroup(ViewSwitcherConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewSwitcher(
             name: String,
             applierAction: ViewGroupApplier<ViewSwitcher, L, FrameLayout.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewSwitcher(
             name: String,
             styleElement: KoshianStyle.StyleElement<ViewSwitcher>,

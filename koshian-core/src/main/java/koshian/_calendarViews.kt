@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.CalendarView
 import kotlin.contracts.*
 
-object CalendarViewConstructor : KoshianViewConstructor<CalendarView> {
+object CalendarViewConstructor : KoshianViewConstructor<CalendarView, Nothing> {
    override fun instantiate(context: Context) = CalendarView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object CalendarViewConstructor : KoshianViewConstructor<CalendarView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CalendarView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CalendarView(
       creatorAction: ViewCreator<CalendarView, L>.() -> Unit
 ): CalendarView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.CalendarView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CalendarView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CalendarView(
       name: String,
       creatorAction: ViewCreator<CalendarView, L>.() -> Unit
 ): CalendarView {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.CalendarView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CalendarView(
             applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CalendarView(
             styleElement: KoshianStyle.StyleElement<CalendarView>,
             applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CalendarView(
             name: String,
             applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(CalendarViewConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CalendarView(
             name: String,
             styleElement: KoshianStyle.StyleElement<CalendarView>,
             applierAction: ViewApplier<CalendarView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(CalendarViewConstructor, name, styleElement, applierAction)
 }
 
 /**

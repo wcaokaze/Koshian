@@ -17,8 +17,8 @@
 package koshian;
 
 import android.content.*;
-import android.view.*;
 
-public interface KoshianViewConstructor<V extends View> {
+public interface KoshianViewConstructor<V, L> {
    public V instantiate(Context context);
+   public L instantiateLayoutParams();
 }

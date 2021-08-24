@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.TableLayout
 import kotlin.contracts.*
 
-object TableLayoutConstructor : KoshianViewGroupConstructor<TableLayout, TableLayout.LayoutParams> {
+object TableLayoutConstructor : KoshianViewConstructor<TableLayout, TableLayout.LayoutParams> {
    override fun instantiate(context: Context?) = TableLayout(context)
    override fun instantiateLayoutParams() = TableLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -44,7 +44,7 @@ inline fun <R> TableLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TableLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TableLayout(
       creatorAction: ViewGroupCreator<TableLayout, L, TableLayout.LayoutParams>.() -> Unit
 ): TableLayout {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -58,7 +58,7 @@ inline fun <L> CreatorParent<L>.TableLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TableLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TableLayout(
       name: String,
       creatorAction: ViewGroupCreator<TableLayout, L, TableLayout.LayoutParams>.() -> Unit
 ): TableLayout {
@@ -201,12 +201,12 @@ inline fun <S : KoshianStyle> TableLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TableLayout(
             applierAction: ViewGroupApplier<TableLayout, L, TableLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(TableLayoutConstructor, applierAction)
+   applyViewGroup(TableLayoutConstructor, applierAction)
 }
 
 /**
@@ -217,13 +217,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TableLayout(
             styleElement: KoshianStyle.StyleElement<TableLayout>,
             applierAction: ViewGroupApplier<TableLayout, L, TableLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(TableLayoutConstructor, styleElement, applierAction)
+   applyViewGroup(TableLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -233,7 +233,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TableLayout(
             name: String,
             applierAction: ViewGroupApplier<TableLayout, L, TableLayout.LayoutParams, S>.() -> Unit
@@ -249,7 +249,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TableLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<TableLayout>,

@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlin.contracts.*
 
-object FrameLayoutConstructor : KoshianViewGroupConstructor<FrameLayout, FrameLayout.LayoutParams> {
+object FrameLayoutConstructor : KoshianViewConstructor<FrameLayout, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context) = FrameLayout(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -44,7 +44,7 @@ inline fun <R> FrameLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.FrameLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.FrameLayout(
       creatorAction: ViewGroupCreator<FrameLayout, L, FrameLayout.LayoutParams>.() -> Unit
 ): FrameLayout {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -58,7 +58,7 @@ inline fun <L> CreatorParent<L>.FrameLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.FrameLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.FrameLayout(
       name: String,
       creatorAction: ViewGroupCreator<FrameLayout, L, FrameLayout.LayoutParams>.() -> Unit
 ): FrameLayout {
@@ -201,12 +201,12 @@ inline fun <S : KoshianStyle> FrameLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.FrameLayout(
             applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(FrameLayoutConstructor, applierAction)
+   applyViewGroup(FrameLayoutConstructor, applierAction)
 }
 
 /**
@@ -217,13 +217,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.FrameLayout(
             styleElement: KoshianStyle.StyleElement<FrameLayout>,
             applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(FrameLayoutConstructor, styleElement, applierAction)
+   applyViewGroup(FrameLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -233,7 +233,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.FrameLayout(
             name: String,
             applierAction: ViewGroupApplier<FrameLayout, L, FrameLayout.LayoutParams, S>.() -> Unit
@@ -249,7 +249,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.FrameLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<FrameLayout>,

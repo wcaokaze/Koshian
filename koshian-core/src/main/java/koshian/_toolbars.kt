@@ -24,7 +24,7 @@ import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
 @RequiresApi(21)
-object ToolbarConstructor : KoshianViewGroupConstructor<Toolbar, Toolbar.LayoutParams> {
+object ToolbarConstructor : KoshianViewConstructor<Toolbar, Toolbar.LayoutParams> {
    override fun instantiate(context: Context?) = Toolbar(context)
    override fun instantiateLayoutParams() = Toolbar.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -48,7 +48,7 @@ inline fun <R> Toolbar.addView(
 @ExperimentalContracts
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Toolbar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Toolbar(
       creatorAction: ViewGroupCreator<Toolbar, L, Toolbar.LayoutParams>.() -> Unit
 ): Toolbar {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -63,7 +63,7 @@ inline fun <L> CreatorParent<L>.Toolbar(
 @ExperimentalContracts
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Toolbar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Toolbar(
       name: String,
       creatorAction: ViewGroupCreator<Toolbar, L, Toolbar.LayoutParams>.() -> Unit
 ): Toolbar {
@@ -209,12 +209,12 @@ inline fun <S : KoshianStyle> Toolbar.applyKoshian(
  */
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Toolbar(
             applierAction: ViewGroupApplier<Toolbar, L, Toolbar.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ToolbarConstructor, applierAction)
+   applyViewGroup(ToolbarConstructor, applierAction)
 }
 
 /**
@@ -226,13 +226,13 @@ inline fun <L, S : KoshianStyle>
  */
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Toolbar(
             styleElement: KoshianStyle.StyleElement<Toolbar>,
             applierAction: ViewGroupApplier<Toolbar, L, Toolbar.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ToolbarConstructor, styleElement, applierAction)
+   applyViewGroup(ToolbarConstructor, styleElement, applierAction)
 }
 
 /**
@@ -243,7 +243,7 @@ inline fun <L, S : KoshianStyle>
  */
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Toolbar(
             name: String,
             applierAction: ViewGroupApplier<Toolbar, L, Toolbar.LayoutParams, S>.() -> Unit
@@ -260,7 +260,7 @@ inline fun <L, S : KoshianStyle>
  */
 @RequiresApi(21)
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Toolbar(
             name: String,
             styleElement: KoshianStyle.StyleElement<Toolbar>,

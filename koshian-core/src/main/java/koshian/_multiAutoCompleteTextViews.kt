@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.MultiAutoCompleteTextView
 import kotlin.contracts.*
 
-object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCompleteTextView> {
+object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCompleteTextView, Nothing> {
    override fun instantiate(context: Context?) = MultiAutoCompleteTextView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object MultiAutoCompleteTextViewConstructor : KoshianViewConstructor<MultiAutoCo
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.MultiAutoCompleteTextView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.MultiAutoCompleteTextView(
       creatorAction: ViewCreator<MultiAutoCompleteTextView, L>.() -> Unit
 ): MultiAutoCompleteTextView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.MultiAutoCompleteTextView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.MultiAutoCompleteTextView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.MultiAutoCompleteTextView(
       name: String,
       creatorAction: ViewCreator<MultiAutoCompleteTextView, L>.() -> Unit
 ): MultiAutoCompleteTextView {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.MultiAutoCompleteTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MultiAutoCompleteTextView(
             applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MultiAutoCompleteTextView(
             styleElement: KoshianStyle.StyleElement<MultiAutoCompleteTextView>,
             applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MultiAutoCompleteTextView(
             name: String,
             applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(MultiAutoCompleteTextViewConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MultiAutoCompleteTextView(
             name: String,
             styleElement: KoshianStyle.StyleElement<MultiAutoCompleteTextView>,
             applierAction: ViewApplier<MultiAutoCompleteTextView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(MultiAutoCompleteTextViewConstructor, name, styleElement, applierAction)
 }
 
 /**

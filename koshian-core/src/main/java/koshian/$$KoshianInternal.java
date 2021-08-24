@@ -23,9 +23,6 @@ public final class $$KoshianInternal {
    private static float displayDensity = 0.0f;
    private static float scaledDensity  = 0.0f;
 
-   @SuppressWarnings("rawtypes")
-   public static KoshianViewGroupConstructor parentViewConstructor = null;
-
    public static void init(final Context context) {
       final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
       displayDensity = displayMetrics.density;

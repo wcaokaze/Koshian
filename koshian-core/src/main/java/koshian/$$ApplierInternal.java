@@ -32,17 +32,22 @@ public final class $$ApplierInternal {
     * Implementation for Applier
     * {@code view {} }
     */
-   public static void invokeViewInKoshian(final Object parent, final View view, final Context context) {
+   public static void invokeViewInKoshian(
+         final Context context,
+         final Object parent,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final View view
+   ) {
       if (applyingIndex == -1) {
          if (view.getParent() != null) {
             throw new IllegalStateException("A View(" + view + ") was specified in a Creator, " +
                   "but the specified view was already added to another ViewGroup.");
          }
 
-         addView(parent, view);
+         addView(parent, parentConstructor, view);
       } else {
          if (view.getParent() == null) {
-            insertView(parent, view);
+            insertView(parent, parentConstructor, view);
          } else {
             assertNextView(parent, view);
          }
@@ -56,8 +61,11 @@ public final class $$ApplierInternal {
     * {@code applicable {} }
     */
    public static KoshianApplicable.ApplicableMode
-         invokeViewInKoshian(final Object parent,
-                             final KoshianApplicable<?> applicable)
+         invokeViewInKoshian(
+               final Object parent,
+               final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+               final KoshianApplicable<?> applicable
+         )
    {
       final View view = applicable.getView();
 
@@ -68,11 +76,11 @@ public final class $$ApplierInternal {
                   "but the specified view was already added to another ViewGroup.");
          }
 
-         addApplicable(parent, applicable);
+         addApplicable(parent, parentConstructor, applicable);
          return KoshianApplicable.ApplicableMode.CREATION;
       } else {
          if (view.getParent() == null) {
-            insertApplicable(parent, applicable);
+            insertApplicable(parent, parentConstructor, applicable);
             return KoshianApplicable.ApplicableMode.INSERTION;
          } else {
             assertNextApplicable(parent, applicable);
@@ -81,7 +89,11 @@ public final class $$ApplierInternal {
       }
    }
 
-   private static void addView(final Object parent, final View view) {
+   private static void addView(
+         final Object parent,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final View view
+   ) {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
                "but the current Koshian-View is not a ViewGroup.");
@@ -91,12 +103,14 @@ public final class $$ApplierInternal {
 
       viewGroup.addView(
             view,
-            $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+            parentConstructor.instantiateLayoutParams());
    }
 
-   private static void addApplicable(final Object parent,
-                                     final KoshianApplicable<?> applicable)
-   {
+   private static void addApplicable(
+         final Object parent,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final KoshianApplicable<?> applicable
+   ) {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(
                "An Applicable(" + applicable + ") was specified " +
@@ -107,10 +121,14 @@ public final class $$ApplierInternal {
 
       viewGroup.addView(
             applicable.getView(),
-            $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+            parentConstructor.instantiateLayoutParams());
    }
 
-   private static void insertView(final Object parent, final View view) {
+   private static void insertView(
+         final Object parent,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final View view
+   ) {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
                "but the current Koshian-View is not a ViewGroup.");
@@ -121,12 +139,14 @@ public final class $$ApplierInternal {
       viewGroup.addView(
             view,
             applyingIndex++,
-            $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+            parentConstructor.instantiateLayoutParams());
    }
 
-   private static void insertApplicable(final Object parent,
-                                        final KoshianApplicable<?> applicable)
-   {
+   private static void insertApplicable(
+         final Object parent,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final KoshianApplicable<?> applicable
+   ) {
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(
                "An Applicable(" + applicable + ") was specified " +
@@ -138,7 +158,7 @@ public final class $$ApplierInternal {
       viewGroup.addView(
             applicable.getView(),
             applyingIndex++,
-            $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+            parentConstructor.instantiateLayoutParams());
    }
 
    private static void assertNextView(final Object parent, final View view) {
@@ -207,9 +227,10 @@ public final class $$ApplierInternal {
     * {@code View {} }
     */
    public static <V extends View> V findViewOrInsertNew(
-         final Object parent,
          final Context context,
-         final KoshianViewConstructor<V> constructor,
+         final Object parent,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final KoshianViewConstructor<V, ?> childConstructor,
          final Class<V> viewClass
    ) {
       final ViewGroup parentViewGroup = (ViewGroup) parent;
@@ -217,7 +238,7 @@ public final class $$ApplierInternal {
       V foundView = findView(parentViewGroup, viewClass);
 
       if (foundView == null) {
-         foundView = insertNewView(parentViewGroup, context, constructor);
+         foundView = insertNewView(context, parentViewGroup, parentConstructor, childConstructor);
       }
 
       $$StyleInternal.applyCurrentStyleTo(foundView, context);
@@ -230,9 +251,10 @@ public final class $$ApplierInternal {
     * {@code View(style) {} }
     */
    public static <V extends View> V findViewOrInsertNewAndApplyStyle(
-         final Object parent,
          final Context context,
-         final KoshianViewConstructor<V> constructor,
+         final Object parent,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final KoshianViewConstructor<V, ?> childConstructor,
          final KoshianStyle.StyleElement<V> styleElement,
          final Class<V> viewClass
    ) {
@@ -241,7 +263,7 @@ public final class $$ApplierInternal {
       V foundView = findView(parentViewGroup, viewClass);
 
       if (foundView == null) {
-         foundView = insertNewView(parentViewGroup, context, constructor);
+         foundView = insertNewView(context, parentViewGroup, parentConstructor, childConstructor);
       }
 
       $$StyleInternal.applyCurrentStyleTo(foundView, context);
@@ -250,21 +272,22 @@ public final class $$ApplierInternal {
       return foundView;
    }
 
-   private static <V extends View>
-         V insertNewView(final ViewManager parentView,
-                         final Context context,
-                         final KoshianViewConstructor<V> childConstructor)
-   {
+   private static <V extends View> V insertNewView(
+         final Context context,
+         final ViewManager parentView,
+         final KoshianViewConstructor<?, ? extends ViewGroup.LayoutParams> parentConstructor,
+         final KoshianViewConstructor<V, ?> childConstructor
+   ) {
       final V child = childConstructor.instantiate(context);
 
       if (parentView instanceof ViewGroup) {
          final ViewGroup parentViewGroup = (ViewGroup) parentView;
          parentViewGroup.addView(child, applyingIndex++,
-               $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+               parentConstructor.instantiateLayoutParams());
       } else {
          parentView.addView(
                child,
-               $$KoshianInternal.parentViewConstructor.instantiateLayoutParams());
+               parentConstructor.instantiateLayoutParams());
       }
 
       return child;

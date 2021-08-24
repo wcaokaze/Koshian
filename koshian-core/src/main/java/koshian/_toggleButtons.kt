@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.ToggleButton
 import kotlin.contracts.*
 
-object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton> {
+object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton, Nothing> {
    override fun instantiate(context: Context?) = ToggleButton(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object ToggleButtonConstructor : KoshianViewConstructor<ToggleButton> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ToggleButton(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ToggleButton(
       creatorAction: ViewCreator<ToggleButton, L>.() -> Unit
 ): ToggleButton {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.ToggleButton(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ToggleButton(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ToggleButton(
       name: String,
       creatorAction: ViewCreator<ToggleButton, L>.() -> Unit
 ): ToggleButton {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.ToggleButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ToggleButton(
             applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ToggleButton(
             styleElement: KoshianStyle.StyleElement<ToggleButton>,
             applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ToggleButton(
             name: String,
             applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(ToggleButtonConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ToggleButton(
             name: String,
             styleElement: KoshianStyle.StyleElement<ToggleButton>,
             applierAction: ViewApplier<ToggleButton, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(ToggleButtonConstructor, name, styleElement, applierAction)
 }
 
 /**

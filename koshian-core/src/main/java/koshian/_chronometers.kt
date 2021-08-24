@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.Chronometer
 import kotlin.contracts.*
 
-object ChronometerConstructor : KoshianViewConstructor<Chronometer> {
+object ChronometerConstructor : KoshianViewConstructor<Chronometer, Nothing> {
    override fun instantiate(context: Context?) = Chronometer(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object ChronometerConstructor : KoshianViewConstructor<Chronometer> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Chronometer(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Chronometer(
       creatorAction: ViewCreator<Chronometer, L>.() -> Unit
 ): Chronometer {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.Chronometer(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Chronometer(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Chronometer(
       name: String,
       creatorAction: ViewCreator<Chronometer, L>.() -> Unit
 ): Chronometer {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.Chronometer(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Chronometer(
             applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Chronometer(
             styleElement: KoshianStyle.StyleElement<Chronometer>,
             applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Chronometer(
             name: String,
             applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(ChronometerConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Chronometer(
             name: String,
             styleElement: KoshianStyle.StyleElement<Chronometer>,
             applierAction: ViewApplier<Chronometer, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(ChronometerConstructor, name, styleElement, applierAction)
 }
 
 /**

@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.webkit.WebView
 import kotlin.contracts.*
 
-object WebViewConstructor : KoshianViewConstructor<WebView> {
+object WebViewConstructor : KoshianViewConstructor<WebView, Nothing> {
    override fun instantiate(context: Context) = WebView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object WebViewConstructor : KoshianViewConstructor<WebView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.WebView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.WebView(
       creatorAction: ViewCreator<WebView, L>.() -> Unit
 ): WebView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.WebView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.WebView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.WebView(
       name: String,
       creatorAction: ViewCreator<WebView, L>.() -> Unit
 ): WebView {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.WebView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.WebView(
             applierAction: ViewApplier<WebView, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.WebView(
             styleElement: KoshianStyle.StyleElement<WebView>,
             applierAction: ViewApplier<WebView, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.WebView(
             name: String,
             applierAction: ViewApplier<WebView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(WebViewConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.WebView(
             name: String,
             styleElement: KoshianStyle.StyleElement<WebView>,
             applierAction: ViewApplier<WebView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(WebViewConstructor, name, styleElement, applierAction)
 }
 
 /**

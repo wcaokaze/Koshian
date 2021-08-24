@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.ProgressBar
 import kotlin.contracts.*
 
-object ProgressBarConstructor : KoshianViewConstructor<ProgressBar> {
+object ProgressBarConstructor : KoshianViewConstructor<ProgressBar, Nothing> {
    override fun instantiate(context: Context?) = ProgressBar(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object ProgressBarConstructor : KoshianViewConstructor<ProgressBar> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ProgressBar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ProgressBar(
       creatorAction: ViewCreator<ProgressBar, L>.() -> Unit
 ): ProgressBar {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.ProgressBar(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ProgressBar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ProgressBar(
       name: String,
       creatorAction: ViewCreator<ProgressBar, L>.() -> Unit
 ): ProgressBar {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.ProgressBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ProgressBar(
             applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ProgressBar(
             styleElement: KoshianStyle.StyleElement<ProgressBar>,
             applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ProgressBar(
             name: String,
             applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(ProgressBarConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ProgressBar(
             name: String,
             styleElement: KoshianStyle.StyleElement<ProgressBar>,
             applierAction: ViewApplier<ProgressBar, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(ProgressBarConstructor, name, styleElement, applierAction)
 }
 
 /**

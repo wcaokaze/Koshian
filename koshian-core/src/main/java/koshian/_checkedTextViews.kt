@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.CheckedTextView
 import kotlin.contracts.*
 
-object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView> {
+object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView, Nothing> {
    override fun instantiate(context: Context?) = CheckedTextView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object CheckedTextViewConstructor : KoshianViewConstructor<CheckedTextView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CheckedTextView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CheckedTextView(
       creatorAction: ViewCreator<CheckedTextView, L>.() -> Unit
 ): CheckedTextView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.CheckedTextView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CheckedTextView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CheckedTextView(
       name: String,
       creatorAction: ViewCreator<CheckedTextView, L>.() -> Unit
 ): CheckedTextView {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.CheckedTextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckedTextView(
             applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckedTextView(
             styleElement: KoshianStyle.StyleElement<CheckedTextView>,
             applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckedTextView(
             name: String,
             applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(CheckedTextViewConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckedTextView(
             name: String,
             styleElement: KoshianStyle.StyleElement<CheckedTextView>,
             applierAction: ViewApplier<CheckedTextView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(CheckedTextViewConstructor, name, styleElement, applierAction)
 }
 
 /**

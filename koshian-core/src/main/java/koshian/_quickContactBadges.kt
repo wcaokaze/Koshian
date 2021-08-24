@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.QuickContactBadge
 import kotlin.contracts.*
 
-object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge> {
+object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge, Nothing> {
    override fun instantiate(context: Context?) = QuickContactBadge(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object QuickContactBadgeConstructor : KoshianViewConstructor<QuickContactBadge> 
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.QuickContactBadge(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.QuickContactBadge(
       creatorAction: ViewCreator<QuickContactBadge, L>.() -> Unit
 ): QuickContactBadge {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.QuickContactBadge(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.QuickContactBadge(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.QuickContactBadge(
       name: String,
       creatorAction: ViewCreator<QuickContactBadge, L>.() -> Unit
 ): QuickContactBadge {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.QuickContactBadge(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.QuickContactBadge(
             applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.QuickContactBadge(
             styleElement: KoshianStyle.StyleElement<QuickContactBadge>,
             applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.QuickContactBadge(
             name: String,
             applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(QuickContactBadgeConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.QuickContactBadge(
             name: String,
             styleElement: KoshianStyle.StyleElement<QuickContactBadge>,
             applierAction: ViewApplier<QuickContactBadge, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(QuickContactBadgeConstructor, name, styleElement, applierAction)
 }
 
 /**

@@ -30,7 +30,8 @@ import android.view.*
 @KoshianMarker
 class Koshian<out V, out L, out CL, M : KoshianMode>(
       val `$$koshianInternal$view`: Any?,
-      val context: Context
+      val context: Context,
+      val viewConstructor: KoshianViewConstructor<out V, out CL>
 ) {
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Float .dip: Int inline get() = dp
@@ -98,9 +99,15 @@ class Koshian<out V, out L, out CL, M : KoshianMode>(
          )
          where V : View
    {
-      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this, context)
+      @Suppress("UNCHECKED_CAST")
+      `$$ApplierInternal`.invokeViewInKoshian(
+            context,
+            `$$koshianInternal$view`,
+            viewConstructor as KoshianViewConstructor<*, out ViewGroup.LayoutParams>,
+            this)
 
-      val koshian = ViewApplier<V, CL, Nothing>(this, context)
+      val koshian = ViewApplier<V, CL, Nothing>(this, context, InvokeViewConstructor(this))
+
       koshian.applierAction()
    }
 
@@ -154,16 +161,31 @@ class Koshian<out V, out L, out CL, M : KoshianMode>(
          ): R
          where A : KoshianApplicable<R>
    {
-      val mode = `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      @Suppress("UNCHECKED_CAST")
+      val mode = `$$ApplierInternal`.invokeViewInKoshian(
+            `$$koshianInternal$view`,
+            viewConstructor as KoshianViewConstructor<*, out ViewGroup.LayoutParams>,
+            this)
 
       beforeApply(mode)
 
-      val koshian = ViewApplier<A, CL, Nothing>(this, context)
+      val koshian = ViewApplier<A, CL, Nothing>(this, context, InvokeViewConstructor(this))
       koshian.applierAction()
 
       afterApply(mode)
 
       return getResult(mode)
+   }
+
+   @PublishedApi
+   internal class InvokeViewConstructor<V>(private val view: V)
+      : KoshianViewConstructor<V, Nothing>
+   {
+      override fun instantiate(context: Context?): V = view
+
+      override fun instantiateLayoutParams(): Nothing {
+         throw UnsupportedOperationException()
+      }
    }
 }
 
@@ -181,7 +203,7 @@ inline fun <V : View, L> Koshian<V, *, L, *>.view(
    view.invoke(applierAction)
 }
 
-inline val <L> Koshian<View, L, *, *>.layout: L get() {
+inline val <L : ViewGroup.LayoutParams> Koshian<View, L, *, *>.layout: L get() {
    @Suppress("UNCHECKED_CAST")
    return (`$$koshianInternal$view` as View).layoutParams as L
 }

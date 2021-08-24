@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.EditText
 import kotlin.contracts.*
 
-object EditTextConstructor : KoshianViewConstructor<EditText> {
+object EditTextConstructor : KoshianViewConstructor<EditText, Nothing> {
    override fun instantiate(context: Context?) = EditText(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object EditTextConstructor : KoshianViewConstructor<EditText> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.EditText(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.EditText(
       creatorAction: ViewCreator<EditText, L>.() -> Unit
 ): EditText {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.EditText(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.EditText(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.EditText(
       name: String,
       creatorAction: ViewCreator<EditText, L>.() -> Unit
 ): EditText {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.EditText(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.EditText(
             applierAction: ViewApplier<EditText, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.EditText(
             styleElement: KoshianStyle.StyleElement<EditText>,
             applierAction: ViewApplier<EditText, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.EditText(
             name: String,
             applierAction: ViewApplier<EditText, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(EditTextConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.EditText(
             name: String,
             styleElement: KoshianStyle.StyleElement<EditText>,
             applierAction: ViewApplier<EditText, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(EditTextConstructor, name, styleElement, applierAction)
 }
 
 /**

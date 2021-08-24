@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.TabHost
 import kotlin.contracts.*
 
-object TabHostConstructor : KoshianViewGroupConstructor<TabHost, FrameLayout.LayoutParams> {
+object TabHostConstructor : KoshianViewConstructor<TabHost, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context?) = TabHost(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> TabHost.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TabHost(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TabHost(
       creatorAction: ViewGroupCreator<TabHost, L, FrameLayout.LayoutParams>.() -> Unit
 ): TabHost {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.TabHost(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TabHost(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TabHost(
       name: String,
       creatorAction: ViewGroupCreator<TabHost, L, FrameLayout.LayoutParams>.() -> Unit
 ): TabHost {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> TabHost.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabHost(
             applierAction: ViewGroupApplier<TabHost, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(TabHostConstructor, applierAction)
+   applyViewGroup(TabHostConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabHost(
             styleElement: KoshianStyle.StyleElement<TabHost>,
             applierAction: ViewGroupApplier<TabHost, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(TabHostConstructor, styleElement, applierAction)
+   applyViewGroup(TabHostConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabHost(
             name: String,
             applierAction: ViewGroupApplier<TabHost, L, FrameLayout.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabHost(
             name: String,
             styleElement: KoshianStyle.StyleElement<TabHost>,

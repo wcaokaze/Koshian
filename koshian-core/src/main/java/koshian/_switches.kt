@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.Switch
 import kotlin.contracts.*
 
-object SwitchConstructor : KoshianViewConstructor<Switch> {
+object SwitchConstructor : KoshianViewConstructor<Switch, Nothing> {
    override fun instantiate(context: Context?) = Switch(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object SwitchConstructor : KoshianViewConstructor<Switch> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Switch(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Switch(
       creatorAction: ViewCreator<Switch, L>.() -> Unit
 ): Switch {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.Switch(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Switch(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Switch(
       name: String,
       creatorAction: ViewCreator<Switch, L>.() -> Unit
 ): Switch {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.Switch(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Switch(
             applierAction: ViewApplier<Switch, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Switch(
             styleElement: KoshianStyle.StyleElement<Switch>,
             applierAction: ViewApplier<Switch, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Switch(
             name: String,
             applierAction: ViewApplier<Switch, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(SwitchConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Switch(
             name: String,
             styleElement: KoshianStyle.StyleElement<Switch>,
             applierAction: ViewApplier<Switch, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(SwitchConstructor, name, styleElement, applierAction)
 }
 
 /**

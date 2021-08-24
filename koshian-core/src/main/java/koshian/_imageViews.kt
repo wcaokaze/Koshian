@@ -20,11 +20,13 @@ package koshian
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.view.ViewGroup
 import android.widget.ImageView
 import kotlin.contracts.*
 
-object ImageViewConstructor : KoshianViewConstructor<ImageView> {
+object ImageViewConstructor : KoshianViewConstructor<ImageView, Nothing> {
    override fun instantiate(context: Context?) = ImageView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -32,7 +34,7 @@ object ImageViewConstructor : KoshianViewConstructor<ImageView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ImageView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ImageView(
       creatorAction: ViewCreator<ImageView, L>.() -> Unit
 ): ImageView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -46,7 +48,7 @@ inline fun <L> CreatorParent<L>.ImageView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ImageView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ImageView(
       name: String,
       creatorAction: ViewCreator<ImageView, L>.() -> Unit
 ): ImageView {
@@ -62,7 +64,7 @@ inline fun <L> CreatorParent<L>.ImageView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageView(
             applierAction: ViewApplier<ImageView, L, S>.() -> Unit
       )
@@ -78,7 +80,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageView(
             styleElement: KoshianStyle.StyleElement<ImageView>,
             applierAction: ViewApplier<ImageView, L, S>.() -> Unit
@@ -94,13 +96,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageView(
             name: String,
             applierAction: ViewApplier<ImageView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(ImageViewConstructor, name, applierAction)
 }
 
 /**
@@ -110,14 +112,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageView(
             name: String,
             styleElement: KoshianStyle.StyleElement<ImageView>,
             applierAction: ViewApplier<ImageView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(ImageViewConstructor, name, styleElement, applierAction)
 }
 
 /**

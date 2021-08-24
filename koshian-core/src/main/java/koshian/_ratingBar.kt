@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.RatingBar
 import kotlin.contracts.*
 
-object RatingBarConstructor : KoshianViewConstructor<RatingBar> {
+object RatingBarConstructor : KoshianViewConstructor<RatingBar, Nothing> {
    override fun instantiate(context: Context?) = RatingBar(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object RatingBarConstructor : KoshianViewConstructor<RatingBar> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RatingBar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RatingBar(
       creatorAction: ViewCreator<RatingBar, L>.() -> Unit
 ): RatingBar {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.RatingBar(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RatingBar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RatingBar(
       name: String,
       creatorAction: ViewCreator<RatingBar, L>.() -> Unit
 ): RatingBar {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.RatingBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RatingBar(
             applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RatingBar(
             styleElement: KoshianStyle.StyleElement<RatingBar>,
             applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RatingBar(
             name: String,
             applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(RatingBarConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RatingBar(
             name: String,
             styleElement: KoshianStyle.StyleElement<RatingBar>,
             applierAction: ViewApplier<RatingBar, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(RatingBarConstructor, name, styleElement, applierAction)
 }
 
 /**

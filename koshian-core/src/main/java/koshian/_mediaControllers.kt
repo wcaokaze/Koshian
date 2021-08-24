@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.MediaController
 import kotlin.contracts.*
 
-object MediaControllerConstructor : KoshianViewConstructor<MediaController> {
+object MediaControllerConstructor : KoshianViewConstructor<MediaController, Nothing> {
    override fun instantiate(context: Context?) = MediaController(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object MediaControllerConstructor : KoshianViewConstructor<MediaController> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.MediaController(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.MediaController(
       creatorAction: ViewCreator<MediaController, L>.() -> Unit
 ): MediaController {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.MediaController(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.MediaController(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.MediaController(
       name: String,
       creatorAction: ViewCreator<MediaController, L>.() -> Unit
 ): MediaController {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.MediaController(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MediaController(
             applierAction: ViewApplier<MediaController, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MediaController(
             styleElement: KoshianStyle.StyleElement<MediaController>,
             applierAction: ViewApplier<MediaController, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MediaController(
             name: String,
             applierAction: ViewApplier<MediaController, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(MediaControllerConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.MediaController(
             name: String,
             styleElement: KoshianStyle.StyleElement<MediaController>,
             applierAction: ViewApplier<MediaController, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(MediaControllerConstructor, name, styleElement, applierAction)
 }
 
 /**
