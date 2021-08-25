@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.Space
 import kotlin.contracts.*
 
-object SpaceConstructor : KoshianViewConstructor<Space> {
+object SpaceConstructor : KoshianViewConstructor<Space, Nothing> {
    override fun instantiate(context: Context?) = Space(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object SpaceConstructor : KoshianViewConstructor<Space> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Space(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Space(
       creatorAction: ViewCreator<Space, L>.() -> Unit
 ): Space {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.Space(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Space(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Space(
       name: String,
       creatorAction: ViewCreator<Space, L>.() -> Unit
 ): Space {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.Space(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Space(
             applierAction: ViewApplier<Space, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Space(
             styleElement: KoshianStyle.StyleElement<Space>,
             applierAction: ViewApplier<Space, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Space(
             name: String,
             applierAction: ViewApplier<Space, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(SpaceConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Space(
             name: String,
             styleElement: KoshianStyle.StyleElement<Space>,
             applierAction: ViewApplier<Space, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(SpaceConstructor, name, styleElement, applierAction)
 }
 
 /**

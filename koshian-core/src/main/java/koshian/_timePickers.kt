@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.TimePicker
 import kotlin.contracts.*
 
-object TimePickerConstructor : KoshianViewConstructor<TimePicker> {
+object TimePickerConstructor : KoshianViewConstructor<TimePicker, Nothing> {
    override fun instantiate(context: Context?) = TimePicker(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object TimePickerConstructor : KoshianViewConstructor<TimePicker> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TimePicker(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TimePicker(
       creatorAction: ViewCreator<TimePicker, L>.() -> Unit
 ): TimePicker {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.TimePicker(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TimePicker(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TimePicker(
       name: String,
       creatorAction: ViewCreator<TimePicker, L>.() -> Unit
 ): TimePicker {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.TimePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TimePicker(
             applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TimePicker(
             styleElement: KoshianStyle.StyleElement<TimePicker>,
             applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TimePicker(
             name: String,
             applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(TimePickerConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TimePicker(
             name: String,
             styleElement: KoshianStyle.StyleElement<TimePicker>,
             applierAction: ViewApplier<TimePicker, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(TimePickerConstructor, name, styleElement, applierAction)
 }
 
 /**

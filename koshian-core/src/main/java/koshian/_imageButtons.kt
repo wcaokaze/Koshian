@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.ImageButton
 import kotlin.contracts.*
 
-object ImageButtonConstructor : KoshianViewConstructor<ImageButton> {
+object ImageButtonConstructor : KoshianViewConstructor<ImageButton, Nothing> {
    override fun instantiate(context: Context?) = ImageButton(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object ImageButtonConstructor : KoshianViewConstructor<ImageButton> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ImageButton(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ImageButton(
       creatorAction: ViewCreator<ImageButton, L>.() -> Unit
 ): ImageButton {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.ImageButton(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ImageButton(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ImageButton(
       name: String,
       creatorAction: ViewCreator<ImageButton, L>.() -> Unit
 ): ImageButton {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.ImageButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageButton(
             applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageButton(
             styleElement: KoshianStyle.StyleElement<ImageButton>,
             applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageButton(
             name: String,
             applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(ImageButtonConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ImageButton(
             name: String,
             styleElement: KoshianStyle.StyleElement<ImageButton>,
             applierAction: ViewApplier<ImageButton, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(ImageButtonConstructor, name, styleElement, applierAction)
 }
 
 /**

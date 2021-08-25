@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.NumberPicker
 import kotlin.contracts.*
 
-object NumberPickerConstructor : KoshianViewConstructor<NumberPicker> {
+object NumberPickerConstructor : KoshianViewConstructor<NumberPicker, Nothing> {
    override fun instantiate(context: Context?) = NumberPicker(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object NumberPickerConstructor : KoshianViewConstructor<NumberPicker> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.NumberPicker(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.NumberPicker(
       creatorAction: ViewCreator<NumberPicker, L>.() -> Unit
 ): NumberPicker {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.NumberPicker(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.NumberPicker(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.NumberPicker(
       name: String,
       creatorAction: ViewCreator<NumberPicker, L>.() -> Unit
 ): NumberPicker {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.NumberPicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NumberPicker(
             applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NumberPicker(
             styleElement: KoshianStyle.StyleElement<NumberPicker>,
             applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NumberPicker(
             name: String,
             applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(NumberPickerConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NumberPicker(
             name: String,
             styleElement: KoshianStyle.StyleElement<NumberPicker>,
             applierAction: ViewApplier<NumberPicker, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(NumberPickerConstructor, name, styleElement, applierAction)
 }
 
 /**

@@ -24,7 +24,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
-object RelativeLayoutConstructor : KoshianViewGroupConstructor<RelativeLayout, RelativeLayout.LayoutParams> {
+object RelativeLayoutConstructor : KoshianViewConstructor<RelativeLayout, RelativeLayout.LayoutParams> {
    override fun instantiate(context: Context?) = RelativeLayout(context)
    override fun instantiateLayoutParams() = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -46,7 +46,7 @@ inline fun <R> RelativeLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RelativeLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RelativeLayout(
       creatorAction: ViewGroupCreator<RelativeLayout, L, RelativeLayout.LayoutParams>.() -> Unit
 ): RelativeLayout {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -60,7 +60,7 @@ inline fun <L> CreatorParent<L>.RelativeLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RelativeLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RelativeLayout(
       name: String,
       creatorAction: ViewGroupCreator<RelativeLayout, L, RelativeLayout.LayoutParams>.() -> Unit
 ): RelativeLayout {
@@ -203,12 +203,12 @@ inline fun <S : KoshianStyle> RelativeLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RelativeLayout(
             applierAction: ViewGroupApplier<RelativeLayout, L, RelativeLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(RelativeLayoutConstructor, applierAction)
+   applyViewGroup(RelativeLayoutConstructor, applierAction)
 }
 
 /**
@@ -219,13 +219,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RelativeLayout(
             styleElement: KoshianStyle.StyleElement<RelativeLayout>,
             applierAction: ViewGroupApplier<RelativeLayout, L, RelativeLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(RelativeLayoutConstructor, styleElement, applierAction)
+   applyViewGroup(RelativeLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -235,7 +235,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RelativeLayout(
             name: String,
             applierAction: ViewGroupApplier<RelativeLayout, L, RelativeLayout.LayoutParams, S>.() -> Unit
@@ -251,7 +251,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RelativeLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<RelativeLayout>,

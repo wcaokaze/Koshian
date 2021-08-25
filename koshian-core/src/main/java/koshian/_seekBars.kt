@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.SeekBar
 import kotlin.contracts.*
 
-object SeekBarConstructor : KoshianViewConstructor<SeekBar> {
+object SeekBarConstructor : KoshianViewConstructor<SeekBar, Nothing> {
    override fun instantiate(context: Context?) = SeekBar(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object SeekBarConstructor : KoshianViewConstructor<SeekBar> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.SeekBar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.SeekBar(
       creatorAction: ViewCreator<SeekBar, L>.() -> Unit
 ): SeekBar {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.SeekBar(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.SeekBar(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.SeekBar(
       name: String,
       creatorAction: ViewCreator<SeekBar, L>.() -> Unit
 ): SeekBar {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.SeekBar(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SeekBar(
             applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SeekBar(
             styleElement: KoshianStyle.StyleElement<SeekBar>,
             applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SeekBar(
             name: String,
             applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(SeekBarConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SeekBar(
             name: String,
             styleElement: KoshianStyle.StyleElement<SeekBar>,
             applierAction: ViewApplier<SeekBar, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(SeekBarConstructor, name, styleElement, applierAction)
 }
 
 /**

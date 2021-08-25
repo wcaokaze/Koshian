@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.RadioButton
 import kotlin.contracts.*
 
-object RadioButtonConstructor : KoshianViewConstructor<RadioButton> {
+object RadioButtonConstructor : KoshianViewConstructor<RadioButton, Nothing> {
    override fun instantiate(context: Context?) = RadioButton(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object RadioButtonConstructor : KoshianViewConstructor<RadioButton> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RadioButton(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RadioButton(
       creatorAction: ViewCreator<RadioButton, L>.() -> Unit
 ): RadioButton {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.RadioButton(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RadioButton(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RadioButton(
       name: String,
       creatorAction: ViewCreator<RadioButton, L>.() -> Unit
 ): RadioButton {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.RadioButton(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RadioButton(
             applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RadioButton(
             styleElement: KoshianStyle.StyleElement<RadioButton>,
             applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RadioButton(
             name: String,
             applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(RadioButtonConstructor, name, applierAction)
 }
 
 /**
@@ -115,7 +117,7 @@ inline fun <L, S : KoshianStyle>
             applierAction: ViewApplier<RadioButton, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(RadioButtonConstructor, name, styleElement, applierAction)
 }
 
 /**

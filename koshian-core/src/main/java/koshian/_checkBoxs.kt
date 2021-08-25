@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.CheckBox
 import kotlin.contracts.*
 
-object CheckBoxConstructor : KoshianViewConstructor<CheckBox> {
+object CheckBoxConstructor : KoshianViewConstructor<CheckBox, Nothing> {
    override fun instantiate(context: Context?) = CheckBox(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object CheckBoxConstructor : KoshianViewConstructor<CheckBox> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CheckBox(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CheckBox(
       creatorAction: ViewCreator<CheckBox, L>.() -> Unit
 ): CheckBox {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.CheckBox(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CheckBox(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CheckBox(
       name: String,
       creatorAction: ViewCreator<CheckBox, L>.() -> Unit
 ): CheckBox {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.CheckBox(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckBox(
             applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckBox(
             styleElement: KoshianStyle.StyleElement<CheckBox>,
             applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckBox(
             name: String,
             applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(CheckBoxConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CheckBox(
             name: String,
             styleElement: KoshianStyle.StyleElement<CheckBox>,
             applierAction: ViewApplier<CheckBox, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(CheckBoxConstructor, name, styleElement, applierAction)
 }
 
 /**

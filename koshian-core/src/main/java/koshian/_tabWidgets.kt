@@ -23,7 +23,7 @@ import android.widget.LinearLayout
 import android.widget.TabWidget
 import kotlin.contracts.*
 
-object TabWidgetConstructor : KoshianViewGroupConstructor<TabWidget, LinearLayout.LayoutParams> {
+object TabWidgetConstructor : KoshianViewConstructor<TabWidget, LinearLayout.LayoutParams> {
    override fun instantiate(context: Context?) = TabWidget(context)
    override fun instantiateLayoutParams() = LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> TabWidget.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TabWidget(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TabWidget(
       creatorAction: ViewGroupCreator<TabWidget, L, LinearLayout.LayoutParams>.() -> Unit
 ): TabWidget {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.TabWidget(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TabWidget(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TabWidget(
       name: String,
       creatorAction: ViewGroupCreator<TabWidget, L, LinearLayout.LayoutParams>.() -> Unit
 ): TabWidget {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> TabWidget.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabWidget(
             applierAction: ViewGroupApplier<TabWidget, L, LinearLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(TabWidgetConstructor, applierAction)
+   applyViewGroup(TabWidgetConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabWidget(
             styleElement: KoshianStyle.StyleElement<TabWidget>,
             applierAction: ViewGroupApplier<TabWidget, L, LinearLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(TabWidgetConstructor, styleElement, applierAction)
+   applyViewGroup(TabWidgetConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabWidget(
             name: String,
             applierAction: ViewGroupApplier<TabWidget, L, LinearLayout.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TabWidget(
             name: String,
             styleElement: KoshianStyle.StyleElement<TabWidget>,

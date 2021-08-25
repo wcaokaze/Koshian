@@ -20,11 +20,13 @@ package koshian
 import android.content.Context
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import kotlin.contracts.*
 
-object ViewConstructor : KoshianViewConstructor<View> {
+object ViewConstructor : KoshianViewConstructor<View, Nothing> {
    override fun instantiate(context: Context?) = View(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -32,7 +34,7 @@ object ViewConstructor : KoshianViewConstructor<View> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.View(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.View(
       creatorAction: ViewCreator<View, L>.() -> Unit
 ): View {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -46,7 +48,7 @@ inline fun <L> CreatorParent<L>.View(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.View(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.View(
       name: String,
       creatorAction: ViewCreator<View, L>.() -> Unit
 ): View {
@@ -62,7 +64,7 @@ inline fun <L> CreatorParent<L>.View(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.View(
             applierAction: ViewApplier<View, L, S>.() -> Unit
       )
@@ -78,7 +80,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.View(
             styleElement: KoshianStyle.StyleElement<View>,
             applierAction: ViewApplier<View, L, S>.() -> Unit
@@ -94,13 +96,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.View(
             name: String,
             applierAction: ViewApplier<View, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(ViewConstructor, name, applierAction)
 }
 
 /**
@@ -110,14 +112,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.View(
             name: String,
             styleElement: KoshianStyle.StyleElement<View>,
             applierAction: ViewApplier<View, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(ViewConstructor, name, styleElement, applierAction)
 }
 
 /**

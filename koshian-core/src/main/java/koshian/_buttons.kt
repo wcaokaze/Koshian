@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.Button
 import kotlin.contracts.*
 
-object ButtonConstructor : KoshianViewConstructor<Button> {
+object ButtonConstructor : KoshianViewConstructor<Button, Nothing> {
    override fun instantiate(context: Context?) = Button(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object ButtonConstructor : KoshianViewConstructor<Button> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Button(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Button(
       creatorAction: ViewCreator<Button, L>.() -> Unit
 ): Button {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.Button(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.Button(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.Button(
       name: String,
       creatorAction: ViewCreator<Button, L>.() -> Unit
 ): Button {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.Button(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Button(
             applierAction: ViewApplier<Button, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Button(
             styleElement: KoshianStyle.StyleElement<Button>,
             applierAction: ViewApplier<Button, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Button(
             name: String,
             applierAction: ViewApplier<Button, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(ButtonConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.Button(
             name: String,
             styleElement: KoshianStyle.StyleElement<Button>,
             applierAction: ViewApplier<Button, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(ButtonConstructor, name, styleElement, applierAction)
 }
 
 /**

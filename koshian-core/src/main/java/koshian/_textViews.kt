@@ -21,11 +21,13 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.TypedValue
+import android.view.ViewGroup
 import android.widget.TextView
 import kotlin.contracts.*
 
-object TextViewConstructor : KoshianViewConstructor<TextView> {
+object TextViewConstructor : KoshianViewConstructor<TextView, Nothing> {
    override fun instantiate(context: Context?) = TextView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -33,7 +35,7 @@ object TextViewConstructor : KoshianViewConstructor<TextView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TextView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TextView(
       creatorAction: ViewCreator<TextView, L>.() -> Unit
 ): TextView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -47,7 +49,7 @@ inline fun <L> CreatorParent<L>.TextView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.TextView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.TextView(
       name: String,
       creatorAction: ViewCreator<TextView, L>.() -> Unit
 ): TextView {
@@ -63,7 +65,7 @@ inline fun <L> CreatorParent<L>.TextView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TextView(
             applierAction: ViewApplier<TextView, L, S>.() -> Unit
       )
@@ -79,7 +81,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TextView(
             styleElement: KoshianStyle.StyleElement<TextView>,
             applierAction: ViewApplier<TextView, L, S>.() -> Unit
@@ -95,13 +97,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TextView(
             name: String,
             applierAction: ViewApplier<TextView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(TextViewConstructor, name, applierAction)
 }
 
 /**
@@ -111,14 +113,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.TextView(
             name: String,
             styleElement: KoshianStyle.StyleElement<TextView>,
             applierAction: ViewApplier<TextView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(TextViewConstructor, name, styleElement, applierAction)
 }
 
 /**

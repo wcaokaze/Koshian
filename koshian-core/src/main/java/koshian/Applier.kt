@@ -19,10 +19,7 @@ package koshian
 import android.content.*
 import android.view.*
 
-val (@Suppress("UNUSED") Koshian<*, *, *, KoshianMode.Applier<*>>).context: Context
-   inline get() = `$$KoshianInternal`.context
-
-object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing> {
+object NothingConstructor : KoshianViewConstructor<Nothing, Nothing> {
    override fun instantiate(context: Context?) = throw UnsupportedOperationException()
    override fun instantiateLayoutParams()      = throw UnsupportedOperationException()
 }
@@ -31,81 +28,55 @@ object NothingConstructor : KoshianViewGroupConstructor<Nothing, Nothing> {
 inline fun <V : View> V.applyKoshian(
       applierAction: ViewApplier<V, ViewGroup.LayoutParams, Nothing>.() -> Unit
 ) {
-   val oldContext = `$$KoshianInternal`.context
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
-   val oldStyle = `$$StyleInternal`.style
-   `$$KoshianInternal`.context = context
-   `$$KoshianInternal`.parentViewConstructor = NothingConstructor
-   `$$ApplierInternal`.applyingIndex = 0
-   `$$StyleInternal`.style = null
+   val koshian = ViewApplier<V, ViewGroup.LayoutParams, Nothing>(
+         this, context, NothingConstructor, applyingIndex = 0, style = null
+   )
 
-   try {
-      val koshian = ViewApplier<V, ViewGroup.LayoutParams, Nothing>(this)
-      koshian.applierAction()
-   } finally {
-      `$$KoshianInternal`.context = oldContext
-      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
-      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
-      `$$StyleInternal`.style = oldStyle
-   }
+   koshian.applierAction()
 }
 
 inline fun <V : View, L : ViewGroup.LayoutParams> V.applyKoshian(
-      constructor: KoshianViewGroupConstructor<V, L>,
+      constructor: KoshianViewConstructor<V, L>,
       applierAction: ViewGroupApplier<V, ViewGroup.LayoutParams, L, Nothing>.() -> Unit
 ) {
-   val oldContext = `$$KoshianInternal`.context
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
-   val oldStyle = `$$StyleInternal`.style
-   `$$KoshianInternal`.context = context
-   `$$KoshianInternal`.parentViewConstructor = constructor
-   `$$ApplierInternal`.applyingIndex = 0
-   `$$StyleInternal`.style = null
+   val koshian = ViewGroupApplier<V, ViewGroup.LayoutParams, L, Nothing>(
+         this, context, constructor, applyingIndex = 0, style = null
+   )
 
-   try {
-      val koshian = ViewGroupApplier<V, ViewGroup.LayoutParams, L, Nothing>(this)
-      koshian.applierAction()
-   } finally {
-      `$$KoshianInternal`.context = oldContext
-      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
-      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
-      `$$StyleInternal`.style = oldStyle
-   }
-}
-
-inline fun <reified V, L, S>
-      Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
-            constructor: KoshianViewConstructor<V>,
-            applierAction: ViewApplier<V, L, S>.() -> Unit
-      )
-      where V : View, S : KoshianStyle
-{
-   val view = `$$ApplierInternal`.findViewOrInsertNew(
-         `$$koshianInternal$view`, constructor, V::class.java)
-
-   val koshian = ViewApplier<V, L, S>(view)
    koshian.applierAction()
 }
 
 inline fun <reified V, L, S>
       Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
-            constructor: KoshianViewConstructor<V>,
+            constructor: KoshianViewConstructor<V, Nothing>,
+            applierAction: ViewApplier<V, L, S>.() -> Unit
+      )
+      where V : View, L : ViewGroup.LayoutParams, S : KoshianStyle
+{
+   val view = `$$ApplierInternal`.findViewOrInsertNew(this, constructor, V::class.java)
+
+   val koshian = ViewApplier<V, L, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
+   koshian.applierAction()
+}
+
+inline fun <reified V, L, S>
+      Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
+            constructor: KoshianViewConstructor<V, Nothing>,
             styleElement: KoshianStyle.StyleElement<V>,
             applierAction: ViewApplier<V, L, S>.() -> Unit
       )
-      where V : View, S : KoshianStyle
+      where V : View, L : ViewGroup.LayoutParams, S : KoshianStyle
 {
    val view = `$$ApplierInternal`.findViewOrInsertNewAndApplyStyle(
-         `$$koshianInternal$view`, constructor, styleElement, V::class.java)
+         this, constructor, styleElement, V::class.java)
 
-   val koshian = ViewApplier<V, L, S>(view)
+   val koshian = ViewApplier<V, L, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
    koshian.applierAction()
 }
 
 inline fun <reified V, L, S>
       Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
+            constructor: KoshianViewConstructor<V, Nothing>,
             name: String,
             applierAction: ViewApplier<V, L, S>.() -> Unit
       )
@@ -114,13 +85,14 @@ inline fun <reified V, L, S>
    val parent = `$$koshianInternal$view` as ViewManager
 
    for (view in `$$ApplierInternal`.findViewByName(parent, name, V::class.java)) {
-      val koshian = ViewApplier<V, L, S>(view)
+      val koshian = ViewApplier<V, L, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
       koshian.applierAction()
    }
 }
 
 inline fun <reified V, L, S>
       Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
+            constructor: KoshianViewConstructor<V, Nothing>,
             name: String,
             styleElement: KoshianStyle.StyleElement<V>,
             applierAction: ViewApplier<V, L, S>.() -> Unit
@@ -128,93 +100,66 @@ inline fun <reified V, L, S>
       where V : View, S : KoshianStyle
 {
    for (view in `$$ApplierInternal`.findViewByName(`$$koshianInternal$view`, name, V::class.java)) {
-      styleElement.applyStyleTo(view)
-      val koshian = ViewApplier<V, L, S>(view)
+      styleElement.applyStyleTo(view, context)
+      val koshian = ViewApplier<V, L, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
       koshian.applierAction()
    }
 }
 
 inline fun <reified V, L, CL, S>
-      Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
-            constructor: KoshianViewGroupConstructor<V, CL>,
+      Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.applyViewGroup(
+            constructor: KoshianViewConstructor<V, CL>,
             applierAction: ViewGroupApplier<V, L, CL, S>.() -> Unit
       )
       where V : View,
+            L : ViewGroup.LayoutParams,
             CL : ViewGroup.LayoutParams,
             S : KoshianStyle
 {
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   `$$KoshianInternal`.parentViewConstructor = constructor
+   val view = `$$ApplierInternal`.findViewOrInsertNew(this, constructor, V::class.java)
 
-   val view = `$$ApplierInternal`.findViewOrInsertNew(
-         `$$koshianInternal$view`, constructor, V::class.java)
-
-   val koshian = ViewApplier<V, L, S>(view)
-
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
-   `$$ApplierInternal`.applyingIndex = 0
+   val koshian = ViewGroupApplier<V, L, CL, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
    koshian.applierAction()
-   `$$ApplierInternal`.applyingIndex = oldApplyingIndex
-
-   `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
 }
 
 inline fun <reified V, L, CL, S>
-      Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
-            constructor: KoshianViewGroupConstructor<V, CL>,
+      Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.applyViewGroup(
+            constructor: KoshianViewConstructor<V, CL>,
             styleElement: KoshianStyle.StyleElement<V>,
             applierAction: ViewGroupApplier<V, L, CL, S>.() -> Unit
       )
       where V : View,
+            L : ViewGroup.LayoutParams,
             CL : ViewGroup.LayoutParams,
             S : KoshianStyle
 {
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   `$$KoshianInternal`.parentViewConstructor = constructor
-
    val view = `$$ApplierInternal`.findViewOrInsertNewAndApplyStyle(
-         `$$koshianInternal$view`, constructor, styleElement, V::class.java)
+         this, constructor, styleElement, V::class.java)
 
-   val koshian = ViewApplier<V, L, S>(view)
-
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
-   `$$ApplierInternal`.applyingIndex = 0
+   val koshian = ViewGroupApplier<V, L, CL, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
    koshian.applierAction()
-   `$$ApplierInternal`.applyingIndex = oldApplyingIndex
-
-   `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
 }
 
 inline fun <reified V, L, CL, S>
       Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
             name: String,
-            constructor: KoshianViewGroupConstructor<V, CL>,
+            constructor: KoshianViewConstructor<V, CL>,
             applierAction: ViewGroupApplier<V, L, CL, S>.() -> Unit
       )
       where V : View,
             CL : ViewGroup.LayoutParams,
             S : KoshianStyle
 {
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   `$$KoshianInternal`.parentViewConstructor = constructor
-
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
-
    for (view in `$$ApplierInternal`.findViewByName(`$$koshianInternal$view`, name, V::class.java)) {
-      val koshian = ViewApplier<V, L, S>(view)
-
-      `$$ApplierInternal`.applyingIndex = 0
+      val koshian = ViewGroupApplier<V, L, CL, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
       koshian.applierAction()
    }
-
-   `$$ApplierInternal`.applyingIndex = oldApplyingIndex
-   `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
 }
 
 inline fun <reified V, L, CL, S>
       Koshian<ViewGroup, *, L, KoshianMode.Applier<S>>.apply(
             name: String,
-            constructor: KoshianViewGroupConstructor<V, CL>,
+            constructor: KoshianViewConstructor<V, CL>,
             styleElement: KoshianStyle.StyleElement<V>,
             applierAction: ViewGroupApplier<V, L, CL, S>.() -> Unit
       )
@@ -222,20 +167,10 @@ inline fun <reified V, L, CL, S>
             CL : ViewGroup.LayoutParams,
             S : KoshianStyle
 {
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   `$$KoshianInternal`.parentViewConstructor = constructor
-
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
-
    for (view in `$$ApplierInternal`.findViewByName(`$$koshianInternal$view`, name, V::class.java)) {
-      styleElement.applyStyleTo(view)
+      styleElement.applyStyleTo(view, context)
 
-      val koshian = ViewApplier<V, L, S>(view)
-
-      `$$ApplierInternal`.applyingIndex = 0
+      val koshian = ViewGroupApplier<V, L, CL, S>(view, context, constructor, applyingIndex = 0, `$$koshianInternal$style`)
       koshian.applierAction()
    }
-
-   `$$ApplierInternal`.applyingIndex = oldApplyingIndex
-   `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
 }

@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.DatePicker
 import kotlin.contracts.*
 
-object DatePickerConstructor : KoshianViewConstructor<DatePicker> {
+object DatePickerConstructor : KoshianViewConstructor<DatePicker, Nothing> {
    override fun instantiate(context: Context?) = DatePicker(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object DatePickerConstructor : KoshianViewConstructor<DatePicker> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.DatePicker(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.DatePicker(
       creatorAction: ViewCreator<DatePicker, L>.() -> Unit
 ): DatePicker {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.DatePicker(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.DatePicker(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.DatePicker(
       name: String,
       creatorAction: ViewCreator<DatePicker, L>.() -> Unit
 ): DatePicker {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.DatePicker(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DatePicker(
             applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DatePicker(
             styleElement: KoshianStyle.StyleElement<DatePicker>,
             applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DatePicker(
             name: String,
             applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(DatePickerConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DatePicker(
             name: String,
             styleElement: KoshianStyle.StyleElement<DatePicker>,
             applierAction: ViewApplier<DatePicker, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(DatePickerConstructor, name, styleElement, applierAction)
 }
 
 /**

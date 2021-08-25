@@ -18,11 +18,13 @@
 package koshian
 
 import android.content.Context
+import android.view.ViewGroup
 import android.widget.VideoView
 import kotlin.contracts.*
 
-object VideoViewConstructor : KoshianViewConstructor<VideoView> {
+object VideoViewConstructor : KoshianViewConstructor<VideoView, Nothing> {
    override fun instantiate(context: Context?) = VideoView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -30,7 +32,7 @@ object VideoViewConstructor : KoshianViewConstructor<VideoView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.VideoView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.VideoView(
       creatorAction: ViewCreator<VideoView, L>.() -> Unit
 ): VideoView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -44,7 +46,7 @@ inline fun <L> CreatorParent<L>.VideoView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.VideoView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.VideoView(
       name: String,
       creatorAction: ViewCreator<VideoView, L>.() -> Unit
 ): VideoView {
@@ -60,7 +62,7 @@ inline fun <L> CreatorParent<L>.VideoView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.VideoView(
             applierAction: ViewApplier<VideoView, L, S>.() -> Unit
       )
@@ -76,7 +78,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.VideoView(
             styleElement: KoshianStyle.StyleElement<VideoView>,
             applierAction: ViewApplier<VideoView, L, S>.() -> Unit
@@ -92,13 +94,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.VideoView(
             name: String,
             applierAction: ViewApplier<VideoView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(VideoViewConstructor, name, applierAction)
 }
 
 /**
@@ -108,14 +110,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.VideoView(
             name: String,
             styleElement: KoshianStyle.StyleElement<VideoView>,
             applierAction: ViewApplier<VideoView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(VideoViewConstructor, name, styleElement, applierAction)
 }
 
 /**

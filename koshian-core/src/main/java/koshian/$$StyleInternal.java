@@ -16,44 +16,50 @@
 
 package koshian;
 
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
 public final class $$StyleInternal {
-   public static KoshianStyle style = null;
-
-   public static void applyCurrentStyleRecursive(final View view) {
-      final KoshianStyle currentStyle = style;
+   public static void applyCurrentStyleRecursive(
+         final Koshian<? extends View, ?, ?, ?> koshian,
+         final Context context
+   ) {
+      final KoshianStyle currentStyle = koshian.$$koshianInternal$style;
       if (currentStyle == null) { return; }
-
-      applyStyleRecursive(currentStyle, view);
+      applyStyleRecursive(currentStyle, koshian.$$koshianInternal$view, context);
    }
 
-   static void applyCurrentStyleTo(final View view) {
-      final KoshianStyle currentStyle = style;
+   static void applyCurrentStyleTo(
+         final Koshian<?, ?, ?, ?> koshian,
+         final View view,
+         final Context context
+   ) {
+      final KoshianStyle currentStyle = koshian.$$koshianInternal$style;
       if (currentStyle == null) { return; }
-
-      applyStyle(currentStyle, view);
+      applyStyle(currentStyle, view, context);
    }
 
-   private static void applyStyleRecursive(@NonNull final KoshianStyle style,
-                                           final View view)
-   {
-      applyStyle(style, view);
+   private static void applyStyleRecursive(
+         @NonNull final KoshianStyle style,
+         final View view,
+         final Context context
+   ) {
+      applyStyle(style, view, context);
 
       if (view instanceof ViewGroup) {
          final ViewGroup viewGroup = (ViewGroup) view;
 
          for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            applyCurrentStyleRecursive(viewGroup.getChildAt(i));
+            applyStyleRecursive(style, viewGroup.getChildAt(i), context);
          }
       }
    }
 
    private static <V extends View>
-         void applyStyle(@NonNull final KoshianStyle style, final V view)
+         void applyStyle(@NonNull final KoshianStyle style, final V view, final Context context)
    {
       @SuppressWarnings("unchecked")
       final KoshianStyle.StyleElement<V> styleElement =
@@ -62,6 +68,6 @@ public final class $$StyleInternal {
 
       if (styleElement == null) { return; }
 
-      styleElement.applyStyleTo(view);
+      styleElement.applyStyleTo(view, context);
    }
 }

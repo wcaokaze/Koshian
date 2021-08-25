@@ -16,6 +16,7 @@
 
 package koshian
 
+import android.content.*
 import android.view.*
 
 /**
@@ -27,10 +28,22 @@ import android.view.*
  *   e.g. When V is FrameLayout, CL is FrameLayout.LayoutParams
  */
 @KoshianMarker
-@JvmInline
-value class Koshian<out V, out L, out CL, M : KoshianMode>
-      (val `$$koshianInternal$view`: Any?)
-{
+class Koshian<out V, out L, out CL, M : KoshianMode>(
+      @JvmField val `$$koshianInternal$view`: V,
+      @JvmField val context: Context,
+      @JvmField val viewConstructor: KoshianViewConstructor<out V, out CL>,
+      applyingIndex: Int,
+      style: KoshianStyle?
+) {
+   @JvmField var `$$koshianInternal$applyingIndex`: Int = applyingIndex
+   @JvmField var `$$koshianInternal$style`: KoshianStyle? = style
+
+   constructor(
+         view: V,
+         context: Context,
+         viewConstructor: KoshianViewConstructor<out V, out CL>,
+   ) : this(view, context, viewConstructor, applyingIndex = -1, style = null)
+
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Float .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Double.dip: Int inline get() = dp
@@ -97,9 +110,10 @@ value class Koshian<out V, out L, out CL, M : KoshianMode>
          )
          where V : View
    {
-      `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      `$$ApplierInternal`.invokeViewInKoshian(this@Koshian, this)
 
-      val koshian = ViewApplier<V, CL, Nothing>(this)
+      val koshian = ViewApplier<V, CL, Nothing>(this, context, InvokeViewConstructor(this))
+
       koshian.applierAction()
    }
 
@@ -153,23 +167,33 @@ value class Koshian<out V, out L, out CL, M : KoshianMode>
          ): R
          where A : KoshianApplicable<R>
    {
-      val mode = `$$ApplierInternal`.invokeViewInKoshian(`$$koshianInternal$view`, this)
+      @Suppress("UNCHECKED_CAST")
+      val mode = `$$ApplierInternal`.invokeViewInKoshian(this@Koshian, this)
 
       beforeApply(mode)
 
-      val koshian = ViewApplier<A, CL, Nothing>(this)
+      val koshian = ViewApplier<A, CL, Nothing>(this, context, InvokeViewConstructor(this))
       koshian.applierAction()
 
       afterApply(mode)
 
       return getResult(mode)
    }
+
+   @PublishedApi
+   internal class InvokeViewConstructor<V>(private val view: V)
+      : KoshianViewConstructor<V, Nothing>
+   {
+      override fun instantiate(context: Context?): V = view
+
+      override fun instantiateLayoutParams(): Nothing {
+         throw UnsupportedOperationException()
+      }
+   }
 }
 
-inline val <V : View> Koshian<V, *, *, *>.view: V get() {
-   @Suppress("UNCHECKED_CAST")
-   return `$$koshianInternal$view` as V
-}
+inline val <V : View> Koshian<V, *, *, *>.view: V
+   get() = `$$koshianInternal$view`
 
 @Deprecated(
       "It always fails to apply koshian to the current koshian-view. Did you mean `View {}`?",
@@ -180,7 +204,7 @@ inline fun <V : View, L> Koshian<V, *, L, *>.view(
    view.invoke(applierAction)
 }
 
-inline val <L> Koshian<View, L, *, *>.layout: L get() {
+inline val <L : ViewGroup.LayoutParams> Koshian<View, L, *, *>.layout: L get() {
    @Suppress("UNCHECKED_CAST")
-   return (`$$koshianInternal$view` as View).layoutParams as L
+   return `$$koshianInternal$view`.layoutParams as L
 }

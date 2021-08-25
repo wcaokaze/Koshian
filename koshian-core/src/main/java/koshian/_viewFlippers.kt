@@ -23,7 +23,7 @@ import android.widget.FrameLayout
 import android.widget.ViewFlipper
 import kotlin.contracts.*
 
-object ViewFlipperConstructor : KoshianViewGroupConstructor<ViewFlipper, FrameLayout.LayoutParams> {
+object ViewFlipperConstructor : KoshianViewConstructor<ViewFlipper, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context?) = ViewFlipper(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> ViewFlipper.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ViewFlipper(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ViewFlipper(
       creatorAction: ViewGroupCreator<ViewFlipper, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewFlipper {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.ViewFlipper(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ViewFlipper(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ViewFlipper(
       name: String,
       creatorAction: ViewGroupCreator<ViewFlipper, L, FrameLayout.LayoutParams>.() -> Unit
 ): ViewFlipper {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> ViewFlipper.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewFlipper(
             applierAction: ViewGroupApplier<ViewFlipper, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ViewFlipperConstructor, applierAction)
+   applyViewGroup(ViewFlipperConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewFlipper(
             styleElement: KoshianStyle.StyleElement<ViewFlipper>,
             applierAction: ViewGroupApplier<ViewFlipper, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ViewFlipperConstructor, styleElement, applierAction)
+   applyViewGroup(ViewFlipperConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewFlipper(
             name: String,
             applierAction: ViewGroupApplier<ViewFlipper, L, FrameLayout.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewFlipper(
             name: String,
             styleElement: KoshianStyle.StyleElement<ViewFlipper>,
