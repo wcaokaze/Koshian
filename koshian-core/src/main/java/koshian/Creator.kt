@@ -29,9 +29,7 @@ inline fun <R> koshian(
 ): R {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$ApplierInternal`.applyingIndex = -1
    `$$StyleInternal`.style = null
 
    `$$KoshianInternal`.init(context)
@@ -45,7 +43,6 @@ inline fun <R> koshian(
 
       return koshian.creatorAction()
    } finally {
-      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle
    }
 }
@@ -61,16 +58,13 @@ inline fun <P, L, R>
 {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$ApplierInternal`.applyingIndex = -1
    `$$StyleInternal`.style = null
 
    try {
       val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this, context, constructor)
       return koshian.creatorAction()
    } finally {
-      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle
    }
 }

@@ -31,7 +31,8 @@ import android.view.*
 class Koshian<out V, out L, out CL, M : KoshianMode>(
       val `$$koshianInternal$view`: Any?,
       val context: Context,
-      val viewConstructor: KoshianViewConstructor<out V, out CL>
+      val viewConstructor: KoshianViewConstructor<out V, out CL>,
+      @JvmField var applyingIndex: Int = -1
 ) {
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Float .dip: Int inline get() = dp
@@ -99,12 +100,7 @@ class Koshian<out V, out L, out CL, M : KoshianMode>(
          )
          where V : View
    {
-      @Suppress("UNCHECKED_CAST")
-      `$$ApplierInternal`.invokeViewInKoshian(
-            context,
-            `$$koshianInternal$view`,
-            viewConstructor as KoshianViewConstructor<*, out ViewGroup.LayoutParams>,
-            this)
+      `$$ApplierInternal`.invokeViewInKoshian(this@Koshian, this)
 
       val koshian = ViewApplier<V, CL, Nothing>(this, context, InvokeViewConstructor(this))
 
@@ -162,10 +158,7 @@ class Koshian<out V, out L, out CL, M : KoshianMode>(
          where A : KoshianApplicable<R>
    {
       @Suppress("UNCHECKED_CAST")
-      val mode = `$$ApplierInternal`.invokeViewInKoshian(
-            `$$koshianInternal$view`,
-            viewConstructor as KoshianViewConstructor<*, out ViewGroup.LayoutParams>,
-            this)
+      val mode = `$$ApplierInternal`.invokeViewInKoshian(this@Koshian, this)
 
       beforeApply(mode)
 

@@ -127,19 +127,16 @@ inline fun <V, S>
       )
       where V : View, S : KoshianStyle
 {
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$ApplierInternal`.applyingIndex = 0
    `$$StyleInternal`.style = style
 
    style.initializeDefaultStyle()
 
    try {
-      val koshian = ViewApplier<V, ViewGroup.LayoutParams, S>(this, context, NothingConstructor)
+      val koshian = ViewApplier<V, ViewGroup.LayoutParams, S>(this, context, NothingConstructor, applyingIndex = 0)
       `$$StyleInternal`.applyCurrentStyleRecursive(this, context)
       koshian.applierAction()
    } finally {
-      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle
    }
 }
@@ -152,19 +149,16 @@ inline fun <V, L, S>
       )
       where V : View, L : ViewGroup.LayoutParams, S : KoshianStyle
 {
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
    val oldStyle = `$$StyleInternal`.style
-   `$$ApplierInternal`.applyingIndex = 0
    `$$StyleInternal`.style = style
 
    style.initializeDefaultStyle()
 
    try {
-      val koshian = ViewGroupApplier<V, ViewGroup.LayoutParams, L, S>(this, context, constructor)
+      val koshian = ViewGroupApplier<V, ViewGroup.LayoutParams, L, S>(this, context, constructor, applyingIndex = 0)
       `$$StyleInternal`.applyCurrentStyleRecursive(this, context)
       koshian.applierAction()
    } finally {
-      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
       `$$StyleInternal`.style = oldStyle
    }
 }
