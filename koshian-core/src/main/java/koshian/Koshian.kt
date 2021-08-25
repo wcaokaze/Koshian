@@ -32,10 +32,17 @@ class Koshian<out V, out L, out CL, M : KoshianMode>(
       val `$$koshianInternal$view`: V,
       val context: Context,
       val viewConstructor: KoshianViewConstructor<out V, out CL>,
-      @JvmField var applyingIndex: Int = -1,
-      style: KoshianStyle? = null
+      applyingIndex: Int,
+      style: KoshianStyle?
 ) {
+   @JvmField var applyingIndex: Int = applyingIndex
    @JvmField var `$$koshianInternal$style`: KoshianStyle? = style
+
+   constructor(
+         view: V,
+         context: Context,
+         viewConstructor: KoshianViewConstructor<out V, out CL>,
+   ) : this(view, context, viewConstructor, applyingIndex = -1, style = null)
 
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Float .dip: Int inline get() = dp
