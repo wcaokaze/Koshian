@@ -47,7 +47,7 @@ public final class $$ApplierInternal {
             assertNextView(koshian, view);
          }
 
-         $$StyleInternal.applyCurrentStyleTo(view, koshian.getContext());
+         $$StyleInternal.applyCurrentStyleTo(koshian, view, koshian.getContext());
       }
    }
 
@@ -248,7 +248,7 @@ public final class $$ApplierInternal {
          foundView = insertNewView(koshian, parentViewGroup, childConstructor);
       }
 
-      $$StyleInternal.applyCurrentStyleTo(foundView, koshian.getContext());
+      $$StyleInternal.applyCurrentStyleTo(koshian, foundView, koshian.getContext());
 
       return foundView;
    }
@@ -273,7 +273,7 @@ public final class $$ApplierInternal {
       }
 
       final Context context = koshian.getContext();
-      $$StyleInternal.applyCurrentStyleTo(foundView, context);
+      $$StyleInternal.applyCurrentStyleTo(koshian, foundView, context);
       styleElement.applyStyleTo(foundView, context);
 
       return foundView;

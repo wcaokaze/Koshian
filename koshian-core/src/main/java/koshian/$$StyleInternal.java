@@ -23,33 +23,37 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 public final class $$StyleInternal {
-   public static KoshianStyle style = null;
-
-   public static void applyCurrentStyleRecursive(final View view, final Context context) {
-      final KoshianStyle currentStyle = style;
+   public static void applyCurrentStyleRecursive(
+         final Koshian<? extends View, ?, ?, ?> koshian,
+         final Context context
+   ) {
+      final KoshianStyle currentStyle = koshian.$$koshianInternal$style;
       if (currentStyle == null) { return; }
-
-      applyStyleRecursive(currentStyle, view, context);
+      applyStyleRecursive(currentStyle, koshian.get$$koshianInternal$view(), context);
    }
 
-   static void applyCurrentStyleTo(final View view, final Context context) {
-      final KoshianStyle currentStyle = style;
+   static void applyCurrentStyleTo(
+         final Koshian<?, ?, ?, ?> koshian,
+         final View view,
+         final Context context
+   ) {
+      final KoshianStyle currentStyle = koshian.$$koshianInternal$style;
       if (currentStyle == null) { return; }
-
       applyStyle(currentStyle, view, context);
    }
 
-   private static void applyStyleRecursive(@NonNull final KoshianStyle style,
-                                           final View view,
-                                           final Context context)
-   {
+   private static void applyStyleRecursive(
+         @NonNull final KoshianStyle style,
+         final View view,
+         final Context context
+   ) {
       applyStyle(style, view, context);
 
       if (view instanceof ViewGroup) {
          final ViewGroup viewGroup = (ViewGroup) view;
 
          for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            applyCurrentStyleRecursive(viewGroup.getChildAt(i), context);
+            applyStyleRecursive(style, viewGroup.getChildAt(i), context);
          }
       }
    }

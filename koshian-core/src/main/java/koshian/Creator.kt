@@ -29,22 +29,15 @@ inline fun <R> koshian(
 ): R {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
-   val oldStyle = `$$StyleInternal`.style
-   `$$StyleInternal`.style = null
-
    `$$KoshianInternal`.init(context)
 
-   try {
-      val koshian = Koshian<KoshianRoot, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(
-            KoshianRoot.INSTANCE,
-            context,
-            KoshianRoot.CONSTRUCTOR
-      )
+   val koshian = Koshian<KoshianRoot, Nothing, ViewGroup.LayoutParams, KoshianMode.Creator>(
+         KoshianRoot.INSTANCE,
+         context,
+         KoshianRoot.CONSTRUCTOR
+   )
 
-      return koshian.creatorAction()
-   } finally {
-      `$$StyleInternal`.style = oldStyle
-   }
+   return koshian.creatorAction()
 }
 
 @ExperimentalContracts
@@ -58,15 +51,8 @@ inline fun <P, L, R>
 {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
-   val oldStyle = `$$StyleInternal`.style
-   `$$StyleInternal`.style = null
-
-   try {
-      val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this, context, constructor)
-      return koshian.creatorAction()
-   } finally {
-      `$$StyleInternal`.style = oldStyle
-   }
+   val koshian = Koshian<P, Nothing, L, KoshianMode.Creator>(this, context, constructor)
+   return koshian.creatorAction()
 }
 
 inline fun <V, L, CL>

@@ -29,11 +29,14 @@ import android.view.*
  */
 @KoshianMarker
 class Koshian<out V, out L, out CL, M : KoshianMode>(
-      val `$$koshianInternal$view`: Any?,
+      val `$$koshianInternal$view`: V,
       val context: Context,
       val viewConstructor: KoshianViewConstructor<out V, out CL>,
-      @JvmField var applyingIndex: Int = -1
+      @JvmField var applyingIndex: Int = -1,
+      style: KoshianStyle? = null
 ) {
+   @JvmField var `$$koshianInternal$style`: KoshianStyle? = style
+
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Int   .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Float .dip: Int inline get() = dp
    @Deprecated("Use dp instead", ReplaceWith("dp")) val Double.dip: Int inline get() = dp
@@ -182,10 +185,8 @@ class Koshian<out V, out L, out CL, M : KoshianMode>(
    }
 }
 
-inline val <V : View> Koshian<V, *, *, *>.view: V get() {
-   @Suppress("UNCHECKED_CAST")
-   return `$$koshianInternal$view` as V
-}
+inline val <V : View> Koshian<V, *, *, *>.view: V
+   get() = `$$koshianInternal$view`
 
 @Deprecated(
       "It always fails to apply koshian to the current koshian-view. Did you mean `View {}`?",
@@ -198,5 +199,5 @@ inline fun <V : View, L> Koshian<V, *, L, *>.view(
 
 inline val <L : ViewGroup.LayoutParams> Koshian<View, L, *, *>.layout: L get() {
    @Suppress("UNCHECKED_CAST")
-   return (`$$koshianInternal$view` as View).layoutParams as L
+   return `$$koshianInternal$view`.layoutParams as L
 }
