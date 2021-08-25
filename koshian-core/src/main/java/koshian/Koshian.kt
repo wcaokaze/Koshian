@@ -29,9 +29,9 @@ import android.view.*
  */
 @KoshianMarker
 class Koshian<out V, out L, out CL, M : KoshianMode>(
-      val `$$koshianInternal$view`: V,
-      val context: Context,
-      val viewConstructor: KoshianViewConstructor<out V, out CL>,
+      @JvmField val `$$koshianInternal$view`: V,
+      @JvmField val context: Context,
+      @JvmField val viewConstructor: KoshianViewConstructor<out V, out CL>,
       applyingIndex: Int,
       style: KoshianStyle?
 ) {

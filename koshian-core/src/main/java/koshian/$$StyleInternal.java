@@ -29,7 +29,7 @@ public final class $$StyleInternal {
    ) {
       final KoshianStyle currentStyle = koshian.$$koshianInternal$style;
       if (currentStyle == null) { return; }
-      applyStyleRecursive(currentStyle, koshian.get$$koshianInternal$view(), context);
+      applyStyleRecursive(currentStyle, koshian.$$koshianInternal$view, context);
    }
 
    static void applyCurrentStyleTo(

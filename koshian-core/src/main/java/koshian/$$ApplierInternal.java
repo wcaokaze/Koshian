@@ -47,7 +47,7 @@ public final class $$ApplierInternal {
             assertNextView(koshian, view);
          }
 
-         $$StyleInternal.applyCurrentStyleTo(koshian, view, koshian.getContext());
+         $$StyleInternal.applyCurrentStyleTo(koshian, view, koshian.context);
       }
    }
 
@@ -87,7 +87,7 @@ public final class $$ApplierInternal {
          final Koshian<?, ?, ?, ?> koshian,
          final View view
    ) {
-      final Object parent = koshian.get$$koshianInternal$view();
+      final Object parent = koshian.$$koshianInternal$view;
 
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
@@ -98,7 +98,7 @@ public final class $$ApplierInternal {
 
       viewGroup.addView(
             view,
-            (ViewGroup.LayoutParams) koshian.getViewConstructor().instantiateLayoutParams()
+            (ViewGroup.LayoutParams) koshian.viewConstructor.instantiateLayoutParams()
       );
    }
 
@@ -106,7 +106,7 @@ public final class $$ApplierInternal {
          final Koshian<?, ?, ?, ?> koshian,
          final KoshianApplicable<?> applicable
    ) {
-      final Object parent = koshian.get$$koshianInternal$view();
+      final Object parent = koshian.$$koshianInternal$view;
 
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(
@@ -118,7 +118,7 @@ public final class $$ApplierInternal {
 
       viewGroup.addView(
             applicable.getView(),
-            (ViewGroup.LayoutParams) koshian.getViewConstructor().instantiateLayoutParams()
+            (ViewGroup.LayoutParams) koshian.viewConstructor.instantiateLayoutParams()
       );
    }
 
@@ -126,7 +126,7 @@ public final class $$ApplierInternal {
          final Koshian<?, ?, ?, ?> koshian,
          final View view
    ) {
-      final Object parent = koshian.get$$koshianInternal$view();
+      final Object parent = koshian.$$koshianInternal$view;
 
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
@@ -138,14 +138,14 @@ public final class $$ApplierInternal {
       viewGroup.addView(
             view,
             koshian.$$koshianInternal$applyingIndex++,
-            (ViewGroup.LayoutParams) koshian.getViewConstructor().instantiateLayoutParams());
+            (ViewGroup.LayoutParams) koshian.viewConstructor.instantiateLayoutParams());
    }
 
    private static void insertApplicable(
          final Koshian<?, ?, ?, ?> koshian,
          final KoshianApplicable<?> applicable
    ) {
-      final Object parent = koshian.get$$koshianInternal$view();
+      final Object parent = koshian.$$koshianInternal$view;
 
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(
@@ -158,14 +158,14 @@ public final class $$ApplierInternal {
       viewGroup.addView(
             applicable.getView(),
             koshian.$$koshianInternal$applyingIndex++,
-            (ViewGroup.LayoutParams) koshian.getViewConstructor().instantiateLayoutParams());
+            (ViewGroup.LayoutParams) koshian.viewConstructor.instantiateLayoutParams());
    }
 
    private static void assertNextView(
          final Koshian<?, ?, ?, ?> koshian,
          final View view
    ) {
-      final Object parent = koshian.get$$koshianInternal$view();
+      final Object parent = koshian.$$koshianInternal$view;
 
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException("A View(" + view + ") was specified " +
@@ -198,7 +198,7 @@ public final class $$ApplierInternal {
          final Koshian<?, ?, ?, ?> koshian,
          final KoshianApplicable<?> applicable
    ) {
-      final Object parent = koshian.get$$koshianInternal$view();
+      final Object parent = koshian.$$koshianInternal$view;
 
       if (!(parent instanceof ViewGroup)) {
          throw new IllegalStateException(
@@ -239,7 +239,7 @@ public final class $$ApplierInternal {
          final KoshianViewConstructor<V, ?> childConstructor,
          final Class<V> viewClass
    ) {
-      final ViewGroup parentViewGroup = (ViewGroup) koshian.get$$koshianInternal$view();
+      final ViewGroup parentViewGroup = (ViewGroup) koshian.$$koshianInternal$view;
       assert parentViewGroup != null;
 
       V foundView = findView(koshian, parentViewGroup, viewClass);
@@ -248,7 +248,7 @@ public final class $$ApplierInternal {
          foundView = insertNewView(koshian, parentViewGroup, childConstructor);
       }
 
-      $$StyleInternal.applyCurrentStyleTo(koshian, foundView, koshian.getContext());
+      $$StyleInternal.applyCurrentStyleTo(koshian, foundView, koshian.context);
 
       return foundView;
    }
@@ -263,7 +263,7 @@ public final class $$ApplierInternal {
          final KoshianStyle.StyleElement<V> styleElement,
          final Class<V> viewClass
    ) {
-      final ViewGroup parentViewGroup = (ViewGroup) koshian.get$$koshianInternal$view();
+      final ViewGroup parentViewGroup = (ViewGroup) koshian.$$koshianInternal$view;
       assert parentViewGroup != null;
 
       V foundView = findView(koshian, parentViewGroup, viewClass);
@@ -272,7 +272,7 @@ public final class $$ApplierInternal {
          foundView = insertNewView(koshian, parentViewGroup, childConstructor);
       }
 
-      final Context context = koshian.getContext();
+      final Context context = koshian.context;
       $$StyleInternal.applyCurrentStyleTo(koshian, foundView, context);
       styleElement.applyStyleTo(foundView, context);
 
@@ -284,12 +284,12 @@ public final class $$ApplierInternal {
          final ViewGroup parentView,
          final KoshianViewConstructor<V, ?> childConstructor
    ) {
-      final V child = childConstructor.instantiate(koshian.getContext());
+      final V child = childConstructor.instantiate(koshian.context);
 
       parentView.addView(
             child,
             koshian.$$koshianInternal$applyingIndex++,
-            koshian.getViewConstructor().instantiateLayoutParams()
+            koshian.viewConstructor.instantiateLayoutParams()
       );
 
       return child;
