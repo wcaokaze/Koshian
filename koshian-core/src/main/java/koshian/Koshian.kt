@@ -35,7 +35,7 @@ class Koshian<out V, out L, out CL, M : KoshianMode>(
       applyingIndex: Int,
       style: KoshianStyle?
 ) {
-   @JvmField var applyingIndex: Int = applyingIndex
+   @JvmField var `$$koshianInternal$applyingIndex`: Int = applyingIndex
    @JvmField var `$$koshianInternal$style`: KoshianStyle? = style
 
    constructor(

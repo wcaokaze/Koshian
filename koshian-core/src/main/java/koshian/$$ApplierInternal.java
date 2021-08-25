@@ -33,7 +33,7 @@ public final class $$ApplierInternal {
          final Koshian<?, ?, ?, ?> koshian,
          final View view
    ) {
-      if (koshian.applyingIndex == -1) {
+      if (koshian.$$koshianInternal$applyingIndex == -1) {
          if (view.getParent() != null) {
             throw new IllegalStateException("A View(" + view + ") was specified in a Creator, " +
                   "but the specified view was already added to another ViewGroup.");
@@ -63,7 +63,7 @@ public final class $$ApplierInternal {
    {
       final View view = applicable.getView();
 
-      if (koshian.applyingIndex == -1) {
+      if (koshian.$$koshianInternal$applyingIndex == -1) {
          if (view.getParent() != null) {
             throw new IllegalStateException(
                   "An Applicable(" + applicable + ") was specified in a Creator, " +
@@ -137,7 +137,7 @@ public final class $$ApplierInternal {
 
       viewGroup.addView(
             view,
-            koshian.applyingIndex++,
+            koshian.$$koshianInternal$applyingIndex++,
             (ViewGroup.LayoutParams) koshian.getViewConstructor().instantiateLayoutParams());
    }
 
@@ -157,7 +157,7 @@ public final class $$ApplierInternal {
 
       viewGroup.addView(
             applicable.getView(),
-            koshian.applyingIndex++,
+            koshian.$$koshianInternal$applyingIndex++,
             (ViewGroup.LayoutParams) koshian.getViewConstructor().instantiateLayoutParams());
    }
 
@@ -173,7 +173,7 @@ public final class $$ApplierInternal {
       }
 
       final ViewGroup viewGroup = (ViewGroup) parent;
-      final int applyingIndex = koshian.applyingIndex;
+      final int applyingIndex = koshian.$$koshianInternal$applyingIndex;
 
       if (applyingIndex >= viewGroup.getChildCount()) {
          throw new AssertionError("A View (" + view + ") " +
@@ -191,7 +191,7 @@ public final class $$ApplierInternal {
                "(Information: the next View was " + nextView + ")");
       }
 
-      koshian.applyingIndex++;
+      koshian.$$koshianInternal$applyingIndex++;
    }
 
    private static void assertNextApplicable(
@@ -207,7 +207,7 @@ public final class $$ApplierInternal {
       }
 
       final ViewGroup viewGroup = (ViewGroup) parent;
-      final int applyingIndex = koshian.applyingIndex;
+      final int applyingIndex = koshian.$$koshianInternal$applyingIndex;
 
       if (applyingIndex >= viewGroup.getChildCount()) {
          throw new AssertionError("An Applicable (" + applicable + ") " +
@@ -225,7 +225,7 @@ public final class $$ApplierInternal {
                "(Information: the next View was " + nextView + ")");
       }
 
-      koshian.applyingIndex++;
+      koshian.$$koshianInternal$applyingIndex++;
    }
 
    // ==========================================================================
@@ -288,7 +288,7 @@ public final class $$ApplierInternal {
 
       parentView.addView(
             child,
-            koshian.applyingIndex++,
+            koshian.$$koshianInternal$applyingIndex++,
             koshian.getViewConstructor().instantiateLayoutParams()
       );
 
@@ -314,7 +314,7 @@ public final class $$ApplierInternal {
          final ViewGroup parent,
          final Class<V> viewClass
    ) {
-      int applyingIndex = koshian.applyingIndex;
+      int applyingIndex = koshian.$$koshianInternal$applyingIndex;
 
       for (; applyingIndex < parent.getChildCount(); applyingIndex++) {
          final View child = parent.getChildAt(applyingIndex);
@@ -323,7 +323,7 @@ public final class $$ApplierInternal {
          if (childName != null) { continue; }
          if (!child.getClass().equals(viewClass)) { return null; }
 
-         koshian.applyingIndex = applyingIndex + 1;
+         koshian.$$koshianInternal$applyingIndex = applyingIndex + 1;
 
          @SuppressWarnings("unchecked")
          final V casted = (V) child;
@@ -331,7 +331,7 @@ public final class $$ApplierInternal {
          return casted;
       }
 
-      koshian.applyingIndex = applyingIndex;
+      koshian.$$koshianInternal$applyingIndex = applyingIndex;
       return null;
    }
 
