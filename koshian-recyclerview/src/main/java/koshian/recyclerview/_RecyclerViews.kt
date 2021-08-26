@@ -18,12 +18,14 @@
 package koshian.recyclerview
 
 import android.content.Context
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import koshian.*
 import kotlin.contracts.*
 
-object RecyclerViewConstructor : KoshianViewConstructor<RecyclerView> {
+object RecyclerViewConstructor : KoshianViewConstructor<RecyclerView, Nothing> {
    override fun instantiate(context: Context) = RecyclerView(context)
+   override fun instantiateLayoutParams(): Nothing = throw UnsupportedOperationException()
 }
 
 /**
@@ -31,7 +33,7 @@ object RecyclerViewConstructor : KoshianViewConstructor<RecyclerView> {
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RecyclerView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RecyclerView(
       creatorAction: ViewCreator<RecyclerView, L>.() -> Unit
 ): RecyclerView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -45,7 +47,7 @@ inline fun <L> CreatorParent<L>.RecyclerView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.RecyclerView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.RecyclerView(
       name: String,
       creatorAction: ViewCreator<RecyclerView, L>.() -> Unit
 ): RecyclerView {
@@ -61,7 +63,7 @@ inline fun <L> CreatorParent<L>.RecyclerView(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RecyclerView(
             applierAction: ViewApplier<RecyclerView, L, S>.() -> Unit
       )
@@ -77,7 +79,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RecyclerView(
             styleElement: KoshianStyle.StyleElement<RecyclerView>,
             applierAction: ViewApplier<RecyclerView, L, S>.() -> Unit
@@ -93,13 +95,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RecyclerView(
             name: String,
             applierAction: ViewApplier<RecyclerView, L, S>.() -> Unit
       )
 {
-   apply(name, applierAction)
+   apply(RecyclerViewConstructor, name, applierAction)
 }
 
 /**
@@ -109,14 +111,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.RecyclerView(
             name: String,
             styleElement: KoshianStyle.StyleElement<RecyclerView>,
             applierAction: ViewApplier<RecyclerView, L, S>.() -> Unit
       )
 {
-   apply(name, styleElement, applierAction)
+   apply(RecyclerViewConstructor, name, styleElement, applierAction)
 }
 
 /**

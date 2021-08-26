@@ -33,9 +33,13 @@ abstract class KoshianViewHolder<in I> {
             )
    }
 
+   @Deprecated("Use bindingAdapterPosition or absoluteAdapterPosition", ReplaceWith("bindingAdapterPosition"))
    val adapterPosition: Int get() = getAndroidxViewHolderOrThrow().adapterPosition
-   val layoutPosition:  Int get() = getAndroidxViewHolderOrThrow().layoutPosition
-   val oldPosition:     Int get() = getAndroidxViewHolderOrThrow().oldPosition
+
+   val bindingAdapterPosition:  Int get() = getAndroidxViewHolderOrThrow().bindingAdapterPosition
+   val absoluteAdapterPosition: Int get() = getAndroidxViewHolderOrThrow().absoluteAdapterPosition
+   val layoutPosition:          Int get() = getAndroidxViewHolderOrThrow().layoutPosition
+   val oldPosition:             Int get() = getAndroidxViewHolderOrThrow().oldPosition
 
    var isRecyclable
       get() = getAndroidxViewHolderOrThrow().isRecyclable

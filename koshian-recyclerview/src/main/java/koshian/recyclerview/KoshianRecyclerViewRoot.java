@@ -26,15 +26,15 @@ import koshian.*;
 public final class KoshianRecyclerViewRoot implements ViewManager {
    public static final KoshianRecyclerViewRoot INSTANCE = new KoshianRecyclerViewRoot();
 
-   public static final KoshianViewGroupConstructor<ViewGroup, RecyclerView.LayoutParams>
+   public static final KoshianViewConstructor<KoshianRecyclerViewRoot, RecyclerView.LayoutParams>
            CONSTRUCTOR = new KoshianRecyclerViewRootConstructor();
 
    private static final class KoshianRecyclerViewRootConstructor
-           implements KoshianViewGroupConstructor<ViewGroup, RecyclerView.LayoutParams>
+           implements KoshianViewConstructor<KoshianRecyclerViewRoot, RecyclerView.LayoutParams>
    {
        @Override
-       public ViewGroup instantiate(final Context context) {
-           throw new UnsupportedOperationException();
+       public KoshianRecyclerViewRoot instantiate(final Context context) {
+           return INSTANCE;
        }
 
        @Override

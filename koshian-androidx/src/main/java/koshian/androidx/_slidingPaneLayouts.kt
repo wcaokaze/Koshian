@@ -23,7 +23,7 @@ import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import koshian.*
 import kotlin.contracts.*
 
-object SlidingPaneLayoutConstructor : KoshianViewGroupConstructor<SlidingPaneLayout, SlidingPaneLayout.LayoutParams> {
+object SlidingPaneLayoutConstructor : KoshianViewConstructor<SlidingPaneLayout, SlidingPaneLayout.LayoutParams> {
    override fun instantiate(context: Context) = SlidingPaneLayout(context)
    override fun instantiateLayoutParams() = SlidingPaneLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> SlidingPaneLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.SlidingPaneLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.SlidingPaneLayout(
       creatorAction: ViewGroupCreator<SlidingPaneLayout, L, SlidingPaneLayout.LayoutParams>.() -> Unit
 ): SlidingPaneLayout {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.SlidingPaneLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.SlidingPaneLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.SlidingPaneLayout(
       name: String,
       creatorAction: ViewGroupCreator<SlidingPaneLayout, L, SlidingPaneLayout.LayoutParams>.() -> Unit
 ): SlidingPaneLayout {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> SlidingPaneLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SlidingPaneLayout(
             applierAction: ViewGroupApplier<SlidingPaneLayout, L, SlidingPaneLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(SlidingPaneLayoutConstructor, applierAction)
+   applyViewGroup(SlidingPaneLayoutConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SlidingPaneLayout(
             styleElement: KoshianStyle.StyleElement<SlidingPaneLayout>,
             applierAction: ViewGroupApplier<SlidingPaneLayout, L, SlidingPaneLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(SlidingPaneLayoutConstructor, styleElement, applierAction)
+   applyViewGroup(SlidingPaneLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SlidingPaneLayout(
             name: String,
             applierAction: ViewGroupApplier<SlidingPaneLayout, L, SlidingPaneLayout.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SlidingPaneLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<SlidingPaneLayout>,
