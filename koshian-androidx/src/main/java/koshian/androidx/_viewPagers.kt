@@ -23,7 +23,7 @@ import androidx.viewpager.widget.ViewPager
 import koshian.*
 import kotlin.contracts.*
 
-object ViewPagerConstructor : KoshianViewGroupConstructor<ViewPager, ViewPager.LayoutParams> {
+object ViewPagerConstructor : KoshianViewConstructor<ViewPager, ViewPager.LayoutParams> {
    override fun instantiate(context: Context) = ViewPager(context)
    override fun instantiateLayoutParams() = ViewPager.LayoutParams()
 }
@@ -45,7 +45,7 @@ inline fun <R> ViewPager.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ViewPager(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ViewPager(
       creatorAction: ViewGroupCreator<ViewPager, L, ViewPager.LayoutParams>.() -> Unit
 ): ViewPager {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.ViewPager(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.ViewPager(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.ViewPager(
       name: String,
       creatorAction: ViewGroupCreator<ViewPager, L, ViewPager.LayoutParams>.() -> Unit
 ): ViewPager {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> ViewPager.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewPager(
             applierAction: ViewGroupApplier<ViewPager, L, ViewPager.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ViewPagerConstructor, applierAction)
+   applyViewGroup(ViewPagerConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewPager(
             styleElement: KoshianStyle.StyleElement<ViewPager>,
             applierAction: ViewGroupApplier<ViewPager, L, ViewPager.LayoutParams, S>.() -> Unit
       )
 {
-   apply(ViewPagerConstructor, styleElement, applierAction)
+   applyViewGroup(ViewPagerConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewPager(
             name: String,
             applierAction: ViewGroupApplier<ViewPager, L, ViewPager.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.ViewPager(
             name: String,
             styleElement: KoshianStyle.StyleElement<ViewPager>,

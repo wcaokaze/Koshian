@@ -23,7 +23,7 @@ import androidx.swiperefreshlayout.widget.*
 import koshian.*
 import kotlin.contracts.*
 
-object SwipeRefreshLayoutConstructor : KoshianViewGroupConstructor<SwipeRefreshLayout, ViewGroup.LayoutParams> {
+object SwipeRefreshLayoutConstructor : KoshianViewConstructor<SwipeRefreshLayout, ViewGroup.LayoutParams> {
    override fun instantiate(context: Context) = SwipeRefreshLayout(context)
    override fun instantiateLayoutParams() = ViewGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> SwipeRefreshLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.SwipeRefreshLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.SwipeRefreshLayout(
       creatorAction: ViewGroupCreator<SwipeRefreshLayout, L, ViewGroup.LayoutParams>.() -> Unit
 ): SwipeRefreshLayout {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.SwipeRefreshLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.SwipeRefreshLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.SwipeRefreshLayout(
       name: String,
       creatorAction: ViewGroupCreator<SwipeRefreshLayout, L, ViewGroup.LayoutParams>.() -> Unit
 ): SwipeRefreshLayout {
@@ -128,7 +128,7 @@ inline fun SwipeRefreshLayout.applyKoshian(
       applierAction: ViewGroupApplier<SwipeRefreshLayout, ViewGroup.LayoutParams, ViewGroup.LayoutParams, Nothing>.() -> Unit
 ) {
    applyKoshian(SwipeRefreshLayoutConstructor) {
-      `$$ApplierInternal`.applyingIndex++
+      `$$koshianInternal$applyingIndex`++
       applierAction()
    }
 }
@@ -195,7 +195,7 @@ inline fun <S : KoshianStyle> SwipeRefreshLayout.applyKoshian(
       applierAction: ViewGroupApplier<SwipeRefreshLayout, ViewGroup.LayoutParams, ViewGroup.LayoutParams, S>.() -> Unit
 ) {
    applyKoshian(style, SwipeRefreshLayoutConstructor) {
-      `$$ApplierInternal`.applyingIndex++
+      `$$koshianInternal$applyingIndex`++
       applierAction()
    }
 }
@@ -208,13 +208,13 @@ inline fun <S : KoshianStyle> SwipeRefreshLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SwipeRefreshLayout(
             applierAction: ViewGroupApplier<SwipeRefreshLayout, L, ViewGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(SwipeRefreshLayoutConstructor) {
-      `$$ApplierInternal`.applyingIndex++
+   applyViewGroup(SwipeRefreshLayoutConstructor) {
+      `$$koshianInternal$applyingIndex`++
       applierAction()
    }
 }
@@ -227,14 +227,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SwipeRefreshLayout(
       styleElement: KoshianStyle.StyleElement<SwipeRefreshLayout>,
             applierAction: ViewGroupApplier<SwipeRefreshLayout, L, ViewGroup.LayoutParams, S>.() -> Unit
       )
 {
-   apply(SwipeRefreshLayoutConstructor, styleElement) {
-      `$$ApplierInternal`.applyingIndex++
+   applyViewGroup(SwipeRefreshLayoutConstructor, styleElement) {
+      `$$koshianInternal$applyingIndex`++
       applierAction()
    }
 }
@@ -246,14 +246,14 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SwipeRefreshLayout(
             name: String,
             applierAction: ViewGroupApplier<SwipeRefreshLayout, L, ViewGroup.LayoutParams, S>.() -> Unit
       )
 {
    apply(name, SwipeRefreshLayoutConstructor) {
-      `$$ApplierInternal`.applyingIndex++
+      `$$koshianInternal$applyingIndex`++
       applierAction()
    }
 }
@@ -265,7 +265,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.SwipeRefreshLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<SwipeRefreshLayout>,
@@ -273,7 +273,7 @@ inline fun <L, S : KoshianStyle>
       )
 {
    apply(name, SwipeRefreshLayoutConstructor, styleElement) {
-      `$$ApplierInternal`.applyingIndex++
+      `$$koshianInternal$applyingIndex`++
       applierAction()
    }
 }

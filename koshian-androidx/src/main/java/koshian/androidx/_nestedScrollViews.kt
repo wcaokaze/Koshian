@@ -24,7 +24,7 @@ import androidx.core.widget.NestedScrollView
 import koshian.*
 import kotlin.contracts.*
 
-object NestedScrollViewConstructor : KoshianViewGroupConstructor<NestedScrollView, FrameLayout.LayoutParams> {
+object NestedScrollViewConstructor : KoshianViewConstructor<NestedScrollView, FrameLayout.LayoutParams> {
    override fun instantiate(context: Context) = NestedScrollView(context)
    override fun instantiateLayoutParams() = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -46,7 +46,7 @@ inline fun <R> NestedScrollView.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.NestedScrollView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.NestedScrollView(
       creatorAction: ViewGroupCreator<NestedScrollView, L, FrameLayout.LayoutParams>.() -> Unit
 ): NestedScrollView {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -60,7 +60,7 @@ inline fun <L> CreatorParent<L>.NestedScrollView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.NestedScrollView(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.NestedScrollView(
       name: String,
       creatorAction: ViewGroupCreator<NestedScrollView, L, FrameLayout.LayoutParams>.() -> Unit
 ): NestedScrollView {
@@ -203,12 +203,12 @@ inline fun <S : KoshianStyle> NestedScrollView.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NestedScrollView(
             applierAction: ViewGroupApplier<NestedScrollView, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(NestedScrollViewConstructor, applierAction)
+   applyViewGroup(NestedScrollViewConstructor, applierAction)
 }
 
 /**
@@ -219,13 +219,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NestedScrollView(
             styleElement: KoshianStyle.StyleElement<NestedScrollView>,
             applierAction: ViewGroupApplier<NestedScrollView, L, FrameLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(NestedScrollViewConstructor, styleElement, applierAction)
+   applyViewGroup(NestedScrollViewConstructor, styleElement, applierAction)
 }
 
 /**
@@ -235,7 +235,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NestedScrollView(
             name: String,
             applierAction: ViewGroupApplier<NestedScrollView, L, FrameLayout.LayoutParams, S>.() -> Unit
@@ -251,7 +251,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.NestedScrollView(
             name: String,
             styleElement: KoshianStyle.StyleElement<NestedScrollView>,

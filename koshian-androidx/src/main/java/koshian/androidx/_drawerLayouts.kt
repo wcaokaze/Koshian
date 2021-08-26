@@ -23,7 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import koshian.*
 import kotlin.contracts.*
 
-object DrawerLayoutConstructor : KoshianViewGroupConstructor<DrawerLayout, DrawerLayout.LayoutParams> {
+object DrawerLayoutConstructor : KoshianViewConstructor<DrawerLayout, DrawerLayout.LayoutParams> {
    override fun instantiate(context: Context) = DrawerLayout(context)
    override fun instantiateLayoutParams() = DrawerLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> DrawerLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.DrawerLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.DrawerLayout(
       creatorAction: ViewGroupCreator<DrawerLayout, L, DrawerLayout.LayoutParams>.() -> Unit
 ): DrawerLayout {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.DrawerLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.DrawerLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.DrawerLayout(
       name: String,
       creatorAction: ViewGroupCreator<DrawerLayout, L, DrawerLayout.LayoutParams>.() -> Unit
 ): DrawerLayout {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> DrawerLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DrawerLayout(
             applierAction: ViewGroupApplier<DrawerLayout, L, DrawerLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(DrawerLayoutConstructor, applierAction)
+   applyViewGroup(DrawerLayoutConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DrawerLayout(
             styleElement: KoshianStyle.StyleElement<DrawerLayout>,
             applierAction: ViewGroupApplier<DrawerLayout, L, DrawerLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(DrawerLayoutConstructor, styleElement, applierAction)
+   applyViewGroup(DrawerLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DrawerLayout(
             name: String,
             applierAction: ViewGroupApplier<DrawerLayout, L, DrawerLayout.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.DrawerLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<DrawerLayout>,

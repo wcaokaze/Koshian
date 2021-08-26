@@ -23,7 +23,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import koshian.*
 import kotlin.contracts.*
 
-object CoordinatorLayoutConstructor : KoshianViewGroupConstructor<CoordinatorLayout, CoordinatorLayout.LayoutParams> {
+object CoordinatorLayoutConstructor : KoshianViewConstructor<CoordinatorLayout, CoordinatorLayout.LayoutParams> {
    override fun instantiate(context: Context) = CoordinatorLayout(context)
    override fun instantiateLayoutParams() = CoordinatorLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
 }
@@ -45,7 +45,7 @@ inline fun <R> CoordinatorLayout.addView(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CoordinatorLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CoordinatorLayout(
       creatorAction: ViewGroupCreator<CoordinatorLayout, L, CoordinatorLayout.LayoutParams>.() -> Unit
 ): CoordinatorLayout {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
@@ -59,7 +59,7 @@ inline fun <L> CreatorParent<L>.CoordinatorLayout(
  */
 @ExperimentalContracts
 @Suppress("FunctionName")
-inline fun <L> CreatorParent<L>.CoordinatorLayout(
+inline fun <L : ViewGroup.LayoutParams> CreatorParent<L>.CoordinatorLayout(
       name: String,
       creatorAction: ViewGroupCreator<CoordinatorLayout, L, CoordinatorLayout.LayoutParams>.() -> Unit
 ): CoordinatorLayout {
@@ -202,12 +202,12 @@ inline fun <S : KoshianStyle> CoordinatorLayout.applyKoshian(
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CoordinatorLayout(
             applierAction: ViewGroupApplier<CoordinatorLayout, L, CoordinatorLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(CoordinatorLayoutConstructor, applierAction)
+   applyViewGroup(CoordinatorLayoutConstructor, applierAction)
 }
 
 /**
@@ -218,13 +218,13 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CoordinatorLayout(
             styleElement: KoshianStyle.StyleElement<CoordinatorLayout>,
             applierAction: ViewGroupApplier<CoordinatorLayout, L, CoordinatorLayout.LayoutParams, S>.() -> Unit
       )
 {
-   apply(CoordinatorLayoutConstructor, styleElement, applierAction)
+   applyViewGroup(CoordinatorLayoutConstructor, styleElement, applierAction)
 }
 
 /**
@@ -234,7 +234,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CoordinatorLayout(
             name: String,
             applierAction: ViewGroupApplier<CoordinatorLayout, L, CoordinatorLayout.LayoutParams, S>.() -> Unit
@@ -250,7 +250,7 @@ inline fun <L, S : KoshianStyle>
  * @see applyKoshian
  */
 @Suppress("FunctionName")
-inline fun <L, S : KoshianStyle>
+inline fun <L : ViewGroup.LayoutParams, S : KoshianStyle>
       ApplierParent<L, S>.CoordinatorLayout(
             name: String,
             styleElement: KoshianStyle.StyleElement<CoordinatorLayout>,

@@ -30,24 +30,13 @@ inline fun <R> (@Suppress("UNUSED") KoshianViewHolder<*>).koshian(
 ): R {
    contract { callsInPlace(creatorAction, InvocationKind.EXACTLY_ONCE) }
 
-   val oldContext = `$$KoshianInternal`.context
-   val oldParentConstructor = `$$KoshianInternal`.parentViewConstructor
-   val oldApplyingIndex = `$$ApplierInternal`.applyingIndex
-   val oldStyle = `$$StyleInternal`.style
-   `$$KoshianInternal`.context = context
-   `$$KoshianInternal`.parentViewConstructor = KoshianRecyclerViewRoot.CONSTRUCTOR
-   `$$ApplierInternal`.applyingIndex = -1
-   `$$StyleInternal`.style = null
-
    `$$KoshianInternal`.init(context)
 
-   try {
-      val koshian = Koshian<Nothing, Nothing, RecyclerView.LayoutParams, KoshianMode.Creator>(KoshianRecyclerViewRoot.INSTANCE)
-      return koshian.creatorAction()
-   } finally {
-      `$$KoshianInternal`.context = oldContext
-      `$$KoshianInternal`.parentViewConstructor = oldParentConstructor
-      `$$ApplierInternal`.applyingIndex = oldApplyingIndex
-      `$$StyleInternal`.style = oldStyle
-   }
+   val koshian = Koshian<KoshianRecyclerViewRoot, Nothing, RecyclerView.LayoutParams, KoshianMode.Creator>(
+         KoshianRecyclerViewRoot.INSTANCE,
+         context,
+         KoshianRecyclerViewRoot.CONSTRUCTOR
+   )
+
+   return koshian.creatorAction()
 }
